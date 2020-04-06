@@ -1,3 +1,9 @@
+html {
+    background-image: linear-gradient(to bottom, #AEADF0, #D8DCFF, white);
+    background-repeat: no-repeat;
+    height: 100vh;
+}
+
 body {
     padding: 0;
     margin: 0;
