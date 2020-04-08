@@ -26,10 +26,17 @@ h1 {
     font-family: 'Syncopate', sans-serif;
     font-weight: bold;
     color: #565676;
-
+    text-shadow: 3px 3px 5px white;
 }
 
 h2 {
+    text-align: center;
+    font-family: 'Syncopate', sans-serif;
+    font-weight: bold;
+    color: #565676;
+}
+
+h3 {
     text-align: center;
     font-family: 'Syncopate', sans-serif;
     font-weight: bold;
@@ -40,10 +47,10 @@ main {
     margin: 1.5em;
 }
 
-/*#movies_list_table {*/
-/*    margin-left: auto;*/
-/*    margin-right: auto;*/
-/*}*/
+#single_star_table {
+    margin-left: auto;
+    margin-right: auto;
+}
 
 nav {
     font-family: 'Syncopate', sans-serif;
@@ -57,6 +64,7 @@ nav {
     color: white;
     padding: 1em;
     display: inline-block;
+    box-shadow: 3px 5px 5px grey;
 }
 
 #movies_list_button:hover {
@@ -64,16 +72,16 @@ nav {
     animation-fill-mode: forwards;
 }
 
-#movies_list_table a {
+.fabflix_table a {
     text-decoration: none;
     color: #565676;
 }
 
-#movies_list_table a:visited {
+.fabflix_table a:visited {
     color: #565676;
 }
 
-#movies_list_table a:hover {
+.fabflix_table a:hover {
     color: #A76571;
 }
 
