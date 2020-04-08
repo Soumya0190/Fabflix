@@ -81,6 +81,7 @@ public class MovieListServlet extends HttpServlet
                     genres += genresResult.getString("name");
                 }
                 jsonObject.addProperty("movie_genres", genres);
+                genresResult.close();
 
                 preparedStatementStars.setString(1, movie_id);
                 ResultSet starsResult = preparedStatementStars.executeQuery();
@@ -92,6 +93,7 @@ public class MovieListServlet extends HttpServlet
                     starsArray.add(starsResult.getString("name"));
                 }
                 jsonObject.addProperty("movie_stars", starsArray.toString());
+                starsResult.close();
                 jsonArray.add(jsonObject);
             }
 
@@ -100,6 +102,8 @@ public class MovieListServlet extends HttpServlet
 
             result.close();
             statement.close();
+            preparedStatementGenres.close();
+            preparedStatementStars.close();
             connection.close();
         }
         catch (Exception ex)
