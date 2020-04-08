@@ -1,3 +1,7 @@
+/*
+Code used form Professor Chen Li's project1-api-example
+ */
+
 function getMovieList(resultData) {
     console.log("getMovieList: updating movie list");
 
