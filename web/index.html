@@ -11,14 +11,33 @@
     <body>
         <header>
             <nav>
-                <span><a href = "index.html">Movies List</a></span>
+                <span id = "navigation">
+                    <a href = "index.html" id = "movies_list_button">Movies List</a>
+                </span>
             </nav>
         </header>
         <main>
             <h1>Fabflix</h1>
+            <h2>Movies List</h2>
+            <table id = "movies_list_table" class = "fabflix_table">
+                <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Year</th>
+                    <th>Director</th>
+                    <th>Rating</th>
+                    <th>Genres</th>
+                    <th>Stars</th>
+                </tr>
+                </thead>
+                <tbody id ="movies_list_body" class = "fabflix_table">
+                </tbody>
+            </table>
+
         </main>
         <footer>
 
         </footer>
+        <script src="index.js"></script>
     </body>
 </html>
