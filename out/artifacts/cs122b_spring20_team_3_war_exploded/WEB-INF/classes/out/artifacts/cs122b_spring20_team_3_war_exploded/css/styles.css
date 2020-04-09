@@ -1,0 +1,100 @@
+@import url('https://fonts.googleapis.com/css?family=Syncopate:400,700&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap');
+
+html {
+    background-image: linear-gradient(to bottom, #AEADF0, #D8DCFF, white);
+    background-repeat: no-repeat;
+    height: 100vh;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+}
+
+nav {
+    position: fixed;
+    top: 0;
+    right: 0;
+    padding: 1em;
+}
+
+h1 {
+    text-align: center;
+    font-family: 'Syncopate', sans-serif;
+    font-weight: bold;
+    color: #565676;
+    text-shadow: 3px 3px 5px white;
+}
+
+h2 {
+    text-align: center;
+    font-family: 'Syncopate', sans-serif;
+    font-weight: bold;
+    color: #565676;
+}
+
+h3 {
+    text-align: center;
+    font-family: 'Syncopate', sans-serif;
+    font-weight: bold;
+    color: #565676;
+}
+
+main {
+    margin: 1.5em;
+}
+
+#single_star_table {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+nav {
+    font-family: 'Syncopate', sans-serif;
+}
+
+#movies_list_button {
+    text-decoration: none;
+    text-transform: uppercase;
+    background-color: #A76571;
+    border-radius: 1em;
+    color: white;
+    padding: 1em;
+    display: inline-block;
+    box-shadow: 3px 5px 5px grey;
+}
+
+#movies_list_button:hover {
+    animation: move 2s;
+    animation-fill-mode: forwards;
+}
+
+.fabflix_table a {
+    text-decoration: none;
+    color: #565676;
+}
+
+.fabflix_table a:visited {
+    color: #565676;
+}
+
+.fabflix_table a:hover {
+    color: #A76571;
+}
+
+@keyframes move {
+    0% {
+        transform: translateY(20px);
+    }
+    50% {
+        background-color: #C38D94;
+    }
+    100% {
+        transform: translateY(0px);
+        background-color: #A76571;
+    }
+
+}
