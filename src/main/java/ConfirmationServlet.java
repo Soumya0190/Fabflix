@@ -24,12 +24,19 @@ public class ConfirmationServlet extends HttpServlet
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
+        JsonObject responseJsonObject = new JsonObject();
+        if (makePayment(request)== false ){
 
+            responseJsonObject.addProperty("status", "fail");
+            responseJsonObject.addProperty("message", "Sorry, Transaction failed");
+            response.getWriter().write(responseJsonObject.toString());
+            return;
+        }
         ArrayList<ShoppingCart> itemsInCart  = (ArrayList<ShoppingCart>) session.getAttribute("moviesinCart");
         JsonArray jsonArray = new JsonArray();
         User userInfo = (User) request.getSession().getAttribute("user");
         // responseJsonObject.addProperty("cardIDNumber", userInfo.get(0).cardNumber);
-        JsonObject responseJsonObject = new JsonObject();
+        //JsonObject responseJsonObject = new JsonObject();
         responseJsonObject.addProperty("cardFirstName", userInfo.firstName);
         responseJsonObject.addProperty("cardLastName", userInfo.lastName);
         try {
@@ -110,6 +117,97 @@ public class ConfirmationServlet extends HttpServlet
             return null;
         }
         return userObj;
+    }
+    protected Boolean makePayment(HttpServletRequest request)
+    {
+        Connection connection = null; //dataSource.getConnection();
+        Statement preparedStatement =null; String paymentQuery;
+        ArrayList<ShoppingCart> itemsInCart = (ArrayList<ShoppingCart>) request.getSession().getAttribute("moviesinCart");
+        System.out.println("itemsInCart: "+itemsInCart.toString());
+        HttpSession session = request.getSession();
+        Integer customer_id = (Integer) session.getAttribute("customerID");
+        ArrayList<ShoppingCart> updatedItemsinCart = new ArrayList<ShoppingCart>();
+        ShoppingCart updatedItemsObj; //need to add Salesid with it
+        String sale_time = getCurrentTime();
+        User customer = (User)request.getSession().getAttribute("user");
+        customer_id = Integer.parseInt(customer.userId);
+        ResultSet rs = null;
+        Integer rid;
+        try
+        {
+            connection = dataSource.getConnection();
+            if (itemsInCart != null)
+            {
+                int count = 0;
+                synchronized (itemsInCart)
+                {
+                    for (ShoppingCart cart : itemsInCart)
+                    {
+                        if(cart != null ) {
+
+                            String sale_movie_id = cart.movieId;
+
+
+                            paymentQuery = "INSERT INTO sales (customerId, movieId, saleDate) VALUES ('"
+                                    + customer_id + "','" + sale_movie_id + "','" + sale_time + "');";
+                            preparedStatement = connection.prepareStatement(paymentQuery, Statement.RETURN_GENERATED_KEYS);
+                            /*paymentQuery = "INSERT INTO sales (customerId, movieId, saleDate) VALUES (?,?,?)";
+
+                            ((PreparedStatement) preparedStatement).setInt(1, customer_id );
+                            ((PreparedStatement) preparedStatement).setString(2,sale_movie_id);
+                            ((PreparedStatement) preparedStatement).setString(3,sale_time);
+*/
+                            //  int userResult =preparedStatement.executeUpdate(paymentQuery); //int userResult =
+                            ((PreparedStatement) preparedStatement).executeUpdate();
+
+                            rs = preparedStatement.getGeneratedKeys();
+                            if (rs != null && rs.next()){
+                                rid = rs.getInt(1);
+                                System.out.println("confirmation: "+rid);
+                                updatedItemsObj = new ShoppingCart(cart.movieId, cart.movieTitle, cart.price, cart.quantity, rid.toString());
+                                updatedItemsinCart.add(updatedItemsObj);
+                            }
+                            //  rs.next();
+                            // int auto_id = rs.getInt(1);
+
+/*
+                            if(rs.next()) {
+
+
+                                //java.sql.RowId rid=rs.getRowId(1);
+                                //TODO create movieid, sales id (rid);, quanity, price
+                                //String id, String title, int price, int quantity, String saleId)
+                                System.out.println("confirmation: "+rid);
+                                updatedItemsObj = new ShoppingCart(cart.movieId, cart.movieTitle, cart.price, cart.quantity, rid.toString());
+                                updatedItemsinCart.add(updatedItemsObj);
+                            }
+                            */
+
+
+                        }
+                    }
+                }
+            }
+            if (rs != null) rs.close();
+            if (preparedStatement != null) preparedStatement.close();
+            if (connection != null) connection.close();
+            session = request.getSession();
+            session.setAttribute("moviesinCart", updatedItemsinCart);
+        }
+        catch (Exception ex)
+        {
+            System.out.println("CONFIRMATION ERROR" + ex.getMessage());
+            return false;
+        }
+        return true;
+    }
+
+    private String getCurrentTime()
+    {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDateTime currentTime = LocalDateTime.now();
+        String saleDate = dtf.format(currentTime);
+        return saleDate;
     }
 }
 

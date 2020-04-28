@@ -45,7 +45,8 @@ public class PaymentServlet extends HttpServlet {
             //paymentList.add(payment);
             request.getSession().setAttribute("paymentInfo", paymentList);
             //viewCart(request, response);
-            if (makePayment(request)) {
+           // if (makePayment(request)) {
+            if (isCardValid){
                 System.out.println("PAYMENT SUCCESSFUL");
                 responseJsonObject.addProperty("status", "success");
                 responseJsonObject.addProperty("message", "Congratulations " + customerFirstName + " " + customerLastName + "! Your order has been processed");

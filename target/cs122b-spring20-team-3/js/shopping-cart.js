@@ -51,7 +51,6 @@ function viewShoppingCart(resultData) {
     table.append(bodyHTML);
 }
 function chkVal(obj){
-    alert(obj);
 
     var objval = obj.value;
     if (Number.isInteger(objval)){
@@ -65,7 +64,7 @@ function chkVal(obj){
 }
 function updateMovie(num, id, btnAction){
     try {
-        alert("updtae movie =" + num+", "+ id+","+btnAction);
+        //alert("updtae movie =" + num+", "+ id+","+btnAction);
         let movieid = id; //eval('$("#id' + num + '")').val();
         let qty = 0;
         if (btnAction ==="del") qty = 0;

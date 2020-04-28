@@ -1,6 +1,9 @@
 # Project 2: Fabflix
 By: Soumya Sharma
 ___
+
+##Note
+Github repo deleted all previous commits because there were problesm with merging latest files
 ## Demo 
 YouTube Video URL: https://youtu.be/-139z_ppkdk
 
