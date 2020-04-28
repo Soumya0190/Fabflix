@@ -1,0 +1,211 @@
+@import url('https://fonts.googleapis.com/css?family=Syncopate:400,700&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap');
+
+html {
+    background-image: linear-gradient(to bottom, #AEADF0, #D8DCFF, white);
+    background-repeat: no-repeat;
+    height: 100vh;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+}
+
+nav {
+    position: fixed;
+    top: 0;
+    right: 0;
+    padding: 2em;
+}
+
+h1 {
+    text-align: center;
+    font-family: 'Syncopate', sans-serif;
+    font-weight: bold;
+    color: #565676;
+    text-shadow: 3px 3px 5px white;
+}
+
+h2 {
+    text-align: center;
+    font-family: 'Syncopate', sans-serif;
+    font-weight: bold;
+    color: #565676;
+}
+
+h3 {
+    text-align: center;
+    font-family: 'Syncopate', sans-serif;
+    font-weight: bold;
+    color: #565676;
+}
+
+.searchDiv {
+    text-align: center;
+    font-family: 'Syncopate', sans-serif;
+    font-weight: bold;
+    color: #565676;
+}
+div {
+    text-align: center;
+    font-family: 'Syncopate', sans-serif;
+    font-weight: bold;
+    color: #A76571;
+}
+main {
+    margin: 1.5em;
+}
+
+#single_star_table {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+nav {
+    font-family: 'Syncopate', sans-serif;
+}
+
+.app_button {
+    text-decoration: none;
+    text-transform: uppercase;
+    background-color: #A76571;
+    border-radius: 1em;
+    color: white;
+    height: 12px;
+    padding: 1em;
+    display: inline-block;
+    box-shadow: 2px 3px 3px grey;
+}
+.app_button:hover {
+    animation: move 10ms;
+    background-color: #FF2E00;
+    animation-fill-mode: forwards;
+}
+
+#movies_list_button {
+    text-decoration: none;
+    text-transform: uppercase;
+    background-color: #A76571;
+    border-radius: 1em;
+    color: white;
+    padding: 1em;
+    height:15px;
+    display: inline-block;
+    box-shadow: 2px 3px 3px grey;
+}
+#search_list_button {
+    text-decoration: none;
+    text-transform: uppercase;
+    background-color: #A76571;
+    border-radius: 1em;
+    color: white;
+    height: auto;
+    padding: 1em;
+    display: inline-block;
+    box-shadow: 2px 3px 3px grey;
+}
+
+#movies_list_button:hover {
+    animation: move 1s;
+    animation-fill-mode: forwards;
+}
+
+#search_list_button:hover {
+    animation: move 1s;
+    animation-fill-mode: forwards;
+}
+
+.fabflix_table a {
+    text-decoration: none;
+    color: #565676;
+}
+
+.fabflix_table a:visited {
+    color: #565676;
+}
+
+.fabflix_table a:hover {
+    color: #A76571;
+}
+.center {
+    text-align: center;
+}
+
+.pagination {
+    display: inline-block;
+}
+
+.pagination a {
+    color: black;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+    transition: background-color .3s;
+    border: 1px solid #ddd;
+    margin: 0 4px;
+}
+
+.pagination a.active {
+    background-color: #4CAF50;
+    color: white;
+    border: 1px solid #4CAF50;
+}
+
+.pagination a:hover:not(.active) {background-color: #ddd;}
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 40%;
+    font-weight:bold;
+    font-color: #565676;
+    align:center;
+}
+
+/* The Close Button */
+.closeCartMsg {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.closeCartMsg:hover,
+.closeCartMsg:focus {
+    color: #000;
+    cursor: pointer;
+}
+
+@keyframes move {
+    0% {
+        transform: translateY(20px);
+    }
+    50% {
+        background-color: #C38D94;
+    }
+    100% {
+        transform: translateY(0px);
+        background-color: #A76571;
+    }
+}

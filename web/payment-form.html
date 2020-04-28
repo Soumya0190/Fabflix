@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Payment Form</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel = "stylesheet" href = "./css/styles.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+</head>
+
+<body>
+<header>
+    <br>
+    <h1>Payment Form</h1>
+    <hr>
+    <nav>
+
+       <span id = "navigation">
+           <a href = "search.html" id = "search_list_button">Search Movies</a>
+           <br />
+           <a href = "shopping-cart.html" id = "movies_list_button">View Shopping Cart</a>
+       </span>
+    </nav>
+</header>
+<body>
+<br>
+<tbody id ="movies_list_body" class = "fabflix_table">
+<table width ="80%" align ="center" class = "fabflix_table">
+    <form id="payment_form" method="POST" action="#" >
+        <tr>
+            <td><label for ="cardNum"> Card Number</label></td>
+            <td><input type="number" id="cardNum" name="cardNumber" value="941" required  /></td>
+        </tr>
+        <tr>
+            <td><label for ="txtFirstName"> Customer First Name</label></td>
+            <td><input type="text" id="txtFirstName" name="firstName" value="soumya" required /></td>
+        </tr>
+        <tr>
+            <td><label for ="txtLastName"> Customer Last Name</label></td>
+            <td><input type="text" id="txtLastName" name="lastName" value="sharma" required /></td>
+        </tr>
+        <tr>
+            <td><label for ="txtExpDate"> Card Expiration Date</label></td>
+            <td><input type="date" id="txtExpDate" name="expirationDate" value="11-01-2005" required /></td>
+        </tr>
+        <tr><td colspan="2" height ="15">&nbsp;</td></tr>
+        <tr>
+            <td colspan="2" align ="center"> <input type="submit" id="orderBtn" class="app_button" value="Place your order" /> </td>
+        </tr>
+    </form>
+
+    </tbody>
+</table>
+</body>
+<div id="payment_error_message"></div>
+<footer>
+    <hr />
+    <div align="center" width="100%">
+        <a href="/api/login?logout=Y">Log Out</a> &nbsp;&nbsp;
+        <a href="#">About Us</a>&nbsp;
+        <a href = "search.html" id = "addMore_button">Add More to Cart</a></span>
+    </div>
+</footer>
+
+
+<!-- include our own JS file -->
+<script src="js/payment.js"></script>
+
+</body>
+</html>
+
