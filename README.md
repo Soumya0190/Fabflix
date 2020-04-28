@@ -1,10 +1,6 @@
-# Project 1: Fabflix
-By: Iqra Abbaali and Soumya Sharma
+# Project 2: Fabflix
+By: Soumya Sharma
 ___
-
-## NOTE
-Soumya has 2 different Github accounts and for some reason, *both of her* accounts (soumya-190 AND Soumya0190) made commits to our project. We contacted TA Yicong and he said to make sure to include this detail in this README. Sorry for making this mistake, and we will not do it in future projects. 
-
 ## Demo 
 YouTube Video URL: https://youtu.be/-139z_ppkdk
 
@@ -13,5 +9,23 @@ In order to deploy the project to Tomcat, it is quite simple because no addition
 
 Navigate to the Tomcat manager page on **http://localhost:8080/manager/html** which will now show the newly deployed project. Click on it and you will see the project! 
 
-## Member Contribution
-Iqra worked on the functionality for the Top 20 Movies List page (HTML, JavaScript, and MovieListServlet). Soumya worked on the functionality for the Single Star page (HTML, JavaScript, and SingleStarServlet). Iqra and Soumya both worked on the Single Movie page together and created the SQL queries for creating tables on the moviedb together. Iqra also did the styling for the pages (styles.css).  
+## Functionalities
+This project has several webpages, as listed: Login Page, Search Page, Movie List Page, Single Movie Page, Single Star Page, Shopping Cart Page, Payment Form, Confirmation Page 
+
+The project has the following functionalities:
+- logs in user 
+- searching for movies based on text input
+- searching for movies based in both ascending or descending order of both title or rating
+- jumping between different pages using provided buttons
+- displays all information about single movie or single star if selected
+- browsing through movies by genre or starting letter
+- accomodating different number of results on each page
+- pagination of results
+- adding movies to shopping cart and viewing shopping cart
+- updating or deleting order on view cart screen
+- allows user to checkout and view cart screen on every page after login
+- allows user to add any movie to cart while browsing or searching 
+- confirming credit card payment
+- confirming payment with message (displays saleID, names of movies, price of each movie, quantity bought)
+
+The project is implemented using Microservice Architecture with CSS, HTML, JavaScript, and Java
