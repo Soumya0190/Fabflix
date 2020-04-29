@@ -64,7 +64,7 @@ function printAlphanumericList() {
     var divText = "";
     divText = getAlphanumericList(48,58, divText);
     divText = getAlphanumericList(65,91, divText);
-    divText = divText + " <a href='movie-list.html?browsetitle=spchr&pagination=N' />*</a> ";
+    divText = divText + " <a href='movie-list.html?browsetitle=spchr&pagination=N'>*</a> ";
 
     $("#divTitleList").html(divText);
 }

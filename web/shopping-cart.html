@@ -26,6 +26,7 @@
     <hr />
     <div id ="cart_error_message" ></div>
     <div id = "movie_info">
+        <form method='GET' action='shopping-cart.html' id="shopping_form" >
     <table id = "shopping_cart_table" class = "fabflix_table" border="0"  width ="100%" align="left">
         <thead>
         <tr>
@@ -38,8 +39,11 @@
         </thead>
         <tbody id ="shopping_cart_body" class = "fabflix_table">
         </tbody>
-
+        <input type="hidden" id = "qty"  name="qty" />
+        <input type="hidden" id = "movieid"  name="movieid" />
+        <input type="hidden" id = "action"  name="action" value="upd"/>
     </table>
+        </form>
     </div>
 
 </main>

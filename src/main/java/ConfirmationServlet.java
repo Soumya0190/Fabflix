@@ -71,6 +71,9 @@ public class ConfirmationServlet extends HttpServlet
             printer.write(responseJsonObject.toString());
             printer.close();
             System.out.println(servletName +" : " + responseJsonObject.toString());
+            ArrayList<ShoppingCart> newCartList = new ArrayList<ShoppingCart>();
+            session.setAttribute("moviesinCart", newCartList);
+            //
         }
         catch (Exception ex)
         {
