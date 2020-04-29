@@ -25,7 +25,7 @@ The project has the following functionalities:
     - Search by year
     - Search by director
     - Search by star's name
-    - Substring Matching is implemented correctly for searching title/director/star. A file that explains of how you use the LIKE predicate.
+    - Substring Matching is implemented for searching title/director/star using the LIKE % predicate for fuzzy searches, in format: %keyword%. If keyword is anywhere in the text input, it will show up in the results
 - Jump among movie list page, single movie page, and single star page without using browser history or changing url
 - Show at least (title(hyperlinked), year, director, list of genres(hyperlinked), list of stars(hyperlinked)), rating
 - Implemented Pagination. Frontend cache and backend cache both can not exceed 100 records 
@@ -45,6 +45,7 @@ The project has the following functionalities:
  - Modify quantity using an input box and only allow valid values (numbers that >= 0) 
 ""Add to Cart"" button for each movie in ""Movie List"" page and ""Single Movie"" page"
 - Show efforts to beautify the page and table using CSS and JavaScript - i have implemneted css consistently , but due to shortage of time, model pops are not implemented everywhere and added alerts for faster delivery. 
+-Update and Delete items from shopping cart
 - Due to shortage of time logout and about is not imeplemneted, but will add next time. (it is optional, and not part of rubric score)
 Use Microservices Architecture (front-end back-end separation)
 
