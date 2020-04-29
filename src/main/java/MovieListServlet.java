@@ -97,7 +97,7 @@ public class MovieListServlet extends HttpServlet {
                 if (commaSeparatedMovieIds != null && commaSeparatedMovieIds.length() > 0) query = query + " AND m.id in (" + commaSeparatedMovieIds + ") ";
             }
             if (titleStartsWith != null && titleStartsWith.length() > 0) {
-                if (titleStartsWith == "spchr") query = query + " AND title not like '[^A-Z0-9]%' ";
+                if (titleStartsWith == "spchr") query = query + " AND title substr(title,1,1)  NOT REGEXP '[A-Za-z0-9]'; ";
                 else query = query + " AND title like '" + titleStartsWith + "%' ";
             }
             if (movieTitle != null && movieTitle.length() > 0) query = query + " AND title like '%" + movieTitle + "%' ";

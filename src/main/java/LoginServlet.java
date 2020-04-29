@@ -28,7 +28,7 @@ public class LoginServlet extends HttpServlet {
         JsonObject responseJsonObject = new JsonObject();
         String logout = request.getParameter("logout");
         if (logout == "Y") {
-            session.invalidate();
+            request.getSession().setAttribute("user", null);
             responseJsonObject.addProperty("status", "fail");
         }
 
