@@ -40,16 +40,17 @@ public class DashboardServlet extends HttpServlet
         String formaction = request.getParameter("formaction");
         String starName = request.getParameter("starName");
         String starDOB = request.getParameter("starDOB");
+        System.out.println("formaction=" +formaction);
         User usrObj =null;  String status ="";
-        if (formaction != null && formaction=="addstar") {
+        if (formaction != null && formaction.equals("addstar")) {
             status = saveActorInfoinDB(request);
         }
-        else if (formaction == "addmovie")
+        else if (formaction.equals("addmovie"))
         {
             status = saveMovieInfoinDB(request);
         }
         responseJsonObject.addProperty("message", "success");
-        if (status == "success") responseJsonObject.addProperty("status", "success");
+        if (status.equals("success")) responseJsonObject.addProperty("status", "success");
         else responseJsonObject.addProperty("status", "fail");
 
         response.getWriter().write(responseJsonObject.toString());
@@ -94,7 +95,7 @@ public class DashboardServlet extends HttpServlet
         String starByear = request.getParameter("starByear")!=null? request.getParameter("starByear") :"";
         String regex = "\\d+";
 
-
+        System.out.println("movieTitle="+movieTitle+" ,director= "+director+",movieStar = " +movieStar);
         String query ="{CALL addMovie(?,?,?,?,?,?,?,?)}"; String status ="";
         try
         {
@@ -105,7 +106,7 @@ public class DashboardServlet extends HttpServlet
             prepStmt.setString(2, starByear);
             prepStmt.setString(3, movieID);
             prepStmt.registerOutParameter(4, java.sql.Types.VARCHAR);
-
+            System.out.println("After = "+prepStmt.toString());
             boolean hadResults = prepStmt.execute();
             status  = prepStmt.getString("status");
             prepStmt.close();

@@ -31,6 +31,7 @@ function submitAddStarForm(formSubmitEvent) {
         dataType: "json",
         method: "POST",
         url: "api/dashboard",
+        data: addStar_form.serialize(),
         success: (resultData) => displayScreen(resultData)
     });
 }
@@ -40,6 +41,7 @@ function submitAddMovieForm(formSubmitEvent) {
     jQuery.ajax({
         dataType: "json",
         method: "POST",
+        data: addMovie_form.serialize(),
         url: "api/dashboard",
         success: (resultData) => displayScreen(resultData)
     });
