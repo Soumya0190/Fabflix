@@ -1,0 +1,70 @@
+<!-- This page will be redirected from any url if you are not logged in -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel = "stylesheet" href = "./css/styles.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <title>Admin Dashboard</title>
+</head>
+<body>
+<header>
+    <nav>
+      <span id = "navigationSrch">
+          <a href = "search.html" id = "search_list_button">Search Movies</a><br /></span>
+
+    </nav>
+</header>
+<main>
+    <br>
+    <h1>Admin Dashboard</h1>
+    <!-- Set the method to POST to avoid showing the username/password in the URL
+        The default action is disabled to allow your own implementation. -->
+    <hr />
+    <div id="error_message" align ="center" width="100%"></div>
+    <div id="divAddStar" align="center" width=80%">
+        <h3>Add Star</h3>
+        <form id="addStar_form" method="post" action="#">
+            <input type="hidden" name="formaction" value="addstar" />
+            <br /><br />
+            <label><b>Star Name </b></label>
+            <label> <input name="starName" required type="text" value="" /></label>
+            <br />
+            <label><b>Birth Year </b></label>
+            <label>
+                <input name="starDOB" type="starDOB" value="" />
+            </label>
+            <br /> <br />
+            <input type="Submit" value="Add Star" class ="app_button"><br /> <br /><br />
+        </form>
+    </div>
+    <div id="divMovie" align="center" width=80%">
+        <form id="addMovie_form" method="post" action="#">
+            <input type="hidden" name="formaction" value="addmovie" />
+            <br /><h3>Add Movie</h3>
+            <label><b>Title </b></label><label><input name="movieTitle" required type="text" value="" placeholder="Enter Title of the movie" /></label>        <br />
+            <label><b>Release Year </b></label><label> <input name="movieYear" type="text" required value="" placeholder="Enter Movie Release Year"/></label>  <br />
+            <label><b>Director </b></label><label> <input name="director" type="text" value="" placeholder="Enter Director" />  </label>  <br />
+            <label><b>Movie Star </b></label><label> <input name="movieStar" type="text" value="" placeholder="Enter Movie Star"/>  </label>  <br />
+            <label><b>Genre </b></label><label> <input name="genre" type="text" value="" />  </label>  <br /><br />
+            <input type="Submit" value="Add Movie" class ="app_button"><br />
+        </form>
+    </div>
+
+    <div id="DBMetaData" align ="center" width="100%" >
+        <h2>Database Metadata</h2>
+        <table id = "metadata_table" class = "fabflix_table">
+            <tbody id ="metadata_body" class = "fabflix_table">
+            </tbody>
+
+        </table>
+    </div>
+
+    <!-- include jQuery-->
+
+    <!-- include our own JS file -->
+    <script src="js/dashboard.js"></script>
+</main>
+</body>
+</html>
+
