@@ -95,7 +95,6 @@ public class SAXParserMovie extends DefaultHandler
         }
         else if (qName.equalsIgnoreCase("cat"))
         {
-            System.out.println("THIS IS THE CATEGORY" + tempVal);
             if(tempVal == null){tempVal = "";}
             tempMovie.setGenre(tempVal);
         }
@@ -110,44 +109,43 @@ public class SAXParserMovie extends DefaultHandler
         {
             Movie movieObj = (Movie)it.next();
 
-            String movieID = movieObj.getMovieID();
-            String movieTitle = movieObj.getTitle();
-            String movieDirector = movieObj.getDirector();
-            String movieReleaseDate = movieObj.getYear();
-            String movieGenre = movieObj.getGenre();
+            String movieID = movieObj.getMovieID()== null ? "": movieObj.getMovieID() ;
+            String movieTitle = movieObj.getTitle()== null ? "": movieObj.getTitle() ;
+            String movieDirector = movieObj.getDirector()== null ? "": movieObj.getDirector() ;
+            String movieReleaseDate = movieObj.getYear()== null ? "": movieObj.getYear() ;
+            String movieGenre = movieObj.getGenre() == null ? "": movieObj.getGenre() ;
 
             Boolean reportIt = false;
             if(movieID.length() >= 11)
             {
                 reportIt = true;
+                report.write("Movie ID: " + movieID + " | ");
             }
             if (movieTitle == null || movieTitle.length() <= 0 || movieTitle.length() > 100) //100 NOT NULL
             {
-                movieTitle = "Unspecified Movie Title".trim();
+                report.write("Bad data for Movie Title: " + movieTitle + " | ");
                 reportIt = true;
             }
             if (movieDirector == null || movieDirector.length() <= 0 || movieDirector.length() > 100) //0 - 100 NOT NULL
             {
-                movieDirector = "Unspecified Movie Director".trim();
+                report.write("Bad data for Movie Director: " + movieDirector + " | ");
                 reportIt = true;
             }
-            if (movieReleaseDate == null || movieReleaseDate.length() <= 0 || movieReleaseDate.length() > 4) //4 digit
+            if (movieReleaseDate == null || movieReleaseDate.trim().length() <= 0 || movieReleaseDate.trim().length() > 4) //4 digit
             {
-                movieReleaseDate = "Unspecified Movie Release Date".trim();
+                report.write("Bad data for movie ReleaseDate: " + movieReleaseDate + " | ");
+
                 reportIt = true;
             }
-            if (movieGenre == null || movieGenre.length() <= 0 || movieGenre.length() > 32) //NOT NULL  0-32
+            if (movieGenre == null || movieGenre.trim().length() <= 0 || movieGenre.trim().length() > 32) //NOT NULL  0-32
             {
-                movieGenre = "Unspecified".trim();
+                report.write("Bad data for movie movieGenre: " + movieGenre + " | ");
                 reportIt = true;
             }
+
             if(reportIt)
             {
-                report.write("Movie ID: " + movieID + "\n");
-                report.write(" Movie Name: " + movieTitle + "\n");
-                report.write("Movie Director: " + movieDirector + "\n");
-                report.write("Movie Release Date: " + movieReleaseDate + "\n");
-                report.write("Movie Genre: " + movieGenre + "\n");
+                report.write("\n");
             }
             else if(!reportIt)
             {

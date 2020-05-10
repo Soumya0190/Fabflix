@@ -25,6 +25,8 @@ function handleLoginResult(resultDataString)
  */
 function submitAddStarForm(formSubmitEvent) {
     console.log("submit add star form");
+    alert($("#starName").val());
+    formSubmitEvent.preventDefault();
     jQuery.ajax({
         dataType: "json",
         method: "POST",
@@ -52,7 +54,7 @@ function displayScreen(resultData) {
     console.log("get DB Meta data");
     let table = $("#metadata_body");   let bodyHTML = "";
     if (resultData ==="undefined" || resultData ==="null" || resultData.length <= 0) return;
-    let tabData = JSON.parse(resultData);
+    let tabData = resultData;
 
     for (let i = 0; i < tabData.length; i++) {
         bodyHTML = bodyHTML + "<tr><td colspan='5'><b>" + tabData[i]["table_name"] + "</b></td></tr>";
