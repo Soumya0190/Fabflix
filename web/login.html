@@ -14,6 +14,7 @@
 <hr />
 <div id="divLogin" align="center" width=80%">
 <form id="login_form" method="post" action="#">
+
     <br /><br />
     <label><b>Username</b></label>
     <label>
@@ -24,7 +25,8 @@
     <label>
         <input name="password" placeholder="Enter Password" type="password" value="" />
     </label>
-    <br /><br /><br />
+    <br />
+    <input type="hidden" id="usertype"  name="usertype" value="admin">
     <input type="submit" value="Login" class ="app_button">
 </form>
 </div>
@@ -34,6 +36,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <!-- include our own JS file -->
 <script src="js/login.js"></script>
+
 
 </body>
 </html>

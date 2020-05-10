@@ -3,7 +3,7 @@
 function handleLoginResult(resultDataString)
 {
     //let resultDataJson = JSON.parse(resultDataString);
-
+alert("receiveddata");
     console.log("handle login response");
     console.log(resultDataString);
     console.log(resultDataString["status"]);
@@ -29,9 +29,9 @@ function submitLoginForm(formSubmitEvent)
     console.log("submit employee login form");
     formSubmitEvent.preventDefault();
     $.ajax(
-        "api/login", {
+        "api/employeelogin", {
             method: "POST",
-            data: login_form.serialize(),
+            data: emp_login_form.serialize(),
             success: (resultData) => handleLoginResult(resultData)
 
         }
@@ -39,6 +39,7 @@ function submitLoginForm(formSubmitEvent)
 }
 
 // Bind the submit action of the form to a handler function
-let emp_login_form = document.getElementById("emp_login_form") ;//$("#emp_login_form");
+let emp_login_form = $("#emp_login_form");//document.getElementById("emp_login_form") ;
 emp_login_form.submit(submitLoginForm);
+alert("ojkjjjkjk");
 

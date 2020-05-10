@@ -4,10 +4,7 @@ import com.google.gson.JsonObject;
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -27,9 +24,32 @@ public class LoginServlet extends HttpServlet {
         //logout
         JsonObject responseJsonObject = new JsonObject();
         String logout = request.getParameter("logout");
-        if (logout == "Y") {
+
+        if (logout == "Y")
+        {
             request.getSession().setAttribute("user", null);
             responseJsonObject.addProperty("status", "fail");
+
+            Cookie[] cookies = request.getCookies();
+            if(cookies != null)
+            {
+               for(Cookie cookie : cookies)
+               {
+                   if(cookie.getName().equals("JSESSIONID"))
+                   {
+                       System.out.println("JSESSIONID="+cookie.getValue());
+                       break;
+                   }
+               }
+            }
+            //invalidate the session if exists
+            System.out.println("User="+session.getAttribute("user"));
+            if(session != null)
+            {
+                session.invalidate();
+            }
+            response.sendRedirect("login.html");
+
         }
 
         else {
@@ -45,7 +65,8 @@ public class LoginServlet extends HttpServlet {
                 responseJsonObject.addProperty("status", "success");
                 responseJsonObject.addProperty("message", "success");
 
-            } else {
+            }
+            else {
                 // Login fail
                 responseJsonObject.addProperty("status", "fail");
                 responseJsonObject.addProperty("message", "Incorrect Username or password");

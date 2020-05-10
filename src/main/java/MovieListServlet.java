@@ -1,6 +1,5 @@
 package main.java;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import javax.annotation.Resource;
@@ -18,11 +17,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.Hashtable;
 
 @WebServlet(name = "MovieListServlet", urlPatterns = "/api/movies")
 public class MovieListServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
+    private final String servletName ="MovieListServlet";
     @Resource(name = "jdbc/moviedb")
     private DataSource dataSource;
     final int totalRecordsCashed = 100;
@@ -67,15 +69,16 @@ public class MovieListServlet extends HttpServlet {
         catch(Exception ex)
         {
             //System.out.println(ex.getStackTrace());
-            System.out.println(ex.getMessage());
+            System.out.println(servletName + ":"+ ex.getMessage());
         }
         printer.close();
     }
 
     protected String getDataFromDatabase(SearchCriteria searchCriteria, int pgOffset, HttpServletRequest request, HttpServletResponse response){
-    String movieStar, movieTitle, movieDirector, movieYear, genreid, titleStartsWith;
-    //int pgOffset, recordsPerPage;
+        String movieStar, movieTitle, movieDirector, movieYear, genreid, titleStartsWith;
+        //int pgOffset, recordsPerPage;
         JsonArray jsonArray = new JsonArray();
+        String[] arrParams;
         genreid = searchCriteria.genreid;
         titleStartsWith = searchCriteria.titleStartsWith;
         movieTitle = searchCriteria.movieTitle;
@@ -83,12 +86,16 @@ public class MovieListServlet extends HttpServlet {
         movieYear = searchCriteria.movieYear;
         movieStar = searchCriteria.movieStar;// searchCriteria.recordsPerPage = request.getParameter("recordsPerPage");
         pgOffset = searchCriteria.pageOffset;
-       // recordsPerPage = searchCriteria.recordsPerPage;
-        System.out.println("titleStartsWith=" +titleStartsWith+", movieTitle = "+ movieTitle+", movieDirector="+movieDirector);
+        Integer intParams = 0;
+        Hashtable<Integer, String> hashtable = new Hashtable<Integer, String>();
+
+        // recordsPerPage = searchCriteria.recordsPerPage;
+        //  System.out.println("titleStartsWith=" +titleStartsWith+", movieTitle = "+ movieTitle+", movieDirector="+movieDirector);
         try {
             String commaSeparatedMovieIds = "";
             Connection connection = dataSource.getConnection();
-            Statement statement = connection.createStatement();
+            // Statement statement = connection.createStatement();
+            PreparedStatement preparedStatementMainQuery;
             String query = "SELECT r.movieid, m.title, m.year, m.director, r.rating , FLOOR(RAND()*(10)+5) price ";
             query =  query + " FROM ratings r, movies m WHERE r.movieId = m.id ";
 
@@ -98,24 +105,51 @@ public class MovieListServlet extends HttpServlet {
             }
             if (titleStartsWith != null && titleStartsWith.length() > 0) {
                 if (titleStartsWith.equals("spchr") ) query = query + " AND substring(title,1,1) NOT REGEXP '[A-Za-z0-9]' ";
-                else query = query + " AND title like '" + titleStartsWith + "%' ";
+                    //else query = query + " AND title like '" + titleStartsWith + "%' ";
+                else
+                {
+                    query = query + " AND title like ? ";
+                    intParams++; hashtable.put(intParams,titleStartsWith + "%" );
+                }
             }
-            if (movieTitle != null && movieTitle.length() > 0) query = query + " AND title like '%" + movieTitle + "%' ";
-            if (movieDirector != null && movieDirector.length() > 0) query = query + " AND director like '%" + movieDirector + "%' ";
-            if (movieYear != null && movieYear.length() > 0) query = query + " AND year = " + movieYear;
-            String mainQuery = query + " LIMIT "+ String.valueOf(totalRecordsCashed) + " OFFSET "+ String.valueOf(pgOffset) + ";";
+            if (movieTitle != null && movieTitle.length() > 0) {
+                query = query + " AND title like ?";
+                intParams++;hashtable.put(intParams,"%" + movieTitle + "%" );
+            }
+            if (movieDirector != null && movieDirector.length() > 0) {
+                query = query + " AND director like ? "; intParams++;hashtable.put(intParams,"%" + movieDirector + "%" );
+            }
+            if (movieYear != null && movieYear.length() > 0) {
+                query = query + " AND year = ? " ; intParams++;hashtable.put(intParams,movieYear);
+            }
+            String mainQuery = query + " LIMIT ? OFFSET ?;";
+            //hashtable.put(intParams,String.valueOf(totalRecordsCashed)); intParams++;
+            //hashtable.put(intParams,String.valueOf(pgOffset)); intParams++;
 
-
-           // jsnObject.addProperty("total");
-           // query = query1 + query; //Create full query
             System.out.println("MovieListServlet DBquery = " + query);
             String genreQuery = "SELECT DISTINCT name FROM genres_in_movies gm, genres g WHERE gm.movieId=? AND gm.genreId = g.id LIMIT 3";
             PreparedStatement preparedStatementGenres = connection.prepareStatement(genreQuery);
 
             String starsQuery = "SELECT DISTINCT name, id FROM stars_in_movies, stars WHERE movieId=? AND starId = id LIMIT 3";
             PreparedStatement preparedStatementStars = connection.prepareStatement(starsQuery);
+            Enumeration names = hashtable.keys(); Integer key;
 
-            ResultSet result = statement.executeQuery(mainQuery);
+            preparedStatementMainQuery = connection.prepareStatement(mainQuery);
+            System.out.println("Before : " + preparedStatementMainQuery.toString());
+            while(names.hasMoreElements()) {
+                key = (Integer) names.nextElement();
+                System.out.println("Key: " +key+ " & Value: " + hashtable.get(key));
+                preparedStatementMainQuery.setString(key, hashtable.get(key));
+            }
+            key = intParams+ 1;
+            System.out.println("Key: " +key+ " & Value: " +totalRecordsCashed);
+            preparedStatementMainQuery.setInt(key, totalRecordsCashed); key = intParams+ 2;
+            System.out.println("Key: " +key+ " & pgOffset: " +pgOffset);
+            preparedStatementMainQuery.setInt(key, pgOffset);
+            System.out.println("After : " + preparedStatementMainQuery.toString());
+
+            ResultSet result = preparedStatementMainQuery.executeQuery();
+            //ResultSet result = statement.executeQuery(mainQuery);
             while (result.next()) {
                 String movie_id =result.getString("movieId") ;
                 String genres = ""; //result.getString("genre");
@@ -150,13 +184,14 @@ public class MovieListServlet extends HttpServlet {
                 jsonArray.add(jsonObject);
             }
             result.close();
-            statement.close();
+            preparedStatementMainQuery.close();
+            // statement.close();
             preparedStatementGenres.close();
             preparedStatementStars.close();
             connection.close();
 
             //Store in session
-            String numOfRecords = getTotalRecords(query);
+            String numOfRecords = getTotalRecords(query, hashtable);
             if (numOfRecords != null && (Integer.parseInt(numOfRecords) <0 ))
             {
                 JsonObject jsonObject = new JsonObject();
@@ -178,8 +213,8 @@ public class MovieListServlet extends HttpServlet {
             jsnObject.addProperty("titleStartsWith", titleStartsWith);
 
             HttpSession session = request.getSession();
-           session.setAttribute("moviesData", jsnObject);
-         //   session.setAttribute("moviesData", jsonArray);
+            session.setAttribute("moviesData", jsnObject);
+            //   session.setAttribute("moviesData", jsonArray);
             session.setAttribute("searchCriteria", searchCriteria);
 
             //String movieLstString = getMovieListFromSession(0, recordsPerPage, session);
@@ -187,7 +222,7 @@ public class MovieListServlet extends HttpServlet {
             //response.setStatus(200);
             return jsnObject.toString();
         } catch (Exception ex) {
-            System.out.println(ex.getMessage());
+            System.out.println(servletName + ":"+ ex.getMessage());
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("errorMessage", ex.getMessage());
             jsonObject.addProperty("totalRecords", 0);
@@ -224,51 +259,6 @@ public class MovieListServlet extends HttpServlet {
         newSrchCriteria.titleStartsWith = srchCriteria.titleStartsWith;
         newSrchCriteria.movieTitle = srchCriteria.movieTitle;
         session.setAttribute("searchCriteria", newSrchCriteria);
-
-       /* JsonArray newJSONarray = new JsonArray();
-        JsonObject newJsonObj = new JsonObject();
-        String arr=(jsonObj.get("movieArray")).getAsJsonPrimitive().toString();
-        int totalRecords = pgRecord + startPg;
-        if (jsonObj.isJsonPrimitive()) {
-            newJsonObj.addProperty("recordsPerPage", String.valueOf(jsonObj.get("recordsPerPage")));
-            newJsonObj.addProperty("pgOffset", String.valueOf(jsonObj.get("pgOffset")));
-            newJsonObj.addProperty("totalRecords", String.valueOf(jsonObj.get("totalRecords")));
-         }
-        try {
-            if (jsonObj.getAsJsonArray("movieArray").isJsonArray()) {
-                JsonArray jArr = jsonObj.getAsJsonArray("movieArray");
-            }
-        }
-        catch( Exception ex)
-        {
-            System.out.println(ex.getMessage());
-            return jsonObj.toString();
-        }
-        /*
-        //Create small subset of json array ...only for number of  records needed on one page
-       // JsonArray jsnArray = (JsonArray)jsonObj.get("movieArray");
-        String movieArray = jsonObj.get("movieArray").toString();
-        JsonArray array = gson.fromJson(lang, JsonArray.class);
-        JsonArray jsnArray = new JsonArray(movieArray);
-        JsonElement je = (JsonElement)jsonObj.get("movieArray");
-        if (je.isJsonArray())
-        for (int i = startPg; i <= totalRecords; i++) {
-            jObj = (JsonObject) jsnArray.get(i);
-            newJSONarray.add(jObj);
-        }
-        //create main json object and add jsonarray to it
-        JsonObject newJsonObj = new JsonObject();
-        newJsonObj.addProperty("recordsPerPage", String.valueOf(jsonObj.get("recordsPerPage")));
-        newJsonObj.addProperty("pgOffset", String.valueOf(jsonObj.get("pgOffset")));
-        newJsonObj.addProperty("totalRecords", String.valueOf(jsonObj.get("totalRecords")));
-        newJsonObj.addProperty("movieArray", newJSONarray.toString());
-
-        System.out.println("MovieList startPg =" + (String.valueOf(startPg)));
-        System.out.println("MovieList pgRecord =" + (String.valueOf(pgRecord)));
-        System.out.println("MovieList totalRecords =" + String.valueOf(jsonObj.get("totalRecords")));
-        /*JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("totalRecords", (String.valueOf(newJSONarray.size())));
-        newJSONarray.add(jsonObject);*/
         return newJSonObj.toString();
     }
 
@@ -279,19 +269,24 @@ public class MovieListServlet extends HttpServlet {
         try {
             Connection connection = dataSource.getConnection();
             if (starName != null && starName.length() > 0) {
-                query = "SELECT  movieId FROM stars_in_movies sm, stars s WHERE starId = id AND s.name like '%" + starName + "%'; ";
-                Statement statement = connection.createStatement();
                 ResultSet movieResult = null;
-                movieResult = statement.executeQuery(query);
+                //query = "SELECT  movieId FROM stars_in_movies sm, stars s WHERE starId = id AND s.name like '%" + starName + "%'; ";
+                query = "SELECT  movieId FROM stars_in_movies sm, stars s WHERE starId = id AND s.name like ?; ";
+                // Statement statement = connection.createStatement();
+                // movieResult = statement.executeQuery(query);
+                PreparedStatement preparedStatementStars = connection.prepareStatement(query);
+                preparedStatementStars.setString(1, starName);
+                movieResult = preparedStatementStars.executeQuery();
+
                 while (movieResult.next()) {
                     movieLst.add(movieResult.getString("movieId"));
                     if (movieList.length() <= 0) movieList = "'" + movieResult.getString("movieId") + "'";
                     else movieList += ",'" + movieResult.getString("movieId") + "'";
                 }
                 movieResult.close();
-                statement.close();
+                preparedStatementStars.close();
             } else if (genreID != null && genreID.length() > 0) {
-                query = "SELECT movieId FROM genres_in_movies, genres WHERE genreId = id AND genreId=? "; // LIMIT ?";
+                query = "SELECT movieId FROM genres_in_movies, genres WHERE genreId = id AND genreId=? ";
                 PreparedStatement preparedStatementGenre = connection.prepareStatement(query);
                 preparedStatementGenre.setString(1, genreID);
                 ResultSet movieResult = preparedStatementGenre.executeQuery();
@@ -306,18 +301,26 @@ public class MovieListServlet extends HttpServlet {
             }
             connection.close();
         } catch (Exception ex) {
+            System.out.println(servletName+" : " + ex.getMessage());
             return null;
         }
         String moviesCommaSeparated = String.join(",", movieLst);
         return movieList;
     }
-    protected String getTotalRecords(String query)
+    protected String getTotalRecords(String query, Hashtable<Integer, String> hashtable)
     {
         Integer rowCount = 0;
         try
         {
+            Enumeration names = hashtable.keys(); Integer key;
             Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatemenUser = connection.prepareStatement(query+";");
+            while(names.hasMoreElements()) {
+                key = (Integer) names.nextElement();
+                System.out.println("Key: " +key+ " & Value: " + hashtable.get(key));
+                preparedStatemenUser.setString(key, hashtable.get(key));
+            }
+            System.out.println("After count : " + preparedStatemenUser.toString());
             ResultSet userResult = preparedStatemenUser.executeQuery();
             if (userResult.last()){
                 rowCount= userResult.getRow();
@@ -346,4 +349,6 @@ public class MovieListServlet extends HttpServlet {
     }
 
 }
+
+
 
