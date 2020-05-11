@@ -19,12 +19,12 @@ import java.sql.Statement;
 
 /*
 Code used form Professor Chen Li's project1-api-example
- */
+*/
 @WebServlet(name = "SingleStarServlet", urlPatterns = "/api/stars")
 public class SingleStarServlet extends HttpServlet
 {
     private static final long serialVersionUID = 1L;
-
+    private final String servletName ="SingleStarServlet";
     @Resource(name = "jdbc/moviedb")
     private DataSource dataSource;
 
@@ -41,8 +41,7 @@ public class SingleStarServlet extends HttpServlet
         {
             Connection connection = dataSource.getConnection();
 
-            String starInfoQuery = "SELECT name, birthYear FROM stars " +
-                    "WHERE id=?";
+            String starInfoQuery = "SELECT name, birthYear FROM stars WHERE id=?";
             PreparedStatement preparedStatementStar = connection.prepareStatement(starInfoQuery);
 
             String starMovieQuery = "SELECT id, title FROM stars_in_movies, movies " +
@@ -97,4 +96,3 @@ public class SingleStarServlet extends HttpServlet
         printer.close();
     }
 }
-

@@ -22,10 +22,6 @@ function handleLoginResult(resultDataString)
     }
 }
 
-
-
-
-
 /**
  * Submit the form content with POST method
  * @param formSubmitEvent
@@ -37,8 +33,8 @@ function submitSearchForm(formSubmitEvent) {
      * users to the url defined in HTML form. Instead, it will call this
      * event handler when the event is triggered.
      */
-    //formSubmitEvent.preventDefault();
-    //window.location.replace("search.html");
+        //formSubmitEvent.preventDefault();
+        //window.location.replace("search.html");
     var data = "?searchTitle="+ $("#searchTitle").val()+"&searchDirector="+$("#searchDirector").val();
     data = data +"&searchYear="+$("#searchYear").val();
     data = data +"&searchStar="+$("#searchStar").val();
@@ -51,11 +47,14 @@ function submitSearchForm(formSubmitEvent) {
 function getGenreList(resultData) {
     console.log("getGenreList: get genre list from database");
     var divText = "";
-    for (let i = 0; i < resultData.length; i++) {
-        divText = divText + " <a href='movie-list.html?pagination=N&genreid=" + resultData[i]["genreID"] + "'>" + resultData[i]["name"] + " </a> &nbsp;&nbsp; ";
+    var genList = JSON.parse(resultData["genre"]);//JSON.parse
+    for (let i = 0; i < genList.length; i++) {
+        divText = divText + " <a href='movie-list.html?pagination=N&genreid=" + genList[i]["genreID"] + "'>" + genList[i]["name"] + " </a> &nbsp;&nbsp; ";
     }
     if (divText.length <= 0){
-        $("#search_error_message").text(resultDataJson["errorMessage"]);
+        if (resultDataJson["errorMessage"]) {
+            if (length(resultDataJson["errorMessage"]) >= 0) $("#search_error_message").text(resultDataJson["errorMessage"]);
+        }
     }
     else  $("#divGenreList").html(divText);
 }
@@ -75,16 +74,29 @@ function getAlphanumericList(i, j, divText){
     }
     return divText;
 }
+function displaySearchScreen (resultData) {
+
+    printAlphanumericList();
+    if (resultData["usertype"]=="admin")
+    {
+        $("#empOptnavigation").show(); $("#custOptnavigation").hide();
+    }
+    else
+    {
+        $("#empOptnavigation").hide();$("#custOptnavigation").show();
+    }
+    getGenreList(resultData);
+}
 // Bind the submit action of the form to a handler function
 search_form.submit(submitSearchForm);
 
 $("#moviesResult").hide();
-printAlphanumericList();
+//printAlphanumericList();
 //($("#searchTitle")).click(submitSearchForm);
 
 jQuery.ajax({
     dataType: "json",
     method: "GET",
     url: "api/search",
-    success: (resultData) => getGenreList(resultData)
+    success: (resultData) => displaySearchScreen(resultData)
 });

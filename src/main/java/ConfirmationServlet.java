@@ -18,12 +18,13 @@ import javax.sql.DataSource;
 @WebServlet(name = "Confirmation", urlPatterns = "/api/confirmation")
 public class ConfirmationServlet extends HttpServlet
 {
-    final String servletName ="ConfirmationServlet";
+    private final String servletName ="ConfirmationServlet";
     @Resource(name = "jdbc/moviedb")
     private DataSource dataSource;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
+        response.setContentType("application/json");
         JsonObject responseJsonObject = new JsonObject();
         if (makePayment(request)== false ){
 
@@ -150,16 +151,16 @@ public class ConfirmationServlet extends HttpServlet
 
                             String sale_movie_id = cart.movieId;
 
-
-                            paymentQuery = "INSERT INTO sales (customerId, movieId, saleDate) VALUES ('"
-                                    + customer_id + "','" + sale_movie_id + "','" + sale_time + "');";
+                            paymentQuery = "INSERT INTO sales (customerId, movieId, saleDate) VALUES (?,?,?)";
+                          /* paymentQuery = "INSERT INTO sales (customerId, movieId, saleDate) VALUES ('"
+                                   + customer_id + "','" + sale_movie_id + "','" + sale_time + "');";*/
                             preparedStatement = connection.prepareStatement(paymentQuery, Statement.RETURN_GENERATED_KEYS);
-                            /*paymentQuery = "INSERT INTO sales (customerId, movieId, saleDate) VALUES (?,?,?)";
+
 
                             ((PreparedStatement) preparedStatement).setInt(1, customer_id );
                             ((PreparedStatement) preparedStatement).setString(2,sale_movie_id);
                             ((PreparedStatement) preparedStatement).setString(3,sale_time);
-*/
+
                             //  int userResult =preparedStatement.executeUpdate(paymentQuery); //int userResult =
                             ((PreparedStatement) preparedStatement).executeUpdate();
 
@@ -174,17 +175,17 @@ public class ConfirmationServlet extends HttpServlet
                             // int auto_id = rs.getInt(1);
 
 /*
-                            if(rs.next()) {
+                           if(rs.next()) {
 
 
-                                //java.sql.RowId rid=rs.getRowId(1);
-                                //TODO create movieid, sales id (rid);, quanity, price
-                                //String id, String title, int price, int quantity, String saleId)
-                                System.out.println("confirmation: "+rid);
-                                updatedItemsObj = new ShoppingCart(cart.movieId, cart.movieTitle, cart.price, cart.quantity, rid.toString());
-                                updatedItemsinCart.add(updatedItemsObj);
-                            }
-                            */
+                               //java.sql.RowId rid=rs.getRowId(1);
+                               //TODO create movieid, sales id (rid);, quanity, price
+                               //String id, String title, int price, int quantity, String saleId)
+                               System.out.println("confirmation: "+rid);
+                               updatedItemsObj = new ShoppingCart(cart.movieId, cart.movieTitle, cart.price, cart.quantity, rid.toString());
+                               updatedItemsinCart.add(updatedItemsObj);
+                           }
+                           */
 
 
                         }
@@ -194,12 +195,14 @@ public class ConfirmationServlet extends HttpServlet
             if (rs != null) rs.close();
             if (preparedStatement != null) preparedStatement.close();
             if (connection != null) connection.close();
+
+            //Update session with items in cart
             session = request.getSession();
             session.setAttribute("moviesinCart", updatedItemsinCart);
         }
         catch (Exception ex)
         {
-            System.out.println("CONFIRMATION ERROR" + ex.getMessage());
+            System.out.println(servletName +" ERROR : " + ex.getMessage());
             return false;
         }
         return true;
@@ -213,5 +216,3 @@ public class ConfirmationServlet extends HttpServlet
         return saleDate;
     }
 }
-
-

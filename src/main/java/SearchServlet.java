@@ -19,37 +19,44 @@ import javax.servlet.http.HttpSession;
 
 /*
 Code used form Professor Chen Li's project1-api-example
- */
+*/
 @WebServlet(name = "SearchServlet", urlPatterns = "/api/search")
 public class SearchServlet extends HttpServlet
 {
     private static final long serialVersionUID = 1L;
-
+    private final String servletName ="SearchServlet";
     @Resource(name = "jdbc/moviedb")
     private DataSource dataSource;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         //Check if user is authenticated
-        HttpSession session = request.getSession(true);
-        Boolean isUserAuthenticated = (Boolean) session.getAttribute("authenticated");
+        //HttpSession session = request.getSession(true);
+        // Boolean isUserAuthenticated = (Boolean) session.getAttribute("authenticated");
 
-        if (isUserAuthenticated == false) {
-            JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("status", "fail");
-            jsonObject.addProperty("errorMessage", "Login Failed");
-        }
+     /*  if (isUserAuthenticated == false) {
+           JsonObject jsonObject = new JsonObject();
+           jsonObject.addProperty("status", "fail");
+           jsonObject.addProperty("errorMessage", "Login Failed");
+       }*/
         response.setContentType("application/json");
-
         PrintWriter printer = response.getWriter();
-
-        try
-        {
+      /* String searchScrData = (String) request.getSession().getAttribute("searchScrData");
+       if (searchScrData.length() > 0 ){
+           System.out.println("get genre from session "+searchScrData.length() );
+           printer.write(searchScrData);
+           response.setStatus(200);
+       }*/
+        //else {
+        HttpSession session = request.getSession();
+        JsonObject jsonTObject = new JsonObject();
+        jsonTObject.addProperty("usertype", "admin");//userInfo.role);
+        try {
             Connection connection = dataSource.getConnection();
-            Statement statement = connection.createStatement();
-            String query = "select id, name from genres ORDER BY name;" ;
-
-            ResultSet result = statement.executeQuery(query);
+            // Statement statement = connection.createStatement();
+            String query = "select id, name from genres ORDER BY name;";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            ResultSet result = preparedStatement.executeQuery();
             JsonArray jsonArray = new JsonArray();
 
             while (result.next()) {
@@ -60,28 +67,26 @@ public class SearchServlet extends HttpServlet
                 jsonObject.addProperty("name", name);
                 jsonArray.add(jsonObject);
             }
-
-            printer.write(jsonArray.toString());
+            jsonTObject.addProperty("genre", jsonArray.toString());
+            printer.write(jsonTObject.toString());
+            // printer.write(jsonArray.toString());
             response.setStatus(200);
 
             result.close();
-            statement.close();
+            preparedStatement.close();
             connection.close();
-        }
-        catch (Exception ex)
-        {
+            request.getSession().setAttribute("searchScrData", jsonTObject.toString());
+        } catch (Exception ex) {
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("status", "fail");
             jsonObject.addProperty("errorMessage", ex.getMessage());
             printer.write(jsonObject.toString());
             response.setStatus(500);
+
         }
         printer.close();
+
+
+        //  }
     }
 }
-
-
-
-
-
-

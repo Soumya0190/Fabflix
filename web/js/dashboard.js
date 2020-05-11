@@ -1,23 +1,20 @@
 let addStar_form = $("#addStar_form");
 let addMovie_form = $("#addMovie_form");
-function handleLoginResult(resultDataString)
+function handleDBupdateResult(resultData)
 {
-    let resultDataJson = JSON.parse(resultDataString);
+    console.log("get DB Meta data");
 
-    console.log("handle login response");
-    console.log(resultDataJson);
-    console.log(resultDataJson["status"]);
+    alert("status =" +resultData["status"] +", message =" + resultData["message"]);
+    displayMsg(resultData["message"]);
+    /*if (resultData["status"] === "success")
+    {
+        console.log(resultData["message"]);
 
-    // If login succeeds, it will redirect the user to search.html
-    if (resultDataJson["status"] === "success") {
-        //window.location.replace("search.html");
-    } else {
-        // If login fails, the web page will display
-        // error messages on <div> with id "login_error_message"
-        console.log("show error message");
-        console.log(resultDataJson["message"]);
-        $("#error_message").text(resultDataJson["message"]);
-    }
+        //var span = $(".close")[0];
+
+
+    }*/
+   // displayDBmetadata(resultData);
 }
 /**
  * Submit the form content with POST method
@@ -25,14 +22,13 @@ function handleLoginResult(resultDataString)
  */
 function submitAddStarForm(formSubmitEvent) {
     console.log("submit add star form");
-    alert($("#starName").val());
-    formSubmitEvent.preventDefault();
+
     jQuery.ajax({
         dataType: "json",
         method: "POST",
-        url: "api/dashboard",
         data: addStar_form.serialize(),
-        success: (resultData) => displayScreen(resultData)
+        url: "api/dashboard",
+        success: (resultData) => handleDBupdateResult(resultData)
     });
 }
 
@@ -41,9 +37,9 @@ function submitAddMovieForm(formSubmitEvent) {
     jQuery.ajax({
         dataType: "json",
         method: "POST",
-        data: addMovie_form.serialize(),
         url: "api/dashboard",
-        success: (resultData) => displayScreen(resultData)
+        data: addMovie_form.serialize(),
+        success: (resultData) => handleDBupdateResult(resultData)
     });
 }
 // Bind the submit action of the form to a handler function
@@ -52,15 +48,20 @@ addMovie_form.submit(submitAddMovieForm);
 // Bind the submit action of the form to a handler function
 //search_form.submit(submitSearchForm);
 
-function displayScreen(resultData) {
-    console.log("get DB Meta data");
+function displayDBmetadata(resultData) {
+
+
     let table = $("#metadata_body");   let bodyHTML = "";
     if (resultData ==="undefined" || resultData ==="null" || resultData.length <= 0) return;
-    let tabData = resultData;
-
+    let tabData = resultData;  let tabname="";
     for (let i = 0; i < tabData.length; i++) {
-        bodyHTML = bodyHTML + "<tr><td colspan='5'><b>" + tabData[i]["table_name"] + "</b></td></tr>";
-        bodyHTML = bodyHTML + "<tr><td><b>Column Name</b></td><td><b>Type</b></td><td><b>Is Nullable?</b></td><td><b>Column Key</b></td><td><b>Extra Info</b></td></tr><tr>";
+        if ( tabData[i]["table_name"] != tabname)
+        {
+            tabname=tabData[i]["table_name"];
+            bodyHTML = bodyHTML + "<tr><td colspan='5' ><b> Table :" + tabData[i]["table_name"] + "</b></td></tr>";
+            bodyHTML = bodyHTML + "<tr><td><b>Column Name</b></td><td><b>Type</b></td><td><b>Is Nullable?</b></td><td><b>Column Key</b></td><td><b>Extra Info</b></td></tr><tr>";
+            bodyHTML = bodyHTML + "<tr><td colspan='5' ><hr /></td></tr>";
+        }
         bodyHTML = bodyHTML + "<td>" + tabData[i]["column_name"] + "</td>";
         bodyHTML = bodyHTML + "<td>" + tabData[i]["column_type"] + "</td>";
         bodyHTML = bodyHTML + "<td>" + tabData[i]["is_nullable"] + "</td>";
@@ -77,10 +78,43 @@ function displayScreen(resultData) {
 }
 
 
-jQuery.ajax({
-    dataType: "json",
-    method: "GET",
-    url: "api/dashboard",
-    success: (resultData) => displayScreen(resultData)
-});
+/*
+if ($("#metadata_body")) {
+    alert($("#metadata_body").innerHTML);
+    let metabodyData = $("#metadata_body").innerHTML;
+    if (length(metabodyData) <= 0) {
+    } */
+    jQuery.ajax({
+        dataType: "json",
+        method: "GET",
+        url: "api/dashboard",
+        success: (resultData) => displayDBmetadata(resultData)
+    });
+//}
 
+function displayMsg(addtocartMsg){
+    msgDiv = document.getElementById("cartMsg");
+    modal = document.getElementById("diveAddData");
+    if (msgDiv !== "undefined" && msgDiv != "null")
+        msgDiv.textContent = addtocartMsg;
+    if (modal !== "undefined" && modal != "null") modal.style.display = "block";
+    else alert ("Some error");
+}
+
+
+function hidePopUp()
+{
+    modal = document.getElementById("diveAddData");
+    if (modal !== "undefined" && modal != "null") modal.style.display = "none";
+}
+
+
+window.onclick = function(event) {
+    modal = document.getElementById("diveAddData");
+    if (modal !== "undefined" && modal != "null")
+    {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+}

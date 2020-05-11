@@ -18,12 +18,11 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.sql.DataSource;
 
-@WebServlet(name = "DashBoardServlet", urlPatterns = "/api/dashboard")
-public class DashboardServlet extends HttpServlet
-{
+@WebServlet(name = "DashboardServlet", urlPatterns = "/api/dashboard")
+public class DashboardServlet extends HttpServlet {
     @Resource(name = "jdbc/moviedb")
     private DataSource dataSource;
-    private final String servletName ="DashBoardServlet";
+    private final String servletName ="DashboardServlet";
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException
     {
         response.setContentType("application/json");
@@ -40,29 +39,32 @@ public class DashboardServlet extends HttpServlet
         String formaction = request.getParameter("formaction");
         String starName = request.getParameter("starName");
         String starDOB = request.getParameter("starDOB");
-        System.out.println("formaction=" +formaction);
         User usrObj =null;  String status ="";
-        if (formaction != null && formaction.equals("addstar")) {
-            status = saveActorInfoinDB(request);
-        }
-        else if (formaction.equals("addmovie"))
-        {
-            status = saveMovieInfoinDB(request);
-        }
-        responseJsonObject.addProperty("message", "success");
-        if (status.equals("success")) responseJsonObject.addProperty("status", "success");
-        else responseJsonObject.addProperty("status", "fail");
+        System.out.println("formaction = "+ formaction+", starName = "+starName);
+        try {
+            if (formaction != null && formaction.equals("addstar")) {
+                status = saveActorInfoinDB(request);
+            } else if (formaction.equals("addmovie")) {
+                status = saveMovieInfoinDB(request);
+            }
+            responseJsonObject.addProperty("message", status);
+            if (status.equals("success")) responseJsonObject.addProperty("status", "success");
+            else responseJsonObject.addProperty("status", "fail");
 
-        response.getWriter().write(responseJsonObject.toString());
-        System.out.println(responseJsonObject.toString());
+            response.getWriter().write(responseJsonObject.toString());
+            System.out.println(responseJsonObject.toString());
+        }
+        catch(Exception ex)
+        {
+            System.out.println("error in add star ="+ ex.getMessage());
+        }
     }
 
-    public String saveActorInfoinDB(HttpServletRequest request )
-    {
+    public String saveActorInfoinDB(HttpServletRequest request ) {
         String movieID="";
         String starName = request.getParameter("starName");
         String starBirthYear = request.getParameter("starDOB");
-        String starQuery ="{CALL addStarMovie(?,?,?,?)}"; String status ="";
+        String starQuery ="{CALL addStarMovie(?,?,?,?,?)}"; String status ="";String msg ="";
         try
         {
             Connection connection = dataSource.getConnection();
@@ -71,19 +73,31 @@ public class DashboardServlet extends HttpServlet
             prepStmt.setInt(2, Integer.parseInt(starBirthYear));
             prepStmt.setString(3, movieID);
             prepStmt.registerOutParameter(4, java.sql.Types.VARCHAR);
-
+            prepStmt.registerOutParameter(5, java.sql.Types.VARCHAR);
+            System.out.println("add star : " + prepStmt.toString());
             boolean hadResults = prepStmt.execute();
+
+            while (hadResults) {
+                ResultSet rs = prepStmt.getResultSet();
+                System.out.println(rs.toString());
+                while (rs.next()) {
+                    msg = rs.getString("addedData");
+                }
+                hadResults = prepStmt.getMoreResults();
+            }
             status  = prepStmt.getString("status");
+            msg  = prepStmt.getString("addedData");
             prepStmt.close();
             connection.close();
 
         }
         catch (Exception ex)
         {
-            System.out.println("SAXParserActor:" +" Exception=" + ex.getMessage());
-            return "error";
+            System.out.println("saveActorInfoinDB: Exception=" + ex.getMessage());
+            msg =  "Add star '" + starName + "'is not successful";
+            return msg;
         }
-        return status;
+        return msg;
     }
     public String saveMovieInfoinDB(HttpServletRequest request ) {
         String movieID="";
@@ -95,30 +109,45 @@ public class DashboardServlet extends HttpServlet
         String starByear = request.getParameter("starByear")!=null? request.getParameter("starByear") :"";
         String regex = "\\d+";
 
-        System.out.println("movieTitle="+movieTitle+" ,director= "+director+",movieStar = " +movieStar);
-        String query ="{CALL addMovie(?,?,?,?,?,?,?,?)}"; String status ="";
+
+        String query ="{CALL addMovie(?,?,?,?,?,?,?,?)}"; String status ="";String msg="";
         try
         {
             if (starByear.length()> 0 && (starByear.matches(regex) == false ) ) starByear ="";
             Connection connection = dataSource.getConnection();
             CallableStatement prepStmt = connection.prepareCall(query);
-            prepStmt.setString(1, movieStar);
-            prepStmt.setString(2, starByear);
-            prepStmt.setString(3, movieID);
-            prepStmt.registerOutParameter(4, java.sql.Types.VARCHAR);
-            System.out.println("After = "+prepStmt.toString());
+
+            prepStmt.setString(1, null);
+            prepStmt.setString(2, movieTitle);
+            prepStmt.setString(3, director);
+            prepStmt.setString(4, movieYear);
+            prepStmt.setString(5, genre);
+            prepStmt.setString(6, movieStar);
+            prepStmt.setString(7, starByear);
+            prepStmt.registerOutParameter(8, java.sql.Types.VARCHAR);
+            System.out.println("add movie : " + prepStmt.toString());
+
             boolean hadResults = prepStmt.execute();
             status  = prepStmt.getString("status");
+            while (hadResults) {
+                ResultSet rs = prepStmt.getResultSet();
+                System.out.println(rs.toString());
+                while (rs.next()) {
+                    msg = rs.getString("addeddata");
+                }
+                hadResults = prepStmt.getMoreResults();
+            }
             prepStmt.close();
             connection.close();
 
         }
         catch (Exception ex)
         {
-            System.out.println("SAXParserActor:" +" Exception=" + ex.getMessage());
-            return "error";
+            System.out.println("saveMovieInfoinDB: Exception=" + ex.getMessage());
+            msg ="Add movie '"+ movieTitle+"' is not successful";
+            return msg;
         }
-        return status;
+        return msg;
     }
 
     public String getDBMetaData(HttpServletRequest request ) {
@@ -170,4 +199,3 @@ public class DashboardServlet extends HttpServlet
     }
 
 }
-

@@ -20,12 +20,12 @@ import java.sql.Statement;
 
 /*
 Code used form Professor Chen Li's project1-api-example
- */
+*/
 @WebServlet(name = "SingleMovieServlet", urlPatterns = "/api/single-movie")
 public class SingleMovieServlet extends HttpServlet
 {
     private static final long serialVersionUID = 1L;
-
+    private final String servletName ="SingleMovieServlet";
     @Resource(name = "jdbc/moviedb")
     private DataSource dataSource;
 
@@ -41,16 +41,13 @@ public class SingleMovieServlet extends HttpServlet
         {
             Connection connection = dataSource.getConnection();
 
-            String movieInfoQuery = "SELECT title, year, director FROM movies " +
-                    "WHERE id=?";
+            String movieInfoQuery = "SELECT title, year, director FROM movies WHERE id=?";
             PreparedStatement preparedStatementMovie = connection.prepareStatement(movieInfoQuery);
 
-            String starMovieQuery = "SELECT id, name FROM stars_in_movies, stars " +
-                    "WHERE id = starId AND movieId=?";
+            String starMovieQuery = "SELECT id, name FROM stars_in_movies, stars WHERE id = starId AND movieId=?";
             PreparedStatement preparedStatementStars = connection.prepareStatement(starMovieQuery);
 
-            String genreMovieQuery = "SELECT name FROM genres, genres_in_movies " +
-                    "WHERE genreId = id AND movieId=?";
+            String genreMovieQuery = "SELECT name FROM genres, genres_in_movies WHERE genreId = id AND movieId=?";
             PreparedStatement preparedStatementGenres = connection.prepareStatement(genreMovieQuery);
 
             String movieRatingQuery = "SELECT rating FROM ratings WHERE movieId=?";
@@ -126,12 +123,11 @@ public class SingleMovieServlet extends HttpServlet
         catch (Exception ex)
         {
             JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("errorMessage", ex.getMessage());
+            jsonObject.addProperty("errorMessage","Unknown Data Retrieval Error");
+            System.out.println(servletName + " : "+ ex.getMessage());
             printer.write(jsonObject.toString());
             response.setStatus(500);
         }
         printer.close();
     }
 }
-
-

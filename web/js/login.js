@@ -6,20 +6,26 @@ let login_form = $("#login_form");
  */
 function handleLoginResult(resultDataString)
 {
-    let resultDataJson = JSON.parse(resultDataString);
+    //let resultDataJson = JSON.parse(resultDataString);
 
     console.log("handle login response");
-    console.log(resultDataJson);
-    console.log(resultDataJson["status"]);
+    console.log(resultDataString);
+    console.log(resultDataString["status"]);
 
     // If login succeeds, it will redirect the user to search.html
-    if (resultDataJson["status"] === "success")
+    if (resultDataString["status"] === "success")
     {
-         window.location.replace("search.html");
+        if (resultDataString["usertype"] === "admin") {
+            window.location.replace("dashboard.html");
+        }
+        else
+        {
+            window.location.replace("search.html");
+        }
     } else {
         console.log("show error message");
-        console.log(resultDataJson["message"]);
-        $("#login_error_message").text(resultDataJson["message"]);
+        console.log(resultDataString["message"]);
+        $("#login_error_message").text(resultDataString["message"]);
     }
 }
 
@@ -41,4 +47,29 @@ function submitLoginForm(formSubmitEvent)
 }
 
 // Bind the submit action of the form to a handler function
-login_form.submit(submitLoginForm);
+if ($("#login_form")) {
+    login_form.submit(submitLoginForm);
+}
+
+function getParameterByName(target)
+{
+    let url = window.location.href;
+    target = target.replace(/[\[\]]/g, "\\$&");
+    let regex = new RegExp("[?&]" + target + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+
+if ($("#usertype")) {
+    let usrType = getParameterByName('usertype');
+    $("#usertype").val(usrType);
+    if ( usrType === "admin")
+    {
+        $("#spnEmpLogin").hide();
+        $("#empMsg").textContent= "Employee Login";
+
+    }
+
+}

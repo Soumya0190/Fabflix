@@ -16,16 +16,19 @@ import javax.sql.DataSource;
 public class LoginServlet extends HttpServlet {
     @Resource(name = "jdbc/moviedb")
     private DataSource dataSource;
+    private final String servletName ="LoginServlet";
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException
     {
+        JsonObject responseJsonObject = new JsonObject();
+        response.setContentType("application/json");
         HttpSession session = request.getSession();
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        //logout
-        JsonObject responseJsonObject = new JsonObject();
+        String usertype = request.getParameter("usertype");
         String logout = request.getParameter("logout");
-
-        if (logout == "Y")
+        User usrObj =null;
+        System.out.println("usrNm="+ username+" , password="+password+",  usertype="+usertype);
+      /* if (logout.equals("Y") )
         {
             request.getSession().setAttribute("user", null);
             responseJsonObject.addProperty("status", "fail");
@@ -33,14 +36,14 @@ public class LoginServlet extends HttpServlet {
             Cookie[] cookies = request.getCookies();
             if(cookies != null)
             {
-               for(Cookie cookie : cookies)
-               {
-                   if(cookie.getName().equals("JSESSIONID"))
-                   {
-                       System.out.println("JSESSIONID="+cookie.getValue());
-                       break;
-                   }
-               }
+                for(Cookie cookie : cookies)
+                {
+                    if(cookie.getName().equals("JSESSIONID"))
+                    {
+                        System.out.println("JSESSIONID="+cookie.getValue());
+                        break;
+                    }
+                }
             }
             //invalidate the session if exists
             System.out.println("User="+session.getAttribute("user"));
@@ -51,31 +54,84 @@ public class LoginServlet extends HttpServlet {
             response.sendRedirect("login.html");
 
         }
+*/
 
-        else {
-            //Boolean isUserValid = validateUser(username, password);
-            Boolean isUserValid = true;
-            User usrObj = validateUser(username, password);
-            if (usrObj != null && usrObj.isUserValid == true) {
-                session = request.getSession(true);
-                request.getSession().setAttribute("user", usrObj);
-                request.getSession().setAttribute("authenticated", true);//TBD not needed
-
-                //read session Boolean isUserAuthenticated = (Boolean) session.getAttribute("authenticated");
-                responseJsonObject.addProperty("status", "success");
-                responseJsonObject.addProperty("message", "success");
-
-            }
-            else {
-                // Login fail
-                responseJsonObject.addProperty("status", "fail");
-                responseJsonObject.addProperty("message", "Incorrect Username or password");
-
-            }
+        if (usertype.equals("admin")) {
+            usrObj = validateEmployee(username, password);
+            System.out.println(" admin =" + usrObj.toString());
         }
+        else {
+   /*    String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
+       try
+       {
+           RecaptchaVerifyUtils.verify(gRecaptchaResponse);
+       } catch (Exception e) {
+           responseJsonObject.addProperty("status", "fail");
+           responseJsonObject.addProperty("message", "recaptcha verification error");
+           response.getWriter().write(responseJsonObject.toString());
+           System.out.println(servletName +" Exception=" + e.getMessage());
+           return;
+       }
+*/
+            //Boolean isUserValid = validateUser(username, password);
+
+            usrObj = validateUser(username, password);
+            System.out.println(" customer =" + usrObj.toString());
+        }
+        if (usrObj != null && usrObj.isUserValid == true) {
+            System.out.println(" Valid user");
+            session = request.getSession(true);
+            request.getSession().setAttribute("user", usrObj);
+
+            //read session Boolean isUserAuthenticated = (Boolean) session.getAttribute("authenticated");
+            responseJsonObject.addProperty("status", "success");
+            responseJsonObject.addProperty("usertype", "admin");
+            responseJsonObject.addProperty("message", "success");
+        }
+        else {
+            // Login fail
+            responseJsonObject.addProperty("status", "fail");
+            responseJsonObject.addProperty("message", "Incorrect Username or password");
+        }
+
         response.getWriter().write(responseJsonObject.toString());
+        System.out.println(responseJsonObject.toString());
     }
 
+    protected User validateEmployee(String username, String password)
+    {
+        String role ="";  User userObj;
+        Boolean userExists = false;
+        String userQuery = "SELECT role FROM employees WHERE username=? AND password =?";
+
+        try
+        {
+            Connection connection = dataSource.getConnection();
+            PreparedStatement preparedStatemenUser = connection.prepareStatement(userQuery);
+            preparedStatemenUser.setString(1, username);
+            preparedStatemenUser.setString(2, password);
+
+            ResultSet userResult = preparedStatemenUser.executeQuery();
+
+            while (userResult.next())
+            {
+                role = userResult.getString("role");
+                userExists = true;
+            }
+
+            userResult.close();
+            preparedStatemenUser.close();
+            connection.close();
+            //User(String username, String userId, String firstName, String lastName, Boolean isUserValid, String role)
+            userObj = new User(username, username, "", "",userExists, "admin");
+        }
+        catch (Exception ex)
+        {
+            System.out.println(servletName +" Exception=" + ex.getMessage());
+            return null;
+        }
+        return userObj;
+    }
     protected User validateUser(String username, String password)
     {
         String id =""; String firstName =""; String lastName =""; User userObj;
@@ -88,7 +144,7 @@ public class LoginServlet extends HttpServlet {
             PreparedStatement preparedStatemenUser = connection.prepareStatement(movieInfoQuery);
             preparedStatemenUser.setString(1, username);
             preparedStatemenUser.setString(2, password);
-
+            System.out.println("after="+ preparedStatemenUser.toString() );
             ResultSet userResult = preparedStatemenUser.executeQuery();
 
             while (userResult.next())
@@ -102,10 +158,11 @@ public class LoginServlet extends HttpServlet {
             userResult.close();
             preparedStatemenUser.close();
             connection.close();
-            userObj = new User(username, id, firstName, lastName,userExists);
+            userObj = new User(username, id, firstName, lastName,userExists, "cust");
         }
         catch (Exception ex)
         {
+            System.out.println(servletName +" Exception=" + ex.getMessage());
             return null;
         }
         return userObj;

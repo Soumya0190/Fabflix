@@ -17,21 +17,22 @@ import javax.servlet.http.HttpSession;
 public class AddToCartServlet extends HttpServlet
 {
     private static final long serialVersionUID = 1L;
-    final String servletName ="ViewCartServlet";
+    private final String servletName ="AddToCartServlet";
     @Resource(name = "jdbc/moviedb")
     private DataSource dataSource;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
+        response.setContentType("application/json");
 
         String newMovieId = request.getParameter("id");
-        newMovieId = newMovieId.trim();
+        if (newMovieId != null) newMovieId = newMovieId.trim();
         String newMovieTitle = request.getParameter("title");
         String newMoviePrice = request.getParameter("price");
 
         ArrayList<ShoppingCart> itemsInCart = (ArrayList<ShoppingCart>) session.getAttribute("moviesinCart");
         ArrayList<ShoppingCart> newCartList = new ArrayList<ShoppingCart>();
-Boolean isExistingMovie = false;
+        Boolean isExistingMovie = false;
         try {
 
             if (itemsInCart != null ) {
@@ -39,22 +40,13 @@ Boolean isExistingMovie = false;
                     int i = 0;
                     ShoppingCart newItem = null;
                     for (ShoppingCart cart : itemsInCart) {
-                        System.out.println(servletName + " : cart= " + cart.toString());
                         i = cart.quantity;
-                        System.out.println("cart.movieId=" + cart.movieId + ", newmovieId=" + newMovieId);
-                        newMovieId = newMovieId.trim();
                         if (newMovieId.equals(cart.movieId.trim())) {
-                            System.out.println(servletName + " : equal= " + cart.movieId + "==" + newMovieId);
-                            i++;
-                            isExistingMovie = true;
-
-                            //cart.quantity = cart.quantity + 1;
+                            //System.out.println(servletName + " : equal= " + cart.movieId + "==" + newMovieId);
+                            i++; isExistingMovie = true;
                         }
                         newItem = new ShoppingCart(cart.movieId, cart.movieTitle, cart.price, i, "");
                         newCartList.add(newItem);
-
-                        System.out.println(servletName + " : new item = " + (newItem.toString()));
-                        System.out.println(servletName + " : newCartList = " + (newCartList.toString()));
                     }
                 }
             }
@@ -63,18 +55,17 @@ Boolean isExistingMovie = false;
                 newCartList.add(cart);
             }
 
-//Store cart data in the session with attribute moviesinCart
-         //   session.setAttribute("moviesinCart", newCartList);
+            //Store cart data in the session with attribute moviesinCart
             session.setAttribute("moviesinCart", newCartList);
             ArrayList<ShoppingCart> itemstmoInCart  = (ArrayList<ShoppingCart>) session.getAttribute("moviesinCart");
-            System.out.println(servletName+" : newCartList = "+ itemstmoInCart.toString());
 
             JsonObject responseJsonObject = new JsonObject();
             responseJsonObject.addProperty("status", "success");
             responseJsonObject.addProperty("message", "Movie '"+ newMovieTitle + "' is added to cart");
             responseJsonObject.addProperty("totalItems", newCartList.size());
+            response.setStatus(200);
             response.getWriter().write(responseJsonObject.toString());
-            System.out.println(servletName + " : " + responseJsonObject.toString());
+            //System.out.println(servletName + " : " + responseJsonObject.toString());
         }
         catch (Exception ex)
         {
@@ -82,7 +73,7 @@ Boolean isExistingMovie = false;
             responseJsonObject.addProperty("errorMessage", ex.getMessage());
             response.setStatus(500);
             response.getWriter().write(responseJsonObject.toString());
-            System.out.println(responseJsonObject.toString());
+            System.out.println(servletName + ":" + responseJsonObject.toString());
         }
 
     }

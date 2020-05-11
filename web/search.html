@@ -11,77 +11,85 @@
 <body>
 <header>
     <nav>
-                <span id = "navigation">
-                     <a href = "shopping-cart.html" id = "movies_list_button">View Shopping Cart</a>
+        <div id="empOpt">
+           <span id = "empOptnavigation">
+                    <a href = "dashboard.html" id = "adminDashboard_button" class ="app_button">Admin Dashboard</a>
 
-                </span>
+               </span>
+        </div>
+        <div id ="custOpt">
+               <span id = "custOptnavigation">
+                    <a href = "shopping-cart.html" id = "movies_list_button">View Shopping Cart</a>
+
+               </span>
+        </div>
 
     </nav>
 </header>
 <main>
 
-        <h1>Search Movies</h1>
-        <hr >
-         <h3>Browse By Genre</h3>
+    <h1>Search Movies</h1>
+    <hr >
+    <h3>Browse By Genre</h3>
     <div id ="divGenreList" class="searchDiv"></div>
-              <br>
-        <h3>Browse By Title</h3>
-            <div id ="divTitleList" class ="searchDiv"></div>
-                <hr>
+    <br>
+    <h3>Browse By Title</h3>
+    <div id ="divTitleList" class ="searchDiv"></div>
+    <hr>
 
-        <form id = "search_form" method = "GET" action = "movie-list.html">
-            <table id = "searchTable" class = "fabflix_table" border="0" width="70%" align="center">
-                <thead>
-                <tr>
-                    <td colspan="3"><h3>Select search criteria</h3></td>
-                </tr>
-                </thead>
-                <tbody class = "fabflix_table">
-                <tr><td>Title</td><td> <input type="text" id="searchTitle" name="searchTitle" ></td></tr>
-                <tr><td>Director</td><td><input type="text" id="searchDirector" name="searchDirector"></td></tr>
-                <tr><td>Year</td><td><input type="text" id="searchYear" name="searchYear" value=""></td></tr>
-                <tr><td>Star's Name</td><td> <input type="text" id="searchStar" name="searchStar" value=""></td></tr>
-                <tr><td>Select records per page</td><td><select id="recordsPerPage" name="recordsPerPage">
-                    <option value="10">10</option>
-                    <option value="25" selected>25</option>
-                    <option value="50">50</option>
-                    <option value="100">100</option>
-                </select></td></tr>
-                <tr><td colspan="3" align ="center">
-                    <input type="submit" id="searchButton" align ="center" class ="app_button" value="Search Movies" />
-                </td></tr>
-                <tr><td></td><td></td></tr>
+    <form id = "search_form" method = "GET" action = "movie-list.html">
+        <table id = "searchTable" class = "fabflix_table" border="0" width="70%" align="center">
+            <thead>
+            <tr>
+                <td colspan="3"><h3>Select search criteria</h3></td>
+            </tr>
+            </thead>
+            <tbody class = "fabflix_table">
+            <tr><td>Title</td><td> <input type="text" id="searchTitle" name="searchTitle" ></td></tr>
+            <tr><td>Director</td><td><input type="text" id="searchDirector" name="searchDirector"></td></tr>
+            <tr><td>Year</td><td><input type="text" id="searchYear" name="searchYear" value=""></td></tr>
+            <tr><td>Star's Name</td><td> <input type="text" id="searchStar" name="searchStar" value=""></td></tr>
+            <tr><td>Select records per page</td><td><select id="recordsPerPage" name="recordsPerPage">
+                <option value="10">10</option>
+                <option value="25" selected>25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+            </select></td></tr>
+            <tr><td colspan="3" align ="center">
+                <input type="submit" id="searchButton" align ="center" class ="app_button" value="Search Movies" />
+            </td></tr>
+            <tr><td></td><td></td></tr>
 
-                </tbody>
-            </table>
+            </tbody>
+        </table>
 
-        </form>
+    </form>
 
-        <div id = "search_error_message" style="display: none; visibility: hidden"></div>
-        <div id ="moviesResult" >
-            <h2>Movies List</h2>
-            <table id = "movies_list_table" class = "fabflix_table">
-                <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>Year</th>
-                    <th>Director</th>
-                    <th>Rating</th>
-                    <th>Genres</th>
-                    <th>Stars</th>
-                </tr>
-                </thead>
-                <tbody id ="movies_list_body" class = "fabflix_table">
-                </tbody>
+    <div id = "search_error_message" style="display: none; visibility: hidden"></div>
+    <div id ="moviesResult" >
+        <h2>Movies List</h2>
+        <table id = "movies_list_table" class = "fabflix_table">
+            <thead>
+            <tr>
+                <th>Title</th>
+                <th>Year</th>
+                <th>Director</th>
+                <th>Rating</th>
+                <th>Genres</th>
+                <th>Stars</th>
+            </tr>
+            </thead>
+            <tbody id ="movies_list_body" class = "fabflix_table">
+            </tbody>
 
-            </table>
-        </div>
+        </table>
+    </div>
 </main>
 <footer>
-<hr />
+    <hr />
     <div align="center" width="100%">
         <a href="/api/login?logout=Y">Log Out</a> &nbsp;&nbsp; <a href="#">About Us</a>
-        </div>
+    </div>
 </footer>
 <script src="js/search.js"></script>
 </body>
