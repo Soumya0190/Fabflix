@@ -1,20 +1,30 @@
 let addStar_form = $("#addStar_form");
 let addMovie_form = $("#addMovie_form");
-function handleDBupdateResult(resultData)
+let pageLoaded = false;
+function handleDBupdateResult(resultData, actionData)
 {
     console.log("get DB Meta data");
 
-    alert(resultData["message"]);
-   // displayMsg(resultData["message"]);
-    /*if (resultData["status"] === "success")
+    // alert("status =" +resultData["status"] +", message =" + resultData["message"]);
+    let statusMsg = resultData["message"];
+    if ((statusMsg=== null || statusMsg ==="undefined" || statusMsg === "null") || (statusMsg != null && statusMsg.length <=0))
     {
-        console.log(resultData["message"]);
+        if (actionData === "addstar") statusMsg ="Error occurred while adding star.";
+        else statusMsg = "Error occurred while adding movie.";
+    }
+    displayMsg(statusMsg);
+    pageLoaded=true;
+    $("#starName").val("");
+    $("#starDOB").val("");
 
-        //var span = $(".close")[0];
+    $("#movieTitle").val("");
+    $("#movieYear").val("");
+    $("#director").val("");
+    $("#movieStar").val("");
+    $("#genre").val("");
 
 
-    }*/
-   // displayDBmetadata(resultData);
+    // displayDBmetadata(resultData);
 }
 /**
  * Submit the form content with POST method
@@ -22,29 +32,29 @@ function handleDBupdateResult(resultData)
  */
 function submitAddStarForm(formSubmitEvent) {
     console.log("submit add star form");
-
+    formSubmitEvent.preventDefault();
     jQuery.ajax({
         dataType: "json",
         method: "POST",
         data: addStar_form.serialize(),
         url: "api/dashboard",
-        success: (resultData) => handleDBupdateResult(resultData)
-       // complete: function(data) {alert(data["message"]);}
+        // success: handleDBupdateResult
+        success: (resultData) => handleDBupdateResult(resultData, "addstar")
     });
 }
 
 function submitAddMovieForm(formSubmitEvent) {
     console.log("submit add movie form");
+    formSubmitEvent.preventDefault();
     jQuery.ajax({
         dataType: "json",
         method: "POST",
         url: "api/dashboard",
         data: addMovie_form.serialize(),
-        success: (resultData) => handleDBupdateResult(resultData)
-       // complete: function(data) {displayMsg(data["message"]);}
+        //success: handleDBupdateResult
+        success: (resultData) => handleDBupdateResult(resultData, "addmovie")
     });
 }
-
 // Bind the submit action of the form to a handler function
 addStar_form.submit(submitAddStarForm);
 addMovie_form.submit(submitAddMovieForm);
@@ -81,27 +91,25 @@ function displayDBmetadata(resultData) {
 }
 
 
-/*
-if ($("#metadata_body")) {
-    alert($("#metadata_body").innerHTML);
-    let metabodyData = $("#metadata_body").innerHTML;
-    if (length(metabodyData) <= 0) {
-    } */
+
+
+if (pageLoaded === false){
     jQuery.ajax({
         dataType: "json",
         method: "GET",
         url: "api/dashboard",
         success: (resultData) => displayDBmetadata(resultData)
     });
-//}
+}
 
-function displayMsg(addtocartMsg){
+function displayMsg(addMsg){
+
     msgDiv = document.getElementById("cartMsg");
     modal = document.getElementById("diveAddData");
     if (msgDiv !== "undefined" && msgDiv != "null")
-        msgDiv.textContent = addtocartMsg;
+        msgDiv.textContent = addMsg;
     if (modal !== "undefined" && modal != "null") modal.style.display = "block";
-    else alert ("Some error");
+    else alert (addMsg);
 }
 
 
@@ -110,14 +118,16 @@ function hidePopUp()
     modal = document.getElementById("diveAddData");
     if (modal !== "undefined" && modal != "null") modal.style.display = "none";
 }
-
 /*
+
 window.onclick = function(event) {
-    modal = document.getElementById("diveAddData");
-    if (modal !== "undefined" && modal != "null")
-    {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    }
-}*/
+   modal = document.getElementById("diveAddData");
+   if (modal !== "undefined" && modal != "null")
+   {
+       if (event.target == modal) {
+           modal.style.display = "none";
+       }
+   }
+}
+
+*/

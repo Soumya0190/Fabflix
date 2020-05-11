@@ -34,11 +34,11 @@
             <input type="hidden" name="formaction" value="addstar" />
             <br /><br />
             <label><b>Star Name </b></label>
-            <label> <input name="starName" required type="text" value="" /></label>
+            <label> <input name="starName" id="starName" required type="text"  /></label>
             <br />
             <label><b>Birth Year </b></label>
             <label>
-                <input name="starDOB" type="starDOB" value="" />
+                <input name="starDOB" id="starDOB" type="starDOB" />
             </label>
             <br /> <br />
             <input type="Submit" value="Add Star" class ="app_button"><br /> <br /><br />
@@ -48,11 +48,11 @@
         <form id="addMovie_form" method="post" action="#">
             <input type="hidden" name="formaction" value="addmovie" />
             <br /><h3>Add Movie</h3>
-            <label><b>Title </b></label><label><input name="movieTitle" required type="text" value="" placeholder="Enter Title of the movie" /></label>        <br />
-            <label><b>Release Year </b></label><label> <input name="movieYear" type="text" required value="" placeholder="Enter Movie Release Year"/></label>  <br />
-            <label><b>Director </b></label><label> <input name="director" type="text" value="" placeholder="Enter Director" />  </label>  <br />
-            <label><b>Movie Star </b></label><label> <input name="movieStar" type="text" value="" placeholder="Enter Movie Star"/>  </label>  <br />
-            <label><b>Genre </b></label><label> <input name="genre" type="text" value="" />  </label>  <br /><br />
+            <label><b>Title </b></label><label><input name="movieTitle" id="movieTitle" required type="text"  placeholder="Enter Title of the movie" /></label>        <br />
+            <label><b>Release Year </b></label><label> <input name="movieYear" id="movieYear" type="text" required  placeholder="Enter Movie Release Year"/></label>  <br />
+            <label><b>Director </b></label><label> <input name="director" type="text" id="director" required  placeholder="Enter Director" />  </label>  <br />
+            <label><b>Movie Star </b></label><label> <input name="movieStar" type="text" id=movieStar"  placeholder="Enter Movie Star"/>  </label>  <br />
+            <label><b>Genre </b></label><label> <input name="genre" type="text" id="genre"  required value="" />  </label>  <br /><br />
             <input type="Submit" value="Add Movie" class ="app_button"><br />
         </form>
     </div>

@@ -27,10 +27,17 @@ public class DashboardServlet extends HttpServlet {
     {
         response.setContentType("application/json");
         PrintWriter printer = response.getWriter();
-        String jSONResponse = getDBMetaData(request);
+        String jSONResponse = "";
+        if (request.getSession().getAttribute("databaseMetaData") != null) {
+            jSONResponse = (String)request.getSession().getAttribute("databaseMetaData");
+        }
+
+        if (jSONResponse == null || (jSONResponse != null && jSONResponse.length()<=0))
+        {
+            jSONResponse = getDBMetaData(request);
+        }
         printer.write(jSONResponse);
         printer.close();
-        response.setStatus(200);
     }
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException
     {
@@ -41,25 +48,25 @@ public class DashboardServlet extends HttpServlet {
         String starName = request.getParameter("starName");
         String starDOB = request.getParameter("starDOB");
         User usrObj =null;  String status ="";
-        System.out.println("formaction = "+ formaction+", starName = "+starName);
+
         try {
             if (formaction != null && formaction.equals("addstar")) {
                 status = saveActorInfoinDB(request);
-            } else if (formaction.equals("addmovie")) {
+            } else if (formaction != null && formaction.equals("addmovie")) {
                 status = saveMovieInfoinDB(request);
             }
             responseJsonObject.addProperty("message", status);
-            //if (status.equals("success")) responseJsonObject.addProperty("status", "success");
-            //else responseJsonObject.addProperty("status", "fail");
+            //if (status != null && status.contains("Added")) responseJsonObject.addProperty("status", "success");
+            // else responseJsonObject.addProperty("status", "fail");
 
             response.getWriter().write(responseJsonObject.toString());
             System.out.println(responseJsonObject.toString());
-            response.setStatus(200);
         }
         catch(Exception ex)
         {
             System.out.println("error in add star ="+ ex.getMessage());
-            response.setStatus(500);
+            responseJsonObject.addProperty("message", "Error in processing request.");
+            response.getWriter().write(responseJsonObject.toString());
         }
     }
 
@@ -186,8 +193,7 @@ public class DashboardServlet extends HttpServlet {
             HttpSession session = request.getSession();
             session.setAttribute("databaseMetaData",jsonArray.toString() );
 
-            //String movieLstString = getMovieListFromSession(0, recordsPerPage, session);
-            System.out.println("databaseMetaData = " + jsonArray.toString());
+            //System.out.println("databaseMetaData = " + jsonArray.toString());
 
         }
         catch (Exception ex)
