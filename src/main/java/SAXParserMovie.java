@@ -76,27 +76,22 @@ public class SAXParserMovie extends DefaultHandler
         }
         else if (qName.equalsIgnoreCase("fid"))
         {
-            if(tempVal == null){tempVal = "";}
             tempMovie.setMovieID(tempVal);
         }
         else if (qName.equalsIgnoreCase("t"))
         {
-            if(tempVal == null){tempVal = "";}
             tempMovie.setTitle(tempVal);
         }
         else if (qName.equalsIgnoreCase("year"))
         {
-            if(tempVal == null){tempVal = "";}
             tempMovie.setYear(tempVal);
         }
         else if (qName.equalsIgnoreCase("dirn"))
         {
-            if(tempVal == null){tempVal = "";}
             tempMovie.setDirector(tempVal);
         }
         else if (qName.equalsIgnoreCase("cat"))
         {
-            if(tempVal == null){tempVal = "";}
             tempMovie.setGenre(tempVal);
         }
     }
@@ -108,21 +103,28 @@ public class SAXParserMovie extends DefaultHandler
         int totalRecords = 0;
         FileWriter report = new FileWriter("inconsistency_report_movies.txt");
         report.write("Inconsistency Report for mains243.xml :");
+        String status="";
         while (it.hasNext())
         {
+            status = "";
             Movie movieObj = (Movie)it.next();
 
-            String movieID = movieObj.getMovieID()== null ? "": movieObj.getMovieID() ;
-            String movieTitle = movieObj.getTitle()== null ? "": movieObj.getTitle() ;
-            String movieDirector = movieObj.getDirector()== null ? "": movieObj.getDirector() ;
-            String movieReleaseDate = movieObj.getYear()== null ? "": movieObj.getYear() ;
-            String movieGenre = movieObj.getGenre() == null ? "": movieObj.getGenre() ;
+            String movieID = movieObj.getMovieID();//== null ? "": movieObj.getMovieID() ;
+            String movieTitle = movieObj.getTitle();//== null ? "": movieObj.getTitle() ;
+            String movieDirector = movieObj.getDirector();//== null ? "": movieObj.getDirector() ;
+            String movieReleaseDate = movieObj.getYear();//== null ? "": movieObj.getYear() ;
+            String movieGenre = movieObj.getGenre();// == null ? "": movieObj.getGenre() ;
 
             Boolean reportIt = false;
-            if(movieID.length() >= 11)
+            if(movieID != null && movieID.length() >= 11)
             {
                 reportIt = true;
                 report.write(" Movie ID: " + movieID + " | ");
+            }
+            if(movieID == null && movieTitle == null)
+            {
+                report.write("Bad data for Movie: " + movieID + " with Title: " + movieTitle + " | ");
+                reportIt = true;
             }
             if (movieTitle != null && (movieTitle.trim().length() <= 0 || movieTitle.trim().length() > 100)) //100 NOT NULL
             {
@@ -141,8 +143,6 @@ public class SAXParserMovie extends DefaultHandler
                 } else if (Integer.parseInt(movieReleaseDate) < 2020) {
                     reportIt = false;
                 }
-
-
                 reportIt = true;
             }
             if (movieGenre == null ||(movieGenre != null && (movieGenre.trim().length() <= 0 || movieGenre.trim().length() > 32))) //NOT NULL  0-32
@@ -160,7 +160,10 @@ public class SAXParserMovie extends DefaultHandler
             }
             else if(!reportIt)
             {
-                saveMovieInfoinDB(movieObj.getMovieID(), movieObj.getTitle(), movieObj.getDirector(), movieObj.getYear(), movieObj.getGenre());
+                status = saveMovieInfoinDB(movieObj.getMovieID(), movieObj.getTitle(), movieObj.getDirector(), movieObj.getYear(), movieObj.getGenre());
+                if (status != null && !status.contains("success")) {
+                    report.write(" Error in processing xml record " + status + "\n");
+                }
             }
         }
         report.write(" Total Records with Bad Data: "+ totalRecords);
@@ -217,6 +220,7 @@ public class SAXParserMovie extends DefaultHandler
             System.out.println(genre);
             return "error";
         }
+        /*
         finally
         {
             if (connection != null)
@@ -224,6 +228,7 @@ public class SAXParserMovie extends DefaultHandler
                 connection.close();
             }
         }
+         */
     }
 }
 

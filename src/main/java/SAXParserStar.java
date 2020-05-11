@@ -120,7 +120,6 @@ public class SAXParserStar extends DefaultHandler
             }
           if(!reportIt)
             {
-
                 status = saveStarMovieInfoinDB(starObj.getActor(), "", starObj.getFilmID());
                 if (status.contains("error")) {
                     report.write("Error in processing xml record " + status);

@@ -99,7 +99,8 @@ public class SAXParserActor extends DefaultHandler
         int totalRecords = 0;
         FileWriter report = new FileWriter("inconsistency_report_actors.txt");
         report.write("Inconsistency Report for mains243.xml :");
-        String regex = "\\d+"; String status="";
+        String regex = "\\d+";
+        String status="";
         while (it.hasNext()) {
             status = "";
             Actor actorObj = (Actor) it.next();
