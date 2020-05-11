@@ -8,6 +8,9 @@ I had to delete all previous commits because there were many conflicts with merg
 ## Demo 
 YouTube Video URL: https://youtu.be/C9vt3wOCDhk
 
+##Assumptions
+Movie is not added to database if genre name is not provided in xml file, and reported to inconsistency_report_movie.txt
+
 ## Deployment Instructions
 In order to deploy the project to Tomcat. First, navigate to the **bin** directory of Tomcat and run **./startup.sh**. This ensures that the Tomcat server is running. Then clone the project into your choice of directory and navigate to the directory in which **pom.xml** is located. Run **mvn clean** to ensure the plugin is clean. Run **mvn package** in order to generate the **.war** file which will be located within the target directory. Copy this war file to the **webapps** directory of Tomcat using **cp ./target/*.war /PATH_TO_TOMCAT/webapps** (i.e. home/ubuntu/tomcat/webapps). 
 

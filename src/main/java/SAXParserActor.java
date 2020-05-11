@@ -25,6 +25,9 @@ public class SAXParserActor extends DefaultHandler
     String loginPasswd = "mypassword";
     String loginUrl = "jdbc:mysql://localhost:3306/moviedb";
 
+    //@Resource(name = "jdbc/moviedb")
+    //private DataSource dataSource;
+
     Connection connection;
 
     List<Actor> actorList;
@@ -93,42 +96,39 @@ public class SAXParserActor extends DefaultHandler
         System.out.println("No of Actors '" + actorList.size() + "'.");
         Iterator<Actor> it = actorList.iterator();
         FileWriter report = new FileWriter("inconsistency_report_actors.txt");
-        while (it.hasNext())
-        {
-            Actor actorObj = (Actor)it.next();
+        String regex = "\\d+"; String status="";
+        while (it.hasNext()) {
+            status = "";
+            Actor actorObj = (Actor) it.next();
             Boolean reportIt = false;
             String starName = actorObj.getStagename();
             String starBirthYear = actorObj.getDob();
-            if (starName == null || starName.length() <= 0 )
+
+            if (starName == null || (starName != null && (starName.trim().length() <= 0 ||starName.trim().length()>100)))
             {
-                starName = "Unspecified".trim();
+                report.write("Bad data for Star Name: " + starName + " | ");
                 reportIt = true;
             }
-            if (starBirthYear == null || starBirthYear.length() <= 0)
-            {
-                starBirthYear = "Unspecified".trim();
-                reportIt = true;
+            if (starBirthYear != null && starBirthYear.trim().length() > 0) { //starBirthYear is optional, so can't be blank
+
+                if (starBirthYear.matches(regex) == false) {
+                    report.write(" starBirthYear is not numeric: " + starBirthYear);
+                    reportIt = true;
+                } else if (Integer.parseInt(starBirthYear) < 2020) {
+                    reportIt = false;
+                }
             }
-            try
-            {
-                int num = Integer.parseInt(starBirthYear);
-                if(num < 2020){reportIt = false;}
-            }
-            catch (NumberFormatException e)
-            {
-                reportIt = true;
-                starBirthYear = "Unspecified".trim();
-            }
-            if(reportIt)
-            {
-                report.write("Star Name: " + starName);
-                report.write(" Star Birth Year: " + starBirthYear);
-                report.write("Movie ID: MovieID is not found in actors63.xml");
-            }
-            else if(!reportIt)
-            {
-                saveActorInfoinDB(actorObj.getStagename() , actorObj.getDob(), null);
-            }
+
+
+           if(!reportIt) {
+               starBirthYear =  starBirthYear != null? starBirthYear :"";
+               status = saveActorInfoinDB(actorObj.getStagename(), actorObj.getDob(), null);
+               if (status != null && !status.contains("success")) {
+                   report.write(" Error in processing xml record " + status + "\n");
+               }
+
+           }else{ report.write("\n");}
+
         }
         report.close();
     }
@@ -147,16 +147,19 @@ public class SAXParserActor extends DefaultHandler
 
     public String saveActorInfoinDB(String starName, String starBirthYear, String movieID)
     {
-        String starQuery ="{CALL addStarMovie(?,?,?,?)}";
+        String starQuery ="{CALL addStarMovie(?,?,?,?,?)}";
         String status ="";
+
         try
         {
             connection = DriverManager.getConnection(loginUrl, loginUser, loginPasswd);
+            //connection = DriverManager.getConnection(String.valueOf(dataSource));
             CallableStatement  prepStmt = connection.prepareCall(starQuery);
             prepStmt.setString(1, starName);
             prepStmt.setString(2, starBirthYear);
             prepStmt.setString(3, movieID);
             prepStmt.registerOutParameter(4, java.sql.Types.VARCHAR);
+            prepStmt.registerOutParameter(5, java.sql.Types.VARCHAR);
             System.out.println(prepStmt);
             boolean hadResults = prepStmt.execute();
             status  = prepStmt.getString("status");

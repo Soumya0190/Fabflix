@@ -95,34 +95,36 @@ public class SAXParserStar extends DefaultHandler
     private void printData() throws IOException
     {
         System.out.println("No of Stars '" + starList.size() + "'.");
-        Iterator<Star> it = starList.iterator();
+        Iterator<Star> it = starList.iterator(); String status ="";
 
         FileWriter report = new FileWriter("inconsistency_report_stars.txt");
         while (it.hasNext())
         {
+            status ="";
             Star starObj = (Star)it.next();
             Boolean reportIt = false;
             String starName = starObj.getActor();
             String starMovieID = starObj.getFilmID();
-            if (starName == null || starName.length() <= 0 )
+            if (starName == null || (starName != null && (starName.trim().length() <= 0 || starName.trim().length()>100)))
             {
-                starName = "Unspecified".trim();
+                report.write("Bad data for Star Name: " + starName + " | ");
                 reportIt = true;
             }
-            if (starMovieID.length() > 11 )
+            if (starMovieID == null ||(starMovieID != null && (starMovieID.trim().length() <=0 || starMovieID.trim().length() > 10 )))
             {
                 reportIt = true;
+                report.write("Bad data for Movie ID: " + starMovieID + "\n");
             }
-            if(reportIt)
+          if(!reportIt)
             {
-                report.write("Star Name: " + starName + "\n");
-                report.write(" Star Birth Year: Not Found in casts124.xml" + "\n");
-                report.write("Movie ID: " + starMovieID + "\n");
+
+                status = saveStarMovieInfoinDB(starObj.getActor(), "", starObj.getFilmID());
+                if (status.contains("error")) {
+                    report.write("Error in processing xml record " + status);
+                }
             }
-            else if(!reportIt)
-            {
-                saveStarMovieInfoinDB(starObj.getActor(), "", starObj.getFilmID());
-            }
+          else{
+              report.write("\n");}
         }
         report.close();
     }
@@ -143,7 +145,7 @@ public class SAXParserStar extends DefaultHandler
     //starName varchar(100), IN starByear varchar(10), IN movieID varchar(10), OUT status varchar(100)
     public String saveStarMovieInfoinDB(String starName, String starBirthYear, String movieID)
     {
-        String starQuery ="{CALL addStarMovie(?,?,?,?)}";
+        String starQuery ="{CALL addStarMovie(?,?,?,?,?)}";
         String status ="";
         try
         {
@@ -153,6 +155,7 @@ public class SAXParserStar extends DefaultHandler
             prepStmt.setString(2, starBirthYear);
             prepStmt.setString(3, movieID);
             prepStmt.registerOutParameter(4, java.sql.Types.VARCHAR);
+            prepStmt.registerOutParameter(5, java.sql.Types.VARCHAR);
             System.out.println(prepStmt);
             boolean hadResults = prepStmt.execute();
             status  = prepStmt.getString("status");

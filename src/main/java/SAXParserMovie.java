@@ -103,7 +103,7 @@ public class SAXParserMovie extends DefaultHandler
     private void printData() throws SQLException, IOException
     {
         System.out.println("No of Movies '" + movieList.size() + "'.");
-        Iterator<Movie> it = movieList.iterator();
+        Iterator<Movie> it = movieList.iterator();  String regex = "\\d+";
         FileWriter report = new FileWriter("inconsistency_report_movies.txt");
         while (it.hasNext())
         {
@@ -119,26 +119,33 @@ public class SAXParserMovie extends DefaultHandler
             if(movieID.length() >= 11)
             {
                 reportIt = true;
-                report.write("Movie ID: " + movieID + " | ");
+                report.write(" Movie ID: " + movieID + " | ");
             }
-            if (movieTitle == null || movieTitle.length() <= 0 || movieTitle.length() > 100) //100 NOT NULL
+            if (movieTitle != null && (movieTitle.trim().length() <= 0 || movieTitle.trim().length() > 100)) //100 NOT NULL
             {
                 report.write("Bad data for Movie Title: " + movieTitle + " | ");
                 reportIt = true;
             }
-            if (movieDirector == null || movieDirector.length() <= 0 || movieDirector.length() > 100) //0 - 100 NOT NULL
+            if (movieDirector != null && ( movieDirector.trim().length() <= 0 || movieDirector.trim().length() > 100)) //0 - 100 NOT NULL
             {
                 report.write("Bad data for Movie Director: " + movieDirector + " | ");
                 reportIt = true;
             }
-            if (movieReleaseDate == null || movieReleaseDate.trim().length() <= 0 || movieReleaseDate.trim().length() > 4) //4 digit
+            if (movieReleaseDate != null || (movieReleaseDate.trim().length() <= 0 || movieReleaseDate.trim().length() > 4) )//4 digit
             {
-                report.write("Bad data for movie ReleaseDate: " + movieReleaseDate + " | ");
+                if (movieReleaseDate.matches(regex) == false) {
+                    report.write(" Bad data for movie ReleaseDate" + movieReleaseDate + "|");
+                } else if (Integer.parseInt(movieReleaseDate) < 2020) {
+                    reportIt = false;
+                }
+
 
                 reportIt = true;
             }
-            if (movieGenre == null || movieGenre.trim().length() <= 0 || movieGenre.trim().length() > 32) //NOT NULL  0-32
+            if (movieGenre == null ||(movieGenre != null && (movieGenre.trim().length() <= 0 || movieGenre.trim().length() > 32))) //NOT NULL  0-32
             {
+                //ASSUMPTION Genre Name is not optional, will be reported, not added to database
+                //Movie not added to DB if genre not specified
                 report.write("Bad data for movie movieGenre: " + movieGenre + " | ");
                 reportIt = true;
             }

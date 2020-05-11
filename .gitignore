@@ -118,7 +118,7 @@ fabric.properties
 ### Intellij Patch ###
 # Comment Reason: https://github.com/joeblau/gitignore.io/issues/186#issuecomment-215987721
 
-# *.iml
+*.iml
 # modules.xml
 # .idea/misc.xml
 # *.ipr
@@ -173,4 +173,9 @@ buildNumber.properties
 
 # End of https://www.gitignore.io/api/java,maven,eclipse,java-web,intellij
 
-
+actor6.dtd
+actors63.xml
+cast93.dtd
+casts124.xml
+main32.dtd
+mains243.xml
