@@ -1,5 +1,3 @@
-CALL `moviedb`.`addStarMovie`('xjjjj', 2000, null, @status,   @addeddata);
-select @status, @addeddata;
 DELIMITER $$
 CREATE PROCEDURE `addStarMovie`(IN starName varchar(100), IN starByear varchar(10), IN movieID varchar(10), OUT status varchar(100), OUT addedData varchar(100))
 BEGIN
@@ -30,10 +28,3 @@ if (status is null or length(status) <= 0) then set status = 'success'; end if;
 select addedData;
 END$$
 DELIMITER ;
-
-select * from stars where name ='xx1';
-select * from stars_in_movies where starid='nm9438891';
-
-set @starName = 'xx1'; set @newstarID ='nm9438891';
-set @addedData = CONCAT('Added Star "',@starName,'" (',@newstarID,').');
-select @addedData;
