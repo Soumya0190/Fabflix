@@ -136,7 +136,7 @@ public class SAXParserMovie extends DefaultHandler
                 report.write("Bad data for Movie Director: " + movieDirector + " | ");
                 reportIt = true;
             }
-            if (movieReleaseDate != null || (movieReleaseDate.trim().length() <= 0 || movieReleaseDate.trim().length() > 4) )//4 digit
+            if (movieReleaseDate != null && (movieReleaseDate.trim().length() <= 0 || movieReleaseDate.trim().length() > 4) )//4 digit
             {
                 if (movieReleaseDate.matches(regex) == false) {
                     report.write(" Bad data for movie ReleaseDate" + movieReleaseDate + "|");
