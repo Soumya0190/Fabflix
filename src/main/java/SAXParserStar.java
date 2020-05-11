@@ -22,7 +22,8 @@ public class SAXParserStar extends DefaultHandler
 {
     String loginUser = "mytestuser";
     String loginPasswd = "mypassword";
-    String loginUrl = "jdbc:mysql://localhost:3306/moviedb";
+    String loginUrl = "jdbc:mysql:///moviedb?autoReconnect=true&useSSL=false";
+    //String loginUrl = "jdbc:mysql://localhost:3306/moviedb";
     Connection connection;
 
     List<Star> starList;
@@ -98,6 +99,8 @@ public class SAXParserStar extends DefaultHandler
         Iterator<Star> it = starList.iterator(); String status ="";
 
         FileWriter report = new FileWriter("inconsistency_report_stars.txt");
+        report.write("Inconsistency report for casts124.xml :");
+        int totalRecords=0;
         while (it.hasNext())
         {
             status ="";
@@ -124,8 +127,10 @@ public class SAXParserStar extends DefaultHandler
                 }
             }
           else{
+              totalRecords ++;
               report.write("\n");}
         }
+        report.write(" Total Records with Bad Data: "+ totalRecords);
         report.close();
     }
 

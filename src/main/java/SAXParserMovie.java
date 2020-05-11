@@ -21,7 +21,8 @@ public class SAXParserMovie extends DefaultHandler
 {
     String loginUser = "mytestuser";
     String loginPasswd = "mypassword";
-    String loginUrl = "jdbc:mysql://localhost:3306/moviedb";
+    //String loginUrl = "jdbc:mysql://localhost:3306/moviedb";
+    String loginUrl = "jdbc:mysql:///moviedb?autoReconnect=true&useSSL=false";
     Connection connection;
 
     List<Movie> movieList;
@@ -104,7 +105,9 @@ public class SAXParserMovie extends DefaultHandler
     {
         System.out.println("No of Movies '" + movieList.size() + "'.");
         Iterator<Movie> it = movieList.iterator();  String regex = "\\d+";
+        int totalRecords = 0;
         FileWriter report = new FileWriter("inconsistency_report_movies.txt");
+        report.write("Inconsistency Report for mains243.xml :");
         while (it.hasNext())
         {
             Movie movieObj = (Movie)it.next();
@@ -152,6 +155,7 @@ public class SAXParserMovie extends DefaultHandler
 
             if(reportIt)
             {
+                totalRecords++;
                 report.write("\n");
             }
             else if(!reportIt)
@@ -159,6 +163,7 @@ public class SAXParserMovie extends DefaultHandler
                 saveMovieInfoinDB(movieObj.getMovieID(), movieObj.getTitle(), movieObj.getDirector(), movieObj.getYear(), movieObj.getGenre());
             }
         }
+        report.write(" Total Records with Bad Data: "+ totalRecords);
         report.close();
     }
 
@@ -184,6 +189,8 @@ public class SAXParserMovie extends DefaultHandler
         //String regex = "\\d+";
         try
         {
+            //Class.forName("com.mysql.jdbc.Driver").newInstance();
+            //DriverManager.getConnection("jdbc:mysql:///moviedb?autoReconnect=true&useSSL=false", "mytestuser", "mypassword")
             connection = DriverManager.getConnection(loginUrl, loginUser, loginPasswd);
             CallableStatement prepStmt = connection.prepareCall(movieQuery);
             prepStmt.setString(1, movie_id.trim());

@@ -23,7 +23,8 @@ public class SAXParserActor extends DefaultHandler
 {
     String loginUser = "mytestuser";
     String loginPasswd = "mypassword";
-    String loginUrl = "jdbc:mysql://localhost:3306/moviedb";
+    String loginUrl = "jdbc:mysql:///moviedb?autoReconnect=true&useSSL=false";
+    //String loginUrl = "jdbc:mysql://localhost:3306/moviedb";
 
     //@Resource(name = "jdbc/moviedb")
     //private DataSource dataSource;
@@ -95,7 +96,9 @@ public class SAXParserActor extends DefaultHandler
     {
         System.out.println("No of Actors '" + actorList.size() + "'.");
         Iterator<Actor> it = actorList.iterator();
+        int totalRecords = 0;
         FileWriter report = new FileWriter("inconsistency_report_actors.txt");
+        report.write("Inconsistency Report for mains243.xml :");
         String regex = "\\d+"; String status="";
         while (it.hasNext()) {
             status = "";
@@ -127,9 +130,12 @@ public class SAXParserActor extends DefaultHandler
                    report.write(" Error in processing xml record " + status + "\n");
                }
 
-           }else{ report.write("\n");}
+           }else{
+               totalRecords++;
+               report.write("\n");}
 
         }
+        report.write(" Total Records with Bad Data: "+ totalRecords);
         report.close();
     }
 
