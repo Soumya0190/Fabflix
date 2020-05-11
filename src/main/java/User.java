@@ -30,7 +30,6 @@ public class User
         this.lastName = lastName;
         this.isUserValid = isUserValid;
         this.role = role;
-
     }
 }
 

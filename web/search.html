@@ -11,18 +11,18 @@
 <body>
 <header>
     <nav>
-        <div id="empOpt">
+
            <span id = "empOptnavigation">
                     <a href = "dashboard.html" id = "adminDashboard_button" class ="app_button">Admin Dashboard</a>
 
                </span>
-        </div>
-        <div id ="custOpt">
-               <span id = "custOptnavigation">
+
+
+        <span id = "custOptnavigation">
                     <a href = "shopping-cart.html" id = "movies_list_button">View Shopping Cart</a>
 
                </span>
-        </div>
+
 
     </nav>
 </header>
@@ -38,6 +38,7 @@
     <hr>
 
     <form id = "search_form" method = "GET" action = "movie-list.html">
+        <input type="hidden" id="usertype" name="usertype" >
         <table id = "searchTable" class = "fabflix_table" border="0" width="70%" align="center">
             <thead>
             <tr>

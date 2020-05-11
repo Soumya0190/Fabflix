@@ -1,7 +1,7 @@
 /*
 Code used form Professor Chen Li's project1-api-example
 Sort code used from w3 schools and modified
- */
+*/
 function sortTable(n, numberOpr) {
     var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
     table = document.getElementById("movies_list_table");
@@ -48,11 +48,20 @@ function sortTable(n, numberOpr) {
 //$("#tdTitle").onclick=sortTable(0);
 //$("#tdRating").onclick=sortTable(1);
 
-function getMovieList(resultData) {
+function getMovieList(resultData,recordsPerPage, pgOffset, usertype) {
     try {
 
         console.log("getMovieList: updating movie list");
         // console.log("getMovieList: resultset length ="+ resultData["totalRecords"]);
+        usertype = resultData["usertype"];
+        if (usertype === "admin"){
+
+            $("#empOptnavigation").show(); $("#custOptnavigation").hide();
+        }
+        else
+        {
+            $("#empOptnavigation").hide();$("#custOptnavigation").show();
+        }
         let table = $("#movies_list_body");
         let srchDiv = $("#divSearchResults");
 
@@ -99,7 +108,13 @@ function getMovieList(resultData) {
             bodyHTML += "</td>";
             bodyHTML += "<td> $" + movieList[i]["price"] + "</td>";
             var tmp = "'" + movieList[i]["movie_id"] + "','" + movieList[i]["movie_title"] + "'," + movieList[i]["price"];
-            bodyHTML += '<td><a href = "javascript:addToCart(' + tmp + ')"; > Add to Shopping Cart</a></td>';
+            if (usertype === "admin"){
+                bodyHTML += '<td></td>';
+            }
+            else
+            {
+                bodyHTML += '<td><a href = "javascript:addToCart(' + tmp + ')"; > Add to Shopping Cart</a></td>';
+            }
             bodyHTML += "</tr>";
 
             table.append(bodyHTML);
@@ -113,7 +128,7 @@ function getMovieList(resultData) {
             let movieYear = resultData["movieYear"];
             let genreid = resultData["genreid"];
             let titleStartsWith = resultData["titleStartsWith"];
-            createPagination(totalPg, recordsPerPage, pgOffset, movieStar, movieTitle, movieDirector, movieYear, genreid,titleStartsWith );
+            createPagination(totalPg, recordsPerPage, pgOffset, movieStar, movieTitle, movieDirector, movieYear, genreid,titleStartsWith ,usertype);
         }
     }
     catch(ex)
@@ -121,13 +136,13 @@ function getMovieList(resultData) {
         alert(ex);
     }
 }
-function createPagination(totalPg, recordsPerPage, pgOffset, movieStar, movieTitle, movieDirector, movieYear, genreid,titleStartsWith){
+function createPagination(totalPg, recordsPerPage, pgOffset, movieStar, movieTitle, movieDirector, movieYear, genreid,titleStartsWith,usertype){
     let createPg =""; let currentPage=pgOffset/recordsPerPage;  let tmp ="";
     if (pgOffset >= recordsPerPage)
     {
         pgOffset = pgOffset - recordsPerPage;
         tmp = "javascript:getMovieLstFromSession(" + recordsPerPage+"," + pgOffset+",'" + movieStar +"','" + movieTitle;
-        tmp = tmp +"','"+ movieDirector +"','"+ movieYear +"','"+ genreid +"','"+titleStartsWith+"');";
+        tmp = tmp +"','"+ movieDirector +"','"+ movieYear +"','"+ genreid +"','"+titleStartsWith+"','"+usertype+"');";
         createPg += '<a href="' + tmp + '">&laquo;</a>';
     }
     let lastPage= 0; let initPg = 0;
@@ -138,24 +153,24 @@ function createPagination(totalPg, recordsPerPage, pgOffset, movieStar, movieTit
         if (i === currentPage) tmp = 'class="active"'; lastPage = i;
         pgOffset = i*recordsPerPage
         tmp = "javascript:getMovieLstFromSession(" + recordsPerPage+"," + pgOffset+",'" + movieStar +"','" + movieTitle;
-        tmp = tmp +"','"+ movieDirector +"','"+ movieYear +"','"+ genreid +"','"+titleStartsWith+"');";
+        tmp = tmp +"','"+ movieDirector +"','"+ movieYear +"','"+ genreid +"','"+titleStartsWith+"','"+usertype+"');";
         createPg += '<a href="' + tmp + '">'+i+'</a>';
     }
     if (totalPg > lastPage+1) {
         pgOffset = lastPage*recordsPerPage + recordsPerPage;
         tmp = "javascript:getMovieLstFromSession(" + recordsPerPage+"," + pgOffset+",'" + movieStar +"','" + movieTitle;
-        tmp = tmp +"','"+ movieDirector +"','"+ movieYear +"','"+ genreid +"','"+titleStartsWith+"');";
+        tmp = tmp +"','"+ movieDirector +"','"+ movieYear +"','"+ genreid +"','"+titleStartsWith+"','"+usertype+"');";
         createPg += '<a href="' + tmp + '">&raquo;</a>';
     }
     $("#divPg").html(createPg);
     $("#divPg").show();
 }
 
-function getMovieLstFromSession(recordsPerPage,pgOffset,movieStar, movieTitle, movieDirector, movieYear, genreid,titleStartsWith){
+function getMovieLstFromSession(recordsPerPage,pgOffset,movieStar, movieTitle, movieDirector, movieYear, genreid,titleStartsWith, usertype){
 //movieStar, movieTitle, movieDirector, movieYear, genreid,titleStartsWith
     if (recordsPerPage == null || recordsPerPage.length <=0)  pgLimit = 25;
     let data = "movie-list.html?pagination=Y&recordsPerPage=" + recordsPerPage;
-   // if (pgOffset != null) data = data+ "&pgOffset="+ pgOffset;
+    // if (pgOffset != null) data = data+ "&pgOffset="+ pgOffset;
     if (movieTitle != "null" && movieTitle != "undefined") data = data + "&searchTitle=" + movieTitle;
     if (movieDirector != "null" && movieTitle != "undefined") data = data + "&searchDirector=" + movieDirector;
     if (movieYear != "null" && movieYear != "undefined") data = data + "&searchYear=" + movieYear;
@@ -163,46 +178,49 @@ function getMovieLstFromSession(recordsPerPage,pgOffset,movieStar, movieTitle, m
     if (genreid != "null" && genreid != "undefined") data = data + "&genreid=" + genreid;
     if (titleStartsWith != "null" && titleStartsWith != "undefined") data = data + "&browsetitle=" + titleStartsWith;
     if (pgOffset != "null" && pgOffset != "undefined") data = data + "&pgOffset=" + pgOffset;
+    if (usertype != "null" && usertype != "undefined") data = data + "&usertype=" + usertype;
     //alert(data);
-     window.location.replace(data);
-/* direct ajax call to end point is ovrwritten by on page load
-    jQuery.ajax({
-        dataType: "json",
-        method: "GET",
-        url: data,
-        success: (resultData) => getMovieList(resultData)
-    });*/
+    window.location.replace(data);
+    /* direct ajax call to end point is ovrwritten by on page load
+       jQuery.ajax({
+           dataType: "json",
+           method: "GET",
+           url: data,
+           success: (resultData) => getMovieList(resultData)
+       });*/
 }
 
-    let searchTitle = getParameterByName('searchTitle');
-    let searchDirector = getParameterByName('searchDirector');
-    let searchYear = getParameterByName('searchYear');
-    let searchStar = getParameterByName('searchStar');
-    let recordsPerPage = getParameterByName('recordsPerPage');
-    let genreid = getParameterByName('genreid');
-    let browsetitle = getParameterByName('browsetitle');
-    let pgOffset = getParameterByName('pgOffset');
-    let pagination = getParameterByName('pagination');
-    if (recordsPerPage == null || recordsPerPage.length <= 0) recordsPerPage = 25;
-    if (pgOffset == null || pgOffset.length <= 0) pgOffset = 0;
-    if (pagination == null || pagination.length <= 0) pagination = "N";
+let searchTitle = getParameterByName('searchTitle');
+let searchDirector = getParameterByName('searchDirector');
+let searchYear = getParameterByName('searchYear');
+let searchStar = getParameterByName('searchStar');
+let recordsPerPage = getParameterByName('recordsPerPage');
+let genreid = getParameterByName('genreid');
+let browsetitle = getParameterByName('browsetitle');
+let pgOffset = getParameterByName('pgOffset');
+let pagination = getParameterByName('pagination');
+if (recordsPerPage == null || recordsPerPage.length <= 0) recordsPerPage = 25;
+if (pgOffset == null || pgOffset.length <= 0) pgOffset = 0;
+if (pagination == null || pagination.length <= 0) pagination = "N";
+let usertype = getParameterByName('usertype');
 
-    let data = "api/movies?recordsPerPage=" + recordsPerPage;
-    if (searchTitle != null) data = data + "&searchTitle=" + searchTitle;
-    if (searchDirector != null) data = data + "&searchDirector=" + searchDirector;
-    if (searchYear != null) data = data + "&searchYear=" + searchYear;
-    if (searchStar != null) data = data + "&searchStar=" + searchStar;
-    if (genreid != null) data = data + "&genreid=" + genreid;
-    if (browsetitle != null) data = data + "&browsetitle=" + browsetitle;
-    if (pgOffset != null) data = data + "&pgOffset=" + pgOffset;
-    if (pagination != null) data = data + "&pagination=" + pagination;
+let data = "api/movies?recordsPerPage=" + recordsPerPage+"&usertype="+usertype;
+if (searchTitle != null) data = data + "&searchTitle=" + searchTitle;
+if (searchDirector != null) data = data + "&searchDirector=" + searchDirector;
+if (searchYear != null) data = data + "&searchYear=" + searchYear;
+if (searchStar != null) data = data + "&searchStar=" + searchStar;
+if (genreid != null) data = data + "&genreid=" + genreid;
+if (browsetitle != null) data = data + "&browsetitle=" + browsetitle;
+if (pgOffset != null) data = data + "&pgOffset=" + pgOffset;
+if (pagination != null) data = data + "&pagination=" + pagination;
+if (usertype != null) data = data + "&usertype=" + usertype;
 
-    jQuery.ajax({
-        dataType: "json",
-        method: "GET",
-        url: data,
-        success: (resultData) => getMovieList(resultData, recordsPerPage, pgOffset)
-    });
+jQuery.ajax({
+    dataType: "json",
+    method: "GET",
+    url: data,
+    success: (resultData) => getMovieList(resultData, recordsPerPage, pgOffset,usertype)
+});
 
 
 
@@ -249,7 +267,7 @@ function displayMsg(addtocartMsg){
 
 /*var span = document.getElementsByClassName("closeCartMsg")[0];
 span.onclick = function() {
-    modal.style.display = "none";
+   modal.style.display = "none";
 }*/
 
 function hidePopUp()
@@ -267,5 +285,3 @@ window.onclick = function(event) {
         }
     }
 }
-
-

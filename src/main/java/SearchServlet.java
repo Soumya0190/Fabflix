@@ -50,7 +50,10 @@ public class SearchServlet extends HttpServlet
         //else {
         HttpSession session = request.getSession();
         JsonObject jsonTObject = new JsonObject();
-        jsonTObject.addProperty("usertype", "admin");//userInfo.role);
+        User userInfo = (User) request.getSession().getAttribute("user");
+        if (userInfo!=null) {
+            jsonTObject.addProperty("usertype", userInfo.role);
+        }
         try {
             Connection connection = dataSource.getConnection();
             // Statement statement = connection.createStatement();

@@ -84,7 +84,7 @@ public class LoginServlet extends HttpServlet {
 
             //read session Boolean isUserAuthenticated = (Boolean) session.getAttribute("authenticated");
             responseJsonObject.addProperty("status", "success");
-            responseJsonObject.addProperty("usertype", "usertype");
+            responseJsonObject.addProperty("usertype", usertype);
             responseJsonObject.addProperty("message", "success");
         }
         else {

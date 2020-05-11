@@ -1,6 +1,13 @@
-function getMovieInfo(resultData, movieId, price) {
+function getMovieInfo(resultData, movieId, price, usertype) {
     console.log("getMovieInfo: updating movie info");
-
+    usertype= resultData["usertype"];
+    if (usertype === "admin"){
+        $("#empOptnavigation").show(); $("#custOptnavigation").hide();
+    }
+    else
+    {
+        $("#empOptnavigation").hide();$("#custOptnavigation").show();
+    }
     let movieInfoDiv = $("#movie_info");
     let info = "<h2>" + "Movie Name: " + resultData["title"] + "</h2>";
     info += "<h3>Year: " + resultData["year"] + "</h3>";
@@ -8,7 +15,9 @@ function getMovieInfo(resultData, movieId, price) {
     info += "<h3>Rating: " + resultData["rating"] + "</h3>";
 
     var tmp = "'" + movieId + "','" + resultData["title"] + "',"+ price;
-    info += '<h3><a href = "javascript:addToCart('+ tmp + ')"; class="app_button"> Add to Shopping Cart</a></h3>';
+    if (usertype != "admin") {
+        info += '<h3><a href = "javascript:addToCart(' + tmp + ')"; class="app_button"> Add to Shopping Cart</a></h3>';
+    }
     movieInfoDiv.append(info);
 
     let starTable = $("#movie_star_body");
@@ -20,7 +29,7 @@ function getMovieInfo(resultData, movieId, price) {
     for (j = 0; j < starList.length; j+=2)
     {
         starBodyHTML += "<tr><td>";
-        starBodyHTML += '<a href = "single-star.html?id=' + starList[j] + '">' + starList[j+1] + "</a>";
+        starBodyHTML += '<a href = "single-star.html?usertype='+ usertype +'&id=' + starList[j] + '">' + starList[j+1] + "</a>";
         starBodyHTML += "</td></tr>";
     }
     starTable.append(starBodyHTML);
@@ -64,7 +73,7 @@ function displayMsg(addtocartMsg){
 }
 /*
 span.onclick = function() {
-    modal.style.display = "none";
+   modal.style.display = "none";
 }
 */
 

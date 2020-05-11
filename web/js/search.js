@@ -1,6 +1,6 @@
 let search_form = $("#search_form");
 let browse_genre = $("#browse_genre");
-
+let usertype=$("#usertype");
 
 function handleLoginResult(resultDataString)
 {
@@ -39,17 +39,18 @@ function submitSearchForm(formSubmitEvent) {
     data = data +"&searchYear="+$("#searchYear").val();
     data = data +"&searchStar="+$("#searchStar").val();
     data = data +"&recordPerPage="+$("#recordPerPage").val();
+    data = data +"&usertype="+$("#usertype").val();
     console.log("search submit: " +data);
     window.location.replace("movie-list.html"+data)
 }
 
 // Display Genre
-function getGenreList(resultData) {
+function getGenreList(resultData, usertype) {
     console.log("getGenreList: get genre list from database");
     var divText = "";
     var genList = JSON.parse(resultData["genre"]);//JSON.parse
     for (let i = 0; i < genList.length; i++) {
-        divText = divText + " <a href='movie-list.html?pagination=N&genreid=" + genList[i]["genreID"] + "'>" + genList[i]["name"] + " </a> &nbsp;&nbsp; ";
+        divText = divText + " <a href='movie-list.html?pagination=N&usertype="+usertype+"&genreid=" + genList[i]["genreID"] + "'>" + genList[i]["name"] + " </a> &nbsp;&nbsp; ";
     }
     if (divText.length <= 0){
         if (resultDataJson["errorMessage"]) {
@@ -59,24 +60,26 @@ function getGenreList(resultData) {
     else  $("#divGenreList").html(divText);
 }
 
-function printAlphanumericList() {
+function printAlphanumericList(usertype) {
     var divText = "";
-    divText = getAlphanumericList(48,58, divText);
-    divText = getAlphanumericList(65,91, divText);
-    divText = divText + " <a href='movie-list.html?browsetitle=spchr&pagination=N'>*</a> ";
+    divText = getAlphanumericList(48,58, divText, usertype);
+    divText = getAlphanumericList(65,91, divText, usertype);
+    divText = divText + " <a href='movie-list.html?browsetitle=spchr&pagination=N&usertype="+usertype+"'>*</a> ";
 
     $("#divTitleList").html(divText);
 }
-function getAlphanumericList(i, j, divText){
+function getAlphanumericList(i, j, divText, usertype){
     for(k = i; k < j; k++) {
         var str = String.fromCharCode(k);
-        divText = divText + " <a href='movie-list.html?browsetitle=" + str + "'&pagination='N' >" + str + " </a> &nbsp;&nbsp; ";
+        divText = divText + " <a href='movie-list.html?browsetitle=" + str + "'&pagination=N&usertype="+usertype+"' >" + str + " </a> &nbsp;&nbsp; ";
     }
     return divText;
 }
 function displaySearchScreen (resultData) {
 
-    printAlphanumericList();
+    usertype = resultData["usertype"];
+    printAlphanumericList(usertype);
+
     if (resultData["usertype"]=="admin")
     {
         $("#empOptnavigation").show(); $("#custOptnavigation").hide();
@@ -85,7 +88,7 @@ function displaySearchScreen (resultData) {
     {
         $("#empOptnavigation").hide();$("#custOptnavigation").show();
     }
-    getGenreList(resultData);
+    getGenreList(resultData, usertype);
 }
 // Bind the submit action of the form to a handler function
 search_form.submit(submitSearchForm);

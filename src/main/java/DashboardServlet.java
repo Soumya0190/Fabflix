@@ -48,8 +48,8 @@ public class DashboardServlet extends HttpServlet {
                 status = saveMovieInfoinDB(request);
             }
             responseJsonObject.addProperty("message", status);
-            if (status.equals("success")) responseJsonObject.addProperty("status", "success");
-            else responseJsonObject.addProperty("status", "fail");
+            //if (status.equals("success")) responseJsonObject.addProperty("status", "success");
+            //else responseJsonObject.addProperty("status", "fail");
 
             response.getWriter().write(responseJsonObject.toString());
             System.out.println(responseJsonObject.toString());
@@ -61,16 +61,17 @@ public class DashboardServlet extends HttpServlet {
     }
 
     public String saveActorInfoinDB(HttpServletRequest request ) {
-        String movieID="";
+        String movieID="";String regex = "\\d+";
         String starName = request.getParameter("starName");
         String starBirthYear = request.getParameter("starDOB");
         String starQuery ="{CALL addStarMovie(?,?,?,?,?)}"; String status ="";String msg ="";
         try
         {
+            if (starBirthYear.length()> 0 && (starBirthYear.matches(regex) == false ) ) starBirthYear ="";
             Connection connection = dataSource.getConnection();
             CallableStatement prepStmt = connection.prepareCall(starQuery);
             prepStmt.setString(1, starName);
-            prepStmt.setInt(2, Integer.parseInt(starBirthYear));
+            prepStmt.setString(2, starBirthYear);
             prepStmt.setString(3, movieID);
             prepStmt.registerOutParameter(4, java.sql.Types.VARCHAR);
             prepStmt.registerOutParameter(5, java.sql.Types.VARCHAR);

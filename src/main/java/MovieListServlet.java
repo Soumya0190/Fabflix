@@ -96,8 +96,8 @@ public class MovieListServlet extends HttpServlet {
             Connection connection = dataSource.getConnection();
             // Statement statement = connection.createStatement();
             PreparedStatement preparedStatementMainQuery;
-            String query = "SELECT r.movieid, m.title, m.year, m.director, r.rating , FLOOR(RAND()*(10)+5) price ";
-            query =  query + " FROM ratings r, movies m WHERE r.movieId = m.id ";
+            String query = "SELECT m.id movieId, m.title, m.year, m.director, r.rating , FLOOR(RAND()*(10)+5) price ";
+            query =  query + " FROM ratings r RIGHT JOIN movies m ON r.movieId = m.id where 1=1 ";
 
             if ((movieStar != null && movieStar.length() > 0) || (genreid != null && genreid.length() > 0)) {
                 commaSeparatedMovieIds = getMovieList(movieStar, genreid);
@@ -216,7 +216,10 @@ public class MovieListServlet extends HttpServlet {
             session.setAttribute("moviesData", jsnObject);
             //   session.setAttribute("moviesData", jsonArray);
             session.setAttribute("searchCriteria", searchCriteria);
-
+            User userInfo = (User) request.getSession().getAttribute("user");
+            if (userInfo!=null) {
+                jsnObject.addProperty("usertype", userInfo.role);
+            }
             //String movieLstString = getMovieListFromSession(0, recordsPerPage, session);
             System.out.println("MovieListServlet = " + jsnObject.toString());
             //response.setStatus(200);
@@ -247,6 +250,10 @@ public class MovieListServlet extends HttpServlet {
         newJSonObj.addProperty("movieYear", jsonObj.get("movieYear").toString());
         newJSonObj.addProperty("genreid", jsonObj.get("genreid").toString());
         newJSonObj.addProperty("titleStartsWith", jsonObj.get("titleStartsWith").toString());
+        User userInfo = (User) session.getAttribute("user");
+        if (userInfo!=null) {
+            newJSonObj.addProperty("usertype", userInfo.role);
+        }
         session.setAttribute("moviesData", newJSonObj.toString());
 
         SearchCriteria newSrchCriteria = new SearchCriteria();

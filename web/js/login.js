@@ -11,6 +11,7 @@ function handleLoginResult(resultDataString)
     console.log("handle login response");
     console.log(resultDataString);
     console.log(resultDataString["status"]);
+    //alert("usertype="+ resultDataString["usertype"] +",  status = "+resultDataString["status"]);
 
     // If login succeeds, it will redirect the user to search.html
     if (resultDataString["status"] === "success")
@@ -68,8 +69,13 @@ if ($("#usertype")) {
     if ( usrType === "admin")
     {
         $("#spnEmpLogin").hide();
+        $("#divRecaptcha").hide();
         $("#empMsg").textContent= "Employee Login";
-
+    } else
+    {
+        $("#spnEmpLogin").show();
+        $("#divRecaptcha").show();
+        $("#empMsg").textContent= "Customer Login";
     }
 
 }

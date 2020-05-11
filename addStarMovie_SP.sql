@@ -5,7 +5,7 @@ DECLARE maxId varchar(10); DECLARE lenId int; DECLARE newstarID varchar(10);
 DECLARE exit handler for SQLEXCEPTION
 BEGIN
   GET DIAGNOSTICS CONDITION 1 @text = MESSAGE_TEXT;
-  SET status = CONCAT('ERROR ', substring(@text, 1,100));
+  SET status = CONCAT('ERROR ', substring(@text, 1,90));
 END;
 
 if NOT Exists (select 1 from stars where name = starName) then

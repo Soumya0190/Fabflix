@@ -37,6 +37,12 @@ public class SingleStarServlet extends HttpServlet
 
         PrintWriter printer = response.getWriter();
 
+        JsonObject star = new JsonObject();
+        User userInfo = (User) request.getSession().getAttribute("user");
+        if (userInfo!=null) {
+            star.addProperty("usertype", userInfo.role);
+        }
+
         try
         {
             Connection connection = dataSource.getConnection();
@@ -54,7 +60,7 @@ public class SingleStarServlet extends HttpServlet
             ResultSet starResult = preparedStatementStar.executeQuery();
             ResultSet movieResult = preparedStatementMovies.executeQuery();
 
-            JsonObject star = new JsonObject();
+
             JsonArray movies = new JsonArray();
 
             while (starResult.next())

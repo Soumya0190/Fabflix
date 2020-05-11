@@ -13,11 +13,16 @@
 <body>
 <header>
     <nav>
-                <span id = "navigation">
-                    <a href = "search.html" id = "search_list_button">Search Movies</a>
-                    <br />
-                    <a href = "shopping-cart.html" id = "movies_list_button">View Shopping Cart</a>
-                </span>
+        <div id = "navigation">
+            <a href = "search.html" id = "search_list_button">Search Movies</a>
+            <br />
+            <span id = "custOptnavigation">
+                   <a href = "shopping-cart.html" id = "movies_list_button">View Shopping Cart</a> </span>
+            <span id = "empOptnavigation">
+                    <a href = "dashboard.html" id = "adminDashboard_button" class ="app_button">Admin Dashboard</a>
+
+               </span>
+        </div>
     </nav>
 </header>
 <main>
@@ -31,22 +36,22 @@
         </div>
     </div>
     <div id="divSearchResults">
-    <table id = "movies_list_table" class = "fabflix_table">
-        <thead>
-        <tr>
-            <th id ="tdTitle" name="TD" onclick="sortTable(0,'alpha');">Title</th>
-            <th id="tdRating"  name="TD" onclick="sortTable(1,'number');">Rating</th>
-            <th>Year</th>
-            <th>Director</th>
-            <th>Genres</th>
-            <th>Stars</th>
-            <th>Price</th>
-            <th></th>
-        </tr>
-         </thead>
-        <tbody id ="movies_list_body" class = "fabflix_table">
-        </tbody>
-    </table>
+        <table id = "movies_list_table" class = "fabflix_table" width="100%">
+            <thead>
+            <tr>
+                <th id ="tdTitle" name="TD" onclick="sortTable(0,'alpha');">Title</th>
+                <th id="tdRating"  name="TD" onclick="sortTable(1,'number');">Rating</th>
+                <th>Year</th>
+                <th>Director</th>
+                <th>Genres</th>
+                <th>Stars</th>
+                <th>Price</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody id ="movies_list_body" class = "fabflix_table">
+            </tbody>
+        </table>
     </div>
 </main>
 <footer>

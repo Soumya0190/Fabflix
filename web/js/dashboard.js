@@ -4,8 +4,8 @@ function handleDBupdateResult(resultData)
 {
     console.log("get DB Meta data");
 
-    alert("status =" +resultData["status"] +", message =" + resultData["message"]);
-    displayMsg(resultData["message"]);
+    alert(resultData["message"]);
+   // displayMsg(resultData["message"]);
     /*if (resultData["status"] === "success")
     {
         console.log(resultData["message"]);

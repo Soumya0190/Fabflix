@@ -36,7 +36,11 @@ public class SingleMovieServlet extends HttpServlet
         String movieID = request.getParameter("id");
 
         PrintWriter printer = response.getWriter();
-
+        JsonObject movie = new JsonObject();
+        User userInfo = (User) request.getSession().getAttribute("user");
+        if (userInfo!=null) {
+            movie.addProperty("usertype", userInfo.role);
+        }
         try
         {
             Connection connection = dataSource.getConnection();
@@ -65,7 +69,7 @@ public class SingleMovieServlet extends HttpServlet
             ResultSet ratingResult = preparedStatementRatings.executeQuery();
 
 
-            JsonObject movie = new JsonObject();
+
             JsonArray stars = new JsonArray();
             JsonArray genres = new JsonArray();
 
