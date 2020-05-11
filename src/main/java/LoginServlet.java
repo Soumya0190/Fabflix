@@ -1,15 +1,15 @@
 package main.java;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import org.jasypt.util.password.StrongPasswordEncryptor;
+
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 import javax.sql.DataSource;
 
 @WebServlet(name = "LoginServlet", urlPatterns = "/api/login")
@@ -61,23 +61,22 @@ public class LoginServlet extends HttpServlet {
             System.out.println(" admin =" + usrObj.toString());
         }
         else {
-   /*    String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
-       try
-       {
-           RecaptchaVerifyUtils.verify(gRecaptchaResponse);
-       } catch (Exception e) {
-           responseJsonObject.addProperty("status", "fail");
-           responseJsonObject.addProperty("message", "recaptcha verification error");
-           response.getWriter().write(responseJsonObject.toString());
-           System.out.println(servletName +" Exception=" + e.getMessage());
-           return;
-       }
-*/
+            String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
+            try {
+                RecaptchaVerifyUtils.verify(gRecaptchaResponse);
+            }
+            catch (Exception e) {
+                responseJsonObject.addProperty("status", "fail");
+                responseJsonObject.addProperty("message", "recaptcha verification error");
+                response.getWriter().write(responseJsonObject.toString());
+                System.out.println(servletName + " Exception=" + e.getMessage());
+                return;
+            }
             //Boolean isUserValid = validateUser(username, password);
-
             usrObj = validateUser(username, password);
             System.out.println(" customer =" + usrObj.toString());
         }
+
         if (usrObj != null && usrObj.isUserValid == true) {
             System.out.println(" Valid user");
             session = request.getSession(true);
@@ -85,7 +84,7 @@ public class LoginServlet extends HttpServlet {
 
             //read session Boolean isUserAuthenticated = (Boolean) session.getAttribute("authenticated");
             responseJsonObject.addProperty("status", "success");
-            responseJsonObject.addProperty("usertype", "admin");
+            responseJsonObject.addProperty("usertype", "usertype");
             responseJsonObject.addProperty("message", "success");
         }
         else {
@@ -132,29 +131,37 @@ public class LoginServlet extends HttpServlet {
         }
         return userObj;
     }
+
+
+
     protected User validateUser(String username, String password)
     {
-        String id =""; String firstName =""; String lastName =""; User userObj;
+        String id =""; String firstName =""; String lastName =""; User userObj; String pwd;
         Boolean userExists = false;
-        String movieInfoQuery = "SELECT id, firstName, lastName FROM customers WHERE email=? AND password =?";
+        Boolean isPasswordValid = false;
+        String movieInfoQuery = "SELECT id, firstName, lastName, password FROM customers WHERE email=?";
 
         try
         {
             Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatemenUser = connection.prepareStatement(movieInfoQuery);
             preparedStatemenUser.setString(1, username);
-            preparedStatemenUser.setString(2, password);
+           //preparedStatemenUser.setString(2, password);
             System.out.println("after="+ preparedStatemenUser.toString() );
             ResultSet userResult = preparedStatemenUser.executeQuery();
 
             while (userResult.next())
             {
-                id = userResult.getString("id");
-                firstName = userResult.getString("firstName");
-                lastName = userResult.getString("lastName");
-                userExists = true;
+                String encryptedPassword = userResult.getString("password");
+                isPasswordValid = new StrongPasswordEncryptor().checkPassword(password, encryptedPassword);
+                if(isPasswordValid){
+                    userExists = true;
+                    id = userResult.getString("id");
+                    pwd = userResult.getString("password");
+                    firstName = userResult.getString("firstName");
+                    lastName = userResult.getString("lastName");
+                }
             }
-
             userResult.close();
             preparedStatemenUser.close();
             connection.close();

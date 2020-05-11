@@ -19,7 +19,7 @@ public class VerifyPassword
 	{
 		String loginUser = "mytestuser";
 		String loginPasswd = "mypassword";
-		String loginUrl = "jdbc:mysql://localhost:3306/moviedb";
+		String loginUrl = "jdbc:mysql:///moviedb?autoReconnect=true&useSSL=false";
 
 		Class.forName("com.mysql.jdbc.Driver").newInstance();
 		Connection connection = DriverManager.getConnection(loginUrl, loginUser, loginPasswd);
