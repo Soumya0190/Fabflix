@@ -29,6 +29,7 @@ function submitAddStarForm(formSubmitEvent) {
         data: addStar_form.serialize(),
         url: "api/dashboard",
         success: (resultData) => handleDBupdateResult(resultData)
+       // complete: function(data) {alert(data["message"]);}
     });
 }
 
@@ -40,8 +41,10 @@ function submitAddMovieForm(formSubmitEvent) {
         url: "api/dashboard",
         data: addMovie_form.serialize(),
         success: (resultData) => handleDBupdateResult(resultData)
+       // complete: function(data) {displayMsg(data["message"]);}
     });
 }
+
 // Bind the submit action of the form to a handler function
 addStar_form.submit(submitAddStarForm);
 addMovie_form.submit(submitAddMovieForm);
@@ -108,7 +111,7 @@ function hidePopUp()
     if (modal !== "undefined" && modal != "null") modal.style.display = "none";
 }
 
-
+/*
 window.onclick = function(event) {
     modal = document.getElementById("diveAddData");
     if (modal !== "undefined" && modal != "null")
@@ -117,4 +120,4 @@ window.onclick = function(event) {
             modal.style.display = "none";
         }
     }
-}
+}*/

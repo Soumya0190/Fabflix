@@ -30,6 +30,7 @@ public class DashboardServlet extends HttpServlet {
         String jSONResponse = getDBMetaData(request);
         printer.write(jSONResponse);
         printer.close();
+        response.setStatus(200);
     }
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException
     {
@@ -53,10 +54,12 @@ public class DashboardServlet extends HttpServlet {
 
             response.getWriter().write(responseJsonObject.toString());
             System.out.println(responseJsonObject.toString());
+            response.setStatus(200);
         }
         catch(Exception ex)
         {
             System.out.println("error in add star ="+ ex.getMessage());
+            response.setStatus(500);
         }
     }
 
