@@ -14,7 +14,6 @@ local.properties
 .settings/
 .loadpath
 .recommenders
-.sql
 
 # External tool builders
 .externalToolBuilders/
@@ -169,6 +168,12 @@ buildNumber.properties
 
 # Avoid ignoring Maven wrapper jar file (.jar files are usually ignored)
 !/.mvn/wrapper/maven-wrapper.jar
+
+### xml files ###
+mains243.xml
+actors63.xml
+casts124.xml
+movie-data.sql
 
 
 # End of https://www.gitignore.io/api/java,maven,eclipse,java-web,intellij

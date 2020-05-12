@@ -7,9 +7,12 @@ I had to delete all previous commits because there were many conflicts with merg
 
 ##Prepared Statements
 Changed Prepared Statements for the Following Files:
-Confirmation Servlet -- for updating Sales Data
+Confirmation Servlet (for updating Sales Data)
+Link: https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-3/blob/master/src/main/java/ConfirmationServlet.java 
 Movie-List Servlet
+Link: https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-3/blob/master/src/main/java/MovieListServlet.java
 Payment Servlet
+Link: https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-3/blob/master/src/main/java/PaymentServlet.java
 
 #Inconsistencies
 - Extracted starName and movieID from casts.xml
@@ -17,9 +20,9 @@ Payment Servlet
 - If movieID is invalid (doesn't exist in movie table), then did not add star to the movie
 
 
-#Parsing Optimization Startegies
+#Parsing Optimization Startegies 
 - Removed old indexes before loading and then recreated indexes after
-- Executed batch statements 
+- Attempted to execute batch statements 
 
 ## Demo 
 YouTube Video URL: https://youtu.be/C9vt3wOCDhk
