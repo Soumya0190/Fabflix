@@ -19,7 +19,7 @@ else
  		Select concat(substring(@maxID, 1,@maxLen-2) , lpad(substring(@maxID, @maxLen-1,@maxLen)+1,2,'0')) INTO newMovieID;
         */
         insert into numbers (n) select FLOOR(RAND()*(100)+500);
-		select  concat('fabflix',LAST_INSERT_ID()) into newMovieID;
+		select  concat('ff',LAST_INSERT_ID()) into newMovieID;
 	END IF;
     if NOT EXISTS( select 1 from movies where id = newMovieID) then
 		insert into movies(id, title, year, director) values(newMovieID, movieTitle, movieYear, movieDirector);

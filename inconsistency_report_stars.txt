@@ -1,0 +1,1 @@
+Inconsistency report for casts124.xml : Total Records with Bad Data: 0

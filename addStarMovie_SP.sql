@@ -13,7 +13,7 @@ if NOT Exists (select 1 from stars where name = starName) then
 	SELECT length(maxId) INTO lenId;
 	SELECT  concat(substring(maxId,1,2),LPAD(substring(maxId,3,lenId)+1, lenId-2,'0')) INTO newstarID;*/
     insert into numbers (n) select FLOOR(RAND()*(100)+500);
-	select  concat('fabflix',LAST_INSERT_ID()) into newstarID;
+	select  concat('ff',LAST_INSERT_ID()) into newstarID;
 
 	if (starByear is not null and length(starByear)  <=0) then set starByear =null; end if;
 	INSERT INTO stars(id, name, birthYear) Values(newstarID,starName, starByear );
