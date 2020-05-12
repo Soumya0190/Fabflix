@@ -32,7 +32,7 @@ Link: https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-3/blob/master/
 
 
 ## Demo 
-YouTube Video URL: https://youtu.be/C9vt3wOCDhk
+YouTube Video URL: https://youtu.be/6Tmq8np-j20
 
 ##Assumptions
 Movie is not added to database if genre name is not provided in xml file, and reported to inconsistency_report_movie.txt
