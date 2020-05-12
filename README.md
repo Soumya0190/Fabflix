@@ -16,6 +16,7 @@ Payment Servlet
 - Generated id for starName and saved data in record
 - If movieID is invalid (doesn't exist in movie table), then did not add star to the movie
 
+
 #Parsing Optimization Startegies
 - Removed old indexes before loading and then recreated indexes after
 - Executed batch statements 
@@ -27,9 +28,19 @@ YouTube Video URL: https://youtu.be/C9vt3wOCDhk
 Movie is not added to database if genre name is not provided in xml file, and reported to inconsistency_report_movie.txt
 
 ## Deployment Instructions
-In order to deploy the project to Tomcat. First, navigate to the **bin** directory of Tomcat and run **./startup.sh**. This ensures that the Tomcat server is running. Then clone the project into your choice of directory and navigate to the directory in which **pom.xml** is located. Run **mvn clean** to ensure the plugin is clean. Run **mvn package** in order to generate the **.war** file which will be located within the target directory. Copy this war file to the **webapps** directory of Tomcat using **cp ./target/*.war /PATH_TO_TOMCAT/webapps** (i.e. home/ubuntu/tomcat/webapps). 
-
-Navigate to the Tomcat manager page on **http://localhost:8080/manager/html** which will now show the newly deployed project. Click on it and you will see the project! 
+In order to deploy the project to Tomcat. 
+First, navigate to the **bin** directory of Tomcat and run **./startup.sh**. 
+This ensures that the Tomcat server is running. 
+Then clone the project into your choice of directory and navigate to the directory in which **pom.xml** is located. 
+Run **mvn clean package** in order to generate the **.war** file which will be located within the target directory. 
+Copy this war file to the **webapps** directory of Tomcat using **cp ./target/*.war /PATH_TO_TOMCAT/webapps** (i.e. home/ubuntu/tomcat/webapps).
+Then need to execute the sql files which have the stored procedures. This can be done with **sudo mysql moviedb < "filename"** where filename
+will be "addStarMovie_SP.sql", "addStar_SP.sql", "addMovie_SP.sql", "showDBMetaData_SP.sql", and "employeeTable.sql".
+Lastly, the parsers will need to be executed, which can be done with the commands -
+**mvn exec:java -Dexec.mainClass=main.java.SAXParserMovie**, **mvn exec:java -Dexec.mainClass=main.java.SAXParserActor**,
+and **mvn exec:java -Dexec.mainClass=main.java.SAXParserStar**  
+Navigate to the Tomcat manager page on **http://localhost:8080/manager/html** which will now show the newly deployed project. 
+Click on it and you will see the project! 
 
 ## Functionalities
 This project has several webpages, as listed: Login Page, Search Page, Movie List Page, Single Movie Page, Single Star Page, Shopping Cart Page, Payment Form, Confirmation Page 
