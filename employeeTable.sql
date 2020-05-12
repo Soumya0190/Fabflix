@@ -19,4 +19,9 @@ CREATE TABLE `numbers` (
   PRIMARY KEY (`numberid`)
 );
 
+GRANT EXECUTE ON PROCEDURE moviedb.addStar  TO mytestuser;
+GRANT EXECUTE ON PROCEDURE moviedb.addStarMovie  TO mytestuser;
+GRANT EXECUTE ON PROCEDURE moviedb.addStarInBatch  TO mytestuser;
+
+
 

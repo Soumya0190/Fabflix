@@ -28,6 +28,9 @@ Link: https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-3/blob/master/
 - As per my research, indexes are only effective if there are lot of records
 - SAX Parser is more efficient than DOM Parser for larger files
 
+
+
+
 ## Demo 
 YouTube Video URL: https://youtu.be/C9vt3wOCDhk
 
@@ -47,6 +50,10 @@ Lastly, the parsers will need to be executed, which can be done with the command
 **mvn exec:java -Dexec.mainClass=main.java.SAXParserMovie**, **mvn exec:java -Dexec.mainClass=main.java.SAXParserActor**,
 and **mvn exec:java -Dexec.mainClass=main.java.SAXParserStar**  
 Navigate to the Tomcat manager page on **http://localhost:8080/manager/html** which will now show the newly deployed project. 
+These permission needed to be given to user:
+GRANT EXECUTE ON PROCEDURE moviedb.addStar  TO mytestuser; 
+GRANT EXECUTE ON PROCEDURE moviedb.addStarMovie  TO mytestuser; 
+GRANT EXECUTE ON PROCEDURE moviedb.addStarInBatch  TO mytestuser; 
 Click on it and you will see the project! 
 
 ## Functionalities
