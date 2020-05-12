@@ -26,6 +26,7 @@ Link: https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-3/blob/master/
 - Done analysis of indexes on the table, there are already primary indexes on the tables, but stars table can have index on name that might help for large data sets because we are searching with name
 - In Movies, index can be created on title, year, and director to improve the performance because these are the used search criterias
 - As per my research, indexes are only effective if there are lot of records
+- SAX Parser is more efficient than DOM Parser for larger files
 
 ## Demo 
 YouTube Video URL: https://youtu.be/C9vt3wOCDhk
