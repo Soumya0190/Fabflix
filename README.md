@@ -1,9 +1,24 @@
-# Project 2: Fabflix
+# Project 3: Fabflix
 By: Soumya Sharma
 ___
 
 ##Note
 I had to delete all previous commits because there were many conflicts with merging latest files
+
+##Prepared Statements
+Changed Prepared Statements for the Following Files:
+Confirmation Servlet -- for updating Sales Data
+Movie-List Servlet
+Payment Servlet
+
+#Inconsistencies
+- Extracted starName and movieID from casts.xml
+- Generated id for starName and saved data in record
+- If movieID is invalid (doesn't exist in movie table), then did not add star to the movie
+
+#Parsing Optimization Startegies
+- Removed old indexes before loading and then recreated indexes after
+- Executed batch statements 
 
 ## Demo 
 YouTube Video URL: https://youtu.be/C9vt3wOCDhk

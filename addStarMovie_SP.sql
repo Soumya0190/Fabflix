@@ -5,18 +5,22 @@ DECLARE maxId varchar(10); DECLARE lenId int; DECLARE newstarID varchar(10);
 DECLARE exit handler for SQLEXCEPTION
 BEGIN
   GET DIAGNOSTICS CONDITION 1 @text = MESSAGE_TEXT;
-  SET status = CONCAT('ERROR ', substring(@text, 1,90));
+  SET status = CONCAT('ERROR ', substring(@text, 1,100));
 END;
 
 if NOT Exists (select 1 from stars where name = starName) then
-	SELECT max(id) INTO maxId from stars;
+	/*SELECT max(id) INTO maxId from stars;
 	SELECT length(maxId) INTO lenId;
-	SELECT  concat(substring(maxId,1,2),LPAD(substring(maxId,3,lenId)+1, lenId-2,'0')) INTO newstarID;
+	SELECT  concat(substring(maxId,1,2),LPAD(substring(maxId,3,lenId)+1, lenId-2,'0')) INTO newstarID;*/
+    insert into numbers (n) select FLOOR(RAND()*(100)+500);
+	select  concat('fabflix',LAST_INSERT_ID()) into newstarID;
+
 	if (starByear is not null and length(starByear)  <=0) then set starByear =null; end if;
 	INSERT INTO stars(id, name, birthYear) Values(newstarID,starName, starByear );
     set addedData = CONCAT('Added Star "',starName,'" (',newstarID,').');
 else
 	select id INTO newstarID from stars where name = starName;
+    set addedData = CONCAT(starName,'(',newstarID,') already exists.');
 END IF;
 if (movieID is not null and length(movieID)> 0 and newstarID is not null and length(newstarID) >0) then
 	if NOT exists(SELECT 1 from stars_in_movies where starID = newstarID and movieId = movieID) then
