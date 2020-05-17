@@ -5,6 +5,9 @@ ___
 ##Note
 I had to delete all previous commits because there were many conflicts with merging latest files
 
+##Full Text Search on Title
+CREATE FULLTEXT INDEX idx ON movies(title);
+
 ##Prepared Statements
 Changed Prepared Statements for the Following Files:
 Confirmation Servlet (for updating Sales Data)
