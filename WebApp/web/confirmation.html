@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirmation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel = "stylesheet" href = "./css/styles.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="js/common.js"></script>
+</head>
+<body>
+<header>
+    <h1>Confirmation </h1>
+    <nav>
+       <span id = "navigation">
+           <a href = "search.html" id = "search_list_button">Search Movies</a>
+           <br />
+           <a href = "shopping-cart.html" id = "movies_list_button">View Shopping Cart</a>
+         </span>
+    </nav>
+</header>
+<body>
+<br>
+<div id="confirmationMsg"></div>
+
+<main>
+    <div id = "card_info"></div>
+    <hr/>
+    <div id = "order_info" align="center"><h2>Order Information</h2></div>
+    <table id = "movie_names" class = "fabflix_table" align ="center" width="80%">
+        <thead ><tr><th>Movie</th><th>Price</th><th>Quantity</th><th>SaleID</th></tr></thead>
+        <tbody id ="movie_list_body" ></tbody>
+    </table>
+    <br/>
+
+
+</main>
+<script src="js/confirmation.js"></script>
+
+</body>
+<footer>
+    <hr />
+    <div align="center" width="100%">
+        <a href="/api/login?logout=Y">Log Out</a> &nbsp;&nbsp;
+        <a href="#">About Us</a>&nbsp;
+        <a href = "search.html" id = "addMore_button">Add More to Cart</a></span>
+    </div>
+</footer>
+<!-- include our own JS file -->
+<script src="js/payment.js"></script>
+
+</body>
+</html>
+
