@@ -1,36 +1,5 @@
-<<<<<<< HEAD
-/* CS 122B Project 4. Autocomplete Example.
- * This Javascript code uses this library: https://github.com/devbridge/jQuery-Autocomplete
- * This example implements the basic features of the autocomplete search, features that are
- *   not implemented are mostly marked as "TODO" in the codebase as a suggestion of how to implement them.
- * To read this code, start from the line "$('#autocomplete').autocomplete" and follow the callback functions.
- */
-
-/*
- * This function is called by the library when it needs to lookup a query.
-=======
-/*
- * CS 122B Project 4. Autocomplete Example.
- * 
- * This Javascript code uses this library: https://github.com/devbridge/jQuery-Autocomplete
- * 
- * This example implements the basic features of the autocomplete search, features that are 
- *   not implemented are mostly marked as "TODO" in the codebase as a suggestion of how to implement them.
- * 
- * To read this code, start from the line "$('#autocomplete').autocomplete" and follow the callback functions.
- * 
- */
 
 
-/*
- * This function is called by the library when it needs to lookup a query.
- * 
->>>>>>> 20a9c460b3dbcb9e95e29fff1ecc2b85ce8e9b88
- * The parameter query is the query string.
- * The doneCallback is a callback function provided by the library, after you get the
- *   suggestion list from AJAX, you need to call this function to let the library know.
- */
-<<<<<<< HEAD
 function handleLookup(query, actionn, doneCallback) {
     console.log("autocomplete initiated")
     console.log("sending AJAX request to backend Java Servlet")
@@ -39,21 +8,22 @@ function handleLookup(query, actionn, doneCallback) {
 
     // sending the HTTP GET request to the Java Servlet endpoint
     // with the query data
-    let url = "search-suggestion?query="+ escape(query) + "&action="+actionn;// escape the query string to avoid errors caused by special characters
+    let url = "search-suggestion?query=" + escape(query) + "&action=" + actionn;// escape the query string to avoid errors caused by special characters
 
     jQuery.ajax({
         "method": "GET",
         "url": url,
-        "success": function(data) {
+        "success": function (data) {
             // pass the data, query, and doneCallback function into the success handler
             handleLookupAjaxSuccess(data, doneCallback)
         },
-        "error": function(errorData) {
+        "error": function (errorData) {
             console.log("lookup ajax error")
             console.log(errorData)
         }
     })
-=======
+}
+
 function handleLookup(query, doneCallback) {
 	console.log("autocomplete initiated")
 	console.log("sending AJAX request to backend Java Servlet")
@@ -76,7 +46,7 @@ function handleLookup(query, doneCallback) {
 			console.log(errorData)
 		}
 	})
->>>>>>> 20a9c460b3dbcb9e95e29fff1ecc2b85ce8e9b88
+
 }
 
 
@@ -103,19 +73,15 @@ function handleLookupAjaxSuccess(data, doneCallback) {
 
 function handleSelectSuggestion(suggestion) {
     // TODO: jump to the specific result page based on the selected suggestion
-    let id="";
-    if ( suggestion["data"] != null) {
+    let id = "";
+    if (suggestion["data"] != null) {
         console.log("you select " + suggestion["value"] + " with ID " + suggestion["data"]["ID"]);
         id = suggestion["data"]["ID"];
     }
 
-    let url = "single-movie.html?id="+ escape(id);
+    let url = "single-movie.html?id=" + escape(id);
     window.location.replace(url);
-=======
- * 
- * data is the JSON data string you get from your Java Servlet
- * 
- */
+}
 function handleLookupAjaxSuccess(data, query, doneCallback) {
 	console.log("lookup ajax successful")
 	
@@ -142,40 +108,10 @@ function handleSelectSuggestion(suggestion) {
 	// TODO: jump to the specific result page based on the selected suggestion
 	
 	console.log("you select " + suggestion["value"] + " with ID " + suggestion["data"]["heroID"])
->>>>>>> 20a9c460b3dbcb9e95e29fff1ecc2b85ce8e9b88
 }
 
 
-/*
-<<<<<<< HEAD
- * This statement binds the autocomplete library with the input box element and
- *   sets necessary parameters of the library.
- *
- * The library documentation can be find here:
- *   https://github.com/devbridge/jQuery-Autocomplete
- *   https://www.devbridge.com/sourcery/components/jquery-autocomplete/
- *
- */
-// $('#autocomplete') is to find element by the ID "autocomplete"
-/*
-$('#autocomplete').autocomplete({
-    // documentation of the lookup function can be found under the "Custom lookup function" section
-    lookup: function (query, doneCallback) {
-        handleLookup(query, doneCallback)
-    },
-    onSelect: function(suggestion) {
-        handleSelectSuggestion(suggestion)
-    },
-    // set delay time
-    deferRequestBy: 300,
-    minChars:3,
-    showNoSuggestionNotice:false,
-    lookupLimit:10,
-    noCache:false,
-    // there are some other parameters that you might want to use to satisfy all the requirements
-    // TODO: add other parameters, such as minimum characters -- done?
-});
-*/
+
 $('#searchmTitle').autocomplete({
     // documentation of the lookup function can be found under the "Custom lookup function" section
     lookup: function (query,doneCallback) {
@@ -217,15 +153,7 @@ $('#searchmTitle').keypress(function(event) {
         // pass the value of the input box to the handler function
         handleNormalSearch($('#searchmTitle').val())
     }
-=======
- * This statement binds the autocomplete library with the input box element and 
- *   sets necessary parameters of the library.
- * 
- * The library documentation can be find here: 
- *   https://github.com/devbridge/jQuery-Autocomplete
- *   https://www.devbridge.com/sourcery/components/jquery-autocomplete/
- * 
- */
+})
 // $('#autocomplete') is to find element by the ID "autocomplete"
 $('#autocomplete').autocomplete({
 	// documentation of the lookup function can be found under the "Custom lookup function" section
@@ -257,7 +185,6 @@ $('#autocomplete').keypress(function(event) {
 		// pass the value of the input box to the handler function
 		handleNormalSearch($('#autocomplete').val())
 	}
->>>>>>> 20a9c460b3dbcb9e95e29fff1ecc2b85ce8e9b88
 })
 
 // TODO: if you have a "search" button, you may want to bind the onClick event as well of that button
