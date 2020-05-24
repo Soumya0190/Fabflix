@@ -46,8 +46,8 @@ public class SearchSuggestion extends HttpServlet {
      * For example, if the query is "super":
      * The JSON response look like this:
      * [
-     * 	{ "value": "Superman", "data": { "heroID": 101 } },
-     * 	{ "value": "Supergirl", "data": { "heroID": 113 } }
+     *     { "value": "Superman", "data": { "heroID": 101 } },
+     *     { "value": "Supergirl", "data": { "heroID": 113 } }
      * ]
      *
      * The format is like this because it can be directly used by the
@@ -66,7 +66,7 @@ public class SearchSuggestion extends HttpServlet {
             String action = request.getParameter("action");
             //String starName = request.getParameter("searchStar");
             // return the empty json array if query is null or empty
-            if ((query == null || (query != null && query.trim().isEmpty())) && (action == null || (action !=null && action.trim().isEmpty()))){
+            if (query == null || (query != null && query.trim().isEmpty())) {//&& (action == null || (action !=null && action.trim().isEmpty()))){
                 response.getWriter().write(jsonArray.toString());
                 return;
             }
@@ -74,10 +74,10 @@ public class SearchSuggestion extends HttpServlet {
             // search on superheroes and add the results to JSON Array
             // this example only does a substring match
             // TODO: in project 4, you should do full text search with MySQL to find the matches on movies and stars
-            if (action.equals("searchmTitle"))
-                jsonArray = checkinHashMap ( query,action, moviemMap,  jsonArray );
-            else
-                jsonArray = checkinHashMap ( query,action, starMap,  jsonArray );
+            //if (action.equals("searchmTitle"))
+            jsonArray = checkinHashMap ( query,action, moviemMap,  jsonArray );
+            // else
+            //    jsonArray = checkinHashMap ( query,action, starMap,  jsonArray );
 
 
             response.getWriter().write(jsonArray.toString());
@@ -97,12 +97,12 @@ public class SearchSuggestion extends HttpServlet {
             }
         }
         if (jsonArray.size() <= 0) {
-            if (action.equals("searchmTitle")) {
-                jsonArray = getMovieList(query);
-            }
-            else
-                jsonArray = getStarList(query, jsonArray);
-
+            //  if (action.equals("searchmTitle")) {
+            jsonArray = getMovieList(query);
+         /*  }
+           else
+               jsonArray = getStarList(query, jsonArray);
+*/
         }
         return jsonArray;
     }
@@ -132,7 +132,7 @@ public class SearchSuggestion extends HttpServlet {
         {
             System.out.println("Error in total records =" +ex.getStackTrace());
             jsonArray.add(generateJsonObject("error", ex.getMessage()));
-           // return jsonArray;
+            // return jsonArray;
         }
         return jsonArray;
     }
