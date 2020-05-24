@@ -38,7 +38,10 @@ public class MovieListServlet extends HttpServlet {
         try {
             searchCriteria.genreid = request.getParameter("genreid");
             searchCriteria.titleStartsWith = request.getParameter("browsetitle");
-            searchCriteria.movieTitle = request.getParameter("searchTitle");
+            if (request.getParameter("ftMovieTitle") != null && request.getParameter("ftMovieTitle").length()>0)
+                searchCriteria.ftMovieTitle = request.getParameter("ftMovieTitle");
+            if (request.getParameter("searchTitle") != null && request.getParameter("searchTitle").length()>0)
+                searchCriteria.movieTitle = request.getParameter("searchTitle");
             searchCriteria.movieDirector = request.getParameter("searchDirector");
             searchCriteria.movieYear = request.getParameter("searchYear");
             searchCriteria.movieStar = request.getParameter("searchStar");
@@ -49,7 +52,55 @@ public class MovieListServlet extends HttpServlet {
             searchCriteria.pageOffset = firstRecord;
             String pageNum = request.getParameter("pageNum");///Still used??
             String pagination = request.getParameter("pagination");
+            System.out.println(" searchCriteria.ftMovieTitle ="+  searchCriteria.ftMovieTitle );
+            if (pagination != null && pagination == "Y") { //initiated from pagination
+                SearchCriteria srchCriteria = (SearchCriteria) session.getAttribute("searchCriteria");
+                int lastRecord = totalRecordsCashed + firstRecord;
+                if (firstRecord >= srchCriteria.pageOffset && firstRecord+srchCriteria.recordsPerPage <= lastRecord) {   //Get Data from Session
+                    jSONResponse = getMovieListFromSession(firstRecord, searchCriteria.recordsPerPage, session);
+                } else {
+                    //Get Data from database
+                    jSONResponse = getDataFromDatabase(srchCriteria,firstRecord, request, response);
+                    System.out.println("srchCriteria="+ srchCriteria.toString());
+                }
+            } else //get data from database
+            {
+                jSONResponse = getDataFromDatabase(searchCriteria, firstRecord, request, response);
+                printer.write(jSONResponse);
+            }
+        }
+        catch(Exception ex)
+        {
+            //System.out.println(ex.getStackTrace());
+            System.out.println(servletName + ":"+ ex.getMessage());
+        }
+        printer.close();
+    }
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("application/json");
+        HttpSession session = request.getSession();
+        PrintWriter printer = response.getWriter();
+        SearchCriteria searchCriteria = new SearchCriteria();
+        String jSONResponse ="";
 
+        try {
+            searchCriteria.genreid = request.getParameter("genreid");
+            searchCriteria.titleStartsWith = request.getParameter("browsetitle");
+            if (request.getParameter("ftMovieTitle") != null && request.getParameter("ftMovieTitle").length()>0)
+                searchCriteria.ftMovieTitle = request.getParameter("ftMovieTitle");
+            if (request.getParameter("searchTitle") != null && request.getParameter("searchTitle").length()>0)
+                searchCriteria.movieTitle = request.getParameter("searchTitle");
+            searchCriteria.movieDirector = request.getParameter("searchDirector");
+            searchCriteria.movieYear = request.getParameter("searchYear");
+            searchCriteria.movieStar = request.getParameter("searchStar");
+            String rec = request.getParameter("recordsPerPage");
+            searchCriteria.recordsPerPage = rec == null ||rec.length()<0 ? 25 : Integer.parseInt(rec);
+            String firstRec = request.getParameter("pgOffset");
+            int firstRecord = firstRec == null || firstRec.length() <= 0 ? 0 : Integer.parseInt(firstRec);
+            searchCriteria.pageOffset = firstRecord;
+            String pageNum = request.getParameter("pageNum");///Still used??
+            String pagination = request.getParameter("pagination");
+System.out.println(" searchCriteria.ftMovieTitle ="+  searchCriteria.ftMovieTitle );
             if (pagination != null && pagination == "Y") { //initiated from pagination
                 SearchCriteria srchCriteria = (SearchCriteria) session.getAttribute("searchCriteria");
                 int lastRecord = totalRecordsCashed + firstRecord;
@@ -75,7 +126,7 @@ public class MovieListServlet extends HttpServlet {
     }
 
     protected String getDataFromDatabase(SearchCriteria searchCriteria, int pgOffset, HttpServletRequest request, HttpServletResponse response){
-        String movieStar, movieTitle, movieDirector, movieYear, genreid, titleStartsWith;
+        String movieStar, movieTitle, movieDirector, movieYear, genreid, titleStartsWith, ftMovieTitle;
         //int pgOffset, recordsPerPage;
         JsonArray jsonArray = new JsonArray();
         String[] arrParams;
@@ -86,8 +137,9 @@ public class MovieListServlet extends HttpServlet {
         movieYear = searchCriteria.movieYear;
         movieStar = searchCriteria.movieStar;// searchCriteria.recordsPerPage = request.getParameter("recordsPerPage");
         pgOffset = searchCriteria.pageOffset;
+        ftMovieTitle = searchCriteria.ftMovieTitle;
         Integer intParams = 0;
-        Hashtable<Integer, String> hashtable = new Hashtable<Integer, String>();
+        Hashtable<Integer, String> hashtable = new Hashtable<Integer, String>(); //Store search criteria and set paramaters in prepared stmt
 
         // recordsPerPage = searchCriteria.recordsPerPage;
         //  System.out.println("titleStartsWith=" +titleStartsWith+", movieTitle = "+ movieTitle+", movieDirector="+movieDirector);
@@ -96,6 +148,7 @@ public class MovieListServlet extends HttpServlet {
             Connection connection = dataSource.getConnection();
             // Statement statement = connection.createStatement();
             PreparedStatement preparedStatementMainQuery;
+
             String query = "SELECT m.id movieId, m.title, m.year, m.director, r.rating , FLOOR(RAND()*(10)+5) price ";
             query =  query + " FROM ratings r RIGHT JOIN movies m ON r.movieId = m.id where 1=1 ";
 
@@ -114,8 +167,19 @@ public class MovieListServlet extends HttpServlet {
             }
             if (movieTitle != null && movieTitle.length() > 0) {
                 query = query + " AND title like ?";
-                intParams++;hashtable.put(intParams,"%" + movieTitle + "%" );
+                intParams++;
+                hashtable.put(intParams, "%" + movieTitle + "%");
             }
+            if (ftMovieTitle != null && ftMovieTitle.length() >0) {
+                    query = query + " AND MATCH (title) AGAINST (? IN BOOLEAN MODE) ";
+                    intParams++;
+                    String[] splited = ftMovieTitle.split("\\s+");
+                    String temp ="";
+                    for (int i = 0; i < splited.length; i++)
+                        temp = temp + "+"+ splited[i] + "* ";
+                    hashtable.put(intParams, temp);
+                }
+
             if (movieDirector != null && movieDirector.length() > 0) {
                 query = query + " AND director like ? "; intParams++;hashtable.put(intParams,"%" + movieDirector + "%" );
             }
@@ -143,7 +207,8 @@ public class MovieListServlet extends HttpServlet {
             }
             key = intParams+ 1;
             System.out.println("Key: " +key+ " & Value: " +totalRecordsCashed);
-            preparedStatementMainQuery.setInt(key, totalRecordsCashed); key = intParams+ 2;
+            preparedStatementMainQuery.setInt(key, totalRecordsCashed);
+            key = intParams+ 2;
             System.out.println("Key: " +key+ " & pgOffset: " +pgOffset);
             preparedStatementMainQuery.setInt(key, pgOffset);
             System.out.println("After : " + preparedStatementMainQuery.toString());
@@ -184,6 +249,7 @@ public class MovieListServlet extends HttpServlet {
                 jsonArray.add(jsonObject);
             }
             result.close();
+            System.out.println(servletName +"  After : " + preparedStatementMainQuery.toString());
             preparedStatementMainQuery.close();
             // statement.close();
             preparedStatementGenres.close();
@@ -222,10 +288,10 @@ public class MovieListServlet extends HttpServlet {
             }
             //String movieLstString = getMovieListFromSession(0, recordsPerPage, session);
             System.out.println("MovieListServlet = " + jsnObject.toString());
-            //response.setStatus(200);
+            response.setStatus(200);
             return jsnObject.toString();
         } catch (Exception ex) {
-            System.out.println(servletName + ":"+ ex.getMessage());
+            System.out.println(servletName + ":"+ ex.getStackTrace().toString());
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("errorMessage", ex.getMessage());
             jsonObject.addProperty("totalRecords", 0);
@@ -279,6 +345,8 @@ public class MovieListServlet extends HttpServlet {
                 ResultSet movieResult = null;
                 //query = "SELECT  movieId FROM stars_in_movies sm, stars s WHERE starId = id AND s.name like '%" + starName + "%'; ";
                 query = "SELECT  movieId FROM stars_in_movies sm, stars s WHERE starId = id AND s.name like ?; ";
+                query = "SELECT movieId FROM stars_in_movies sm, stars s WHERE starId = id AND match(s.name) against (? in boolean mode); ";
+                // query = "SELECT  movieId FROM stars_in_movies sm, stars s WHERE starId = id AND s.name like ?;
                 // Statement statement = connection.createStatement();
                 // movieResult = statement.executeQuery(query);
                 PreparedStatement preparedStatementStars = connection.prepareStatement(query);
@@ -339,7 +407,7 @@ public class MovieListServlet extends HttpServlet {
         }
         catch (Exception ex)
         {
-            System.out.println(ex.getMessage());
+            System.out.println("Error in total records =" +ex.getMessage());
             return "0";
         }
         return rowCount.toString();
@@ -353,6 +421,7 @@ public class MovieListServlet extends HttpServlet {
         String titleStartsWith;
         int recordsPerPage;
         int pageOffset;
+        String ftMovieTitle;
     }
 
 }

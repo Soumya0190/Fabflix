@@ -1,5 +1,6 @@
 let search_form = $("#search_form");
 let browse_genre = $("#browse_genre");
+let search_movie_form = $("#search_movie_form");
 let usertype=$("#usertype");
 
 function handleLoginResult(resultDataString)
@@ -28,6 +29,7 @@ function handleLoginResult(resultDataString)
  */
 function submitSearchForm(formSubmitEvent) {
     console.log("submit search form");
+    formSubmitEvent.preventDefault();
     /**
      * When users click the submit button, the browser will not direct
      * users to the url defined in HTML form. Instead, it will call this
@@ -41,7 +43,7 @@ function submitSearchForm(formSubmitEvent) {
     data = data +"&recordPerPage="+$("#recordPerPage").val();
     data = data +"&usertype="+$("#usertype").val();
     console.log("search submit: " +data);
-    window.location.replace("movie-list.html"+data)
+    window.location.replace("movie-list.html"+data);
 }
 
 // Display Genre
@@ -90,13 +92,42 @@ function displaySearchScreen (resultData) {
     }
     getGenreList(resultData, usertype);
 }
+
+function submitmovieSearchForm(formSubmitEvent) {
+    formSubmitEvent.preventDefault();
+    console.log("submit movie search form");
+    var data = "?ftMovieTitle="+ $("#searchmTitle").val();
+    data = data +"&recordPerPage=25";
+    data = data +"&usertype="+$("#usertype").val();
+    console.log("search submit: " +data);
+   // alert(data);
+    window.location.replace("movie-list.html"+data);
+}
+
+function displayAdvancedSrch(flag) {
+    console.log("display advanced search");
+    // if ($("#divAdvSearch"))
+    //    $("#divAdvSearch").show();
+    if (flag === "Y") {
+        $("#divAdvSearch").hide(); $("#divBasicSearch").show();
+        //document.getElementById("divAdvSearch").style.visibility = "hidden";
+
+    }
+else {
+        $("#divAdvSearch").show(); $("#divBasicSearch").hide();
+        //document.getElementById("divAdvSearch").style.display = "block";
+       // document.getElementById("divAdvSearch").style.visibility = "visible";
+    }
+}
+
 // Bind the submit action of the form to a handler function
 search_form.submit(submitSearchForm);
-
+search_movie_form.submit(submitmovieSearchForm);
 $("#moviesResult").hide();
+
 //printAlphanumericList();
 //($("#searchTitle")).click(submitSearchForm);
-
+displayAdvancedSrch("Y");
 jQuery.ajax({
     dataType: "json",
     method: "GET",

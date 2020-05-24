@@ -6,6 +6,7 @@
     <link rel = "stylesheet" href = "./css/styles.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.devbridge-autocomplete/1.4.7/jquery.autocomplete.min.js"></script>
     <title>Fabflix-Search</title>
 </head>
 <body>
@@ -36,9 +37,17 @@
     <h3>Browse By Title</h3>
     <div id ="divTitleList" class ="searchDiv"></div>
     <hr>
+<div align="center" id="divBasicSearch">
+    <form id = "search_movie_form" method = "GET" >
+        <h3>Basic Movie Search</h3> <input type="text" id="searchmTitle" name="searchmTitle" size="100" height="23"/>
+        <input type="submit" id="searchmButton" align ="center" class ="app_button" value="Search Movies" />
+    </form>
+    <br /><input type="button" id="advSearchBtn" align ="center"  onclick="JavaScript:displayAdvancedSrch('N');" class ="app_button" value="Advanced Search" align="right" />
+</div>
 
     <form id = "search_form" method = "GET" action = "movie-list.html">
         <input type="hidden" id="usertype" name="usertype" >
+        <div id = "divAdvSearch" >
         <table id = "searchTable" class = "fabflix_table" border="0" width="70%" align="center">
             <thead>
             <tr>
@@ -46,10 +55,10 @@
             </tr>
             </thead>
             <tbody class = "fabflix_table">
-            <tr><td>Title</td><td> <input type="text" id="searchTitle" name="searchTitle" ></td></tr>
-            <tr><td>Director</td><td><input type="text" id="searchDirector" name="searchDirector"></td></tr>
-            <tr><td>Year</td><td><input type="text" id="searchYear" name="searchYear" value=""></td></tr>
-            <tr><td>Star's Name</td><td> <input type="text" id="searchStar" name="searchStar" value=""></td></tr>
+            <tr><td>Title</td><td width="70%"> <input type="text" id="searchTitle" name="searchTitle" size="70"></td></tr>
+            <tr><td>Director</td><td><input type="text" id="searchDirector" name="searchDirector" size="70"></td></tr>
+            <tr><td>Year</td><td><input type="text" id="searchYear" name="searchYear" size="70" ></td></tr>
+            <tr><td>Star's Name</td><td> <input type="text" id="searchStar" name="searchStar" size="70"></td></tr>
             <tr><td>Select records per page</td><td><select id="recordsPerPage" name="recordsPerPage">
                 <option value="10">10</option>
                 <option value="25" selected>25</option>
@@ -57,14 +66,16 @@
                 <option value="100">100</option>
             </select></td></tr>
             <tr><td colspan="3" align ="center">
-                <input type="submit" id="searchButton" align ="center" class ="app_button" value="Search Movies" />
+                <input type="submit" id="searchButton" align ="center" class ="app_button" value="Search Movies" /> <br>
             </td></tr>
-            <tr><td></td><td></td></tr>
-
-            </tbody>
+            <tr><td colspan="3" align ="right">
+                <input type="button" id="basicSearchBtn" align ="center"  onclick="JavaScript:displayAdvancedSrch('Y');" value="Basic Search" class ="app_button" />
+            </td></tr>
+            <tr><td></td><td></td></tr></tbody>
         </table>
-
+        </div>
     </form>
+
 
     <div id = "search_error_message" style="display: none; visibility: hidden"></div>
     <div id ="moviesResult" >
@@ -93,5 +104,6 @@
     </div>
 </footer>
 <script src="js/search.js"></script>
+<script src="js/autocomplete.js"></script>
 </body>
 </html>

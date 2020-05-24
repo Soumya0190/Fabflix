@@ -40,6 +40,8 @@ function submitLoginForm(formSubmitEvent)
     formSubmitEvent.preventDefault();
     $.ajax(
         "api/login", {
+       // "http://192.168.1.129:8080/cs122b_spring20_team_3_war_exploded/api/login", {
+     //   "http://10.0.2.2:8080/cs122b_spring20_team_3_war_exploded/api/login",{
             method: "POST",
             data: login_form.serialize(),
             success: handleLoginResult
