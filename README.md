@@ -5,6 +5,9 @@ ___
 ##Note
 I had to delete all previous commits because there were many conflicts with merging latest files
 
+##Full Text Search on Title
+CREATE FULLTEXT INDEX idx ON movies(title);
+
 ##Prepared Statements
 Changed Prepared Statements for the Following Files:
 Confirmation Servlet (for updating Sales Data)
@@ -14,13 +17,13 @@ Link: https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-3/blob/master/
 Payment Servlet
 Link: https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-3/blob/master/src/main/java/PaymentServlet.java
 
-#Inconsistencies
+##Inconsistencies
 - Extracted starName and movieID from casts.xml
 - Generated id for starName and saved data in record
 - If movieID is invalid (doesn't exist in movie table), then did not add star to the movie
 
 
-#Parsing Optimization Strategies 
+##Parsing Optimization Strategies
 - Removed old indexes before loading and then recreated indexes after
 - Attempted to execute batch statements 
 - Done analysis of indexes on the table, there are already primary indexes on the tables, but stars table can have index on name that might help for large data sets because we are searching with name
@@ -32,7 +35,7 @@ Link: https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-3/blob/master/
 
 
 ## Demo 
-YouTube Video URL: https://youtu.be/6Tmq8np-j20
+YouTube Video URL: https://youtu.be/x9ZtjQJrLzQ
 
 ##Assumptions
 Movie is not added to database if genre name is not provided in xml file, and reported to inconsistency_report_movie.txt
