@@ -158,7 +158,9 @@ public class LoginServlet extends HttpServlet {
             while (userResult.next())
             {
                 String encryptedPassword = userResult.getString("password");
-               isPasswordValid = true;//new StrongPasswordEncryptor().checkPassword(password, encryptedPassword);
+                System.out.println("ENCRYPTED PASSWORD?? " + encryptedPassword);
+                isPasswordValid = new StrongPasswordEncryptor().checkPassword(password, encryptedPassword);
+                System.out.println("IS PASSWORD VALID?? " + isPasswordValid);
                 if(isPasswordValid){
                     userExists = true;
                     id = userResult.getString("id");

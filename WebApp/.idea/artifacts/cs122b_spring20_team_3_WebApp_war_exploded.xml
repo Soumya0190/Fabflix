@@ -1,17 +1,17 @@
 <component name="ArtifactManager">
-  <artifact type="exploded-war" name="WebApp:war exploded">
+  <artifact type="exploded-war" name="cs122b-spring20-team-3-WebApp:war exploded">
     <output-path>$PROJECT_DIR$/target/cs122b-spring20-team-3</output-path>
     <properties id="maven-jee-properties">
       <options>
         <exploded>true</exploded>
-        <module>WebApp</module>
+        <module>cs122b-spring20-team-3-WebApp</module>
         <packaging>war</packaging>
       </options>
     </properties>
     <root id="root">
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
-          <element id="module-output" name="WebApp" />
+          <element id="module-output" name="cs122b-spring20-team-3-WebApp" />
         </element>
         <element id="directory" name="lib">
           <element id="library" level="project" name="Maven: mysql:mysql-connector-java:5.1.46" />
@@ -22,7 +22,7 @@
       <element id="directory" name="META-INF">
         <element id="file-copy" path="$PROJECT_DIR$/target/cs122b-spring20-team-3/META-INF/MANIFEST.MF" />
       </element>
-      <element id="javaee-facet-resources" facet="WebApp/web/Web" />
+      <element id="javaee-facet-resources" facet="cs122b-spring20-team-3-WebApp/web/Web" />
     </root>
   </artifact>
 </component>
