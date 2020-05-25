@@ -110,7 +110,7 @@ $('#searchmTitle').autocomplete({
     showNoSuggestionNotice:true,
     lookupLimit:10,
     noCache:true,
-    noSuggestionNotice: 'Sorry, no matching results'
+    noSuggestionNotice: 'Sorry, no matching results',
     preventBadQueries:true
     //  lookupFilter: function (suggestion, query, queryLowerCase) {
     //     return suggestion.value.toLowerCase().indexOf(queryLowerCase) < -1 || suggestion.id.toLowerCase().indexOf(queryLowerCase) < -1; //checking with both id as well as value
