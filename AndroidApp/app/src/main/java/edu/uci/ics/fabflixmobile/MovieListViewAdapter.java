@@ -37,14 +37,14 @@ public class MovieListViewAdapter extends ArrayAdapter<MovieItem>
         TextView starsView = view.findViewById(R.id.stars);
         TextView ratingView = view.findViewById(R.id.rating);
         TextView pricingView = view.findViewById(R.id.pricing);
-        titleView.setText(movie.getTitle());
-        yearView.setText(movie.getYear());
+        titleView.setText(movie.getTitle() +" ("+movie.getYear()+")");
+       // yearView.setText();
         movieidView.setText(movie.getMovieid());
-        directorView.setText(movie.getDirector());
-        genreView.setText(movie.getMovie_genres());
-        starsView.setText(movie.getMovie_stars());
-        ratingView.setText(movie.getRating());
-        pricingView.setText(movie.getPrice());
+        directorView.setText("Director :" +movie.getDirector());
+        genreView.setText("Genre :" + movie.getMovie_genres());
+        starsView.setText("Stars : "+ movie.getMovie_stars());
+        //ratingView.setText("Movie Rating: "+movie.getRating());
+        pricingView.setText("Price :$"+ movie.getPrice()+ "       Movie Rating: "+movie.getRating());
         return view;
     }
 }

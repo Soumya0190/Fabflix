@@ -27,26 +27,26 @@ import java.util.ArrayList;
         public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent)
         {
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            View view = inflater.inflate(R.layout.row, parent, false);
+            View view = inflater.inflate(R.layout.singlemovie, parent, false);
 
             MovieItem movie = movies.get(position);
 
-            TextView titleView = view.findViewById(R.id.title);
-            TextView yearView = view.findViewById(R.id.year);
-            TextView movieidView = view.findViewById(R.id.movieid);
-            TextView directorView = view.findViewById(R.id.director);
-            TextView genreView = view.findViewById(R.id.genres);
-            TextView starsView = view.findViewById(R.id.stars);
-            TextView ratingView = view.findViewById(R.id.rating);
-            TextView pricingView = view.findViewById(R.id.pricing);
+            TextView titleView = view.findViewById(R.id.smtitle);
+            TextView yearView = view.findViewById(R.id.smyear);
+           // TextView movieidView = view.findViewById(R.id.movieid);
+            TextView directorView = view.findViewById(R.id.smdirector);
+            TextView genreView = view.findViewById(R.id.smgenres);
+            TextView starsView = view.findViewById(R.id.smstars);
+            //TextView ratingView = view.findViewById(R.id.rating);
+           // TextView pricingView = view.findViewById(R.id.pricing);
             titleView.setText(movie.getTitle());
             yearView.setText(movie.getYear());
-            movieidView.setText(movie.getMovieid());
-            directorView.setText(movie.getDirector());
-            genreView.setText(movie.getMovie_genres());
-            starsView.setText(movie.getMovie_stars());
-            ratingView.setText(movie.getRating());
-            pricingView.setText(movie.getPrice());
+           // movieidView.setText(movie.getMovieid());
+            directorView.setText("Director :" +movie.getDirector());
+            genreView.setText("Genre :" + movie.getMovie_genres());
+            starsView.setText("Stars : "+ movie.getMovie_stars());
+           // ratingView.setText("Movie Rating: "+movie.getRating());
+           // pricingView.setText("Price :"+ movie.getPrice());
             return view;
         }
     }

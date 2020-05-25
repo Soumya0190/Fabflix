@@ -35,10 +35,12 @@ public class Search extends ActionBarActivity
         mTitle = findViewById(R.id.mTitle);
         message = findViewById(R.id.message);
         searchButton = findViewById(R.id.search);
-        url = "http://10.0.2.2:8080/cs122b_spring20_team_3_war_exploded/api/movies";
-       // url = "https://192.168.1.129:8443/cs122b_spring20_team_3_war_exploded/api/movies";
+        //url = "http://10.0.2.2:8080/cs122b_spring20_team_3_war_exploded/api/movies";
 
-       // url="https://10.0.2.2:8443/cs122b_spring20_project2_login_cart_example_war_exploded/api/movies"; //good
+      // url = "http://192.168.1.129:8080/cs122b_spring20_team_3_war_exploded/api/movies";
+       url ="https://10.0.2.2:8443/cs122b_spring20_team_3_war_exploded/api/movies";
+
+
 
         searchButton.setOnClickListener(new View.OnClickListener()
         {

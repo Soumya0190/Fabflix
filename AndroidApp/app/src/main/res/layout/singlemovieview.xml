@@ -1,15 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="match_parent" xmlns:tools="http://schemas.android.com/tools"
                 android:paddingBottom="@dimen/activity_vertical_margin"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
-                android:paddingTop="@dimen/activity_vertical_margin">
+                android:paddingTop="@dimen/activity_vertical_margin"
+                android:isScrollContainer="true"
+                android:id="@+id/singlemovieview"
+                android:scrollbarStyle="outsideInset"
+                android:theme="@style/Theme.AppCompat"
+                tools:context=".SingleMovieActivity">
 
-    <ListView
-            android:id="@+id/smovielist"
+    <TextView
+            android:text=""
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/smmessage"
+            android:layout_centerHorizontal = "true"
+
+            android:textSize = "20dp"/>
+    <!-- ListView
+            android:id="@+id/smovieview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent" android:isScrollContainer="true" / -->
+    <TextView
+            android:id="@+id/sMovieid"
+            android:visibility="invisible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
 
+
+    <TextView
+            android:layout_width = "wrap_content"
+            android:layout_height = "wrap_content"
+            android:text = "Fabflix - Movie"
+            android:id = "@+id/spgtitle"
+            android:layout_centerHorizontal = "true"
+            android:textSize = "30dp" />
+
+
+    <TextView
+            android:id="@+id/smtitle"
+            android:textSize="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="35dp"
+            android:layout_below="@+id/spgtitle"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+        />
+
+    <TextView
+            android:id="@+id/smyear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="25"
+            android:textSize="20dp"
+            android:layout_below="@+id/smtitle"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignRight="@+id/smtitle"
+            android:layout_alignEnd="@+id/smtitle"/>
+    <TextView
+            android:id="@+id/smdirector"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="25"
+            android:textSize="20dp"
+            android:layout_below="@+id/smyear"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignRight="@+id/smyear"
+            android:layout_alignEnd="@+id/smyear"
+            />
+
+    <TextView
+            android:id="@+id/smgenres"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="25"
+            android:textSize="20dp"
+            android:layout_below="@+id/smdirector"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignRight="@+id/smdirector"
+            android:layout_alignEnd="@+id/smdirector"
+            />
+    <TextView
+            android:id="@+id/smstars"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="25"
+            android:textSize="20dp"
+            android:layout_below="@+id/smgenres"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignRight="@+id/smgenres"
+            android:layout_alignEnd="@+id/smgenres"
+            />
+    <Button
+            android:text="Go to Search Screen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="50"
+            android:layout_below="@+id/smstars"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignRight="@+id/smstars"
+            android:layout_alignEnd="@+id/smstars"
+            android:id="@+id/navSrchBtn" />
 </RelativeLayout>
