@@ -1,21 +1,25 @@
-# Project 3: Fabflix
+# Project 4: Fabflix
 By: Soumya Sharma
 ___
 
-##Note
-I had to delete all previous commits because there were many conflicts with merging latest files
+##Demo 
+YouTube Video URL (Project 3): https://youtu.be/x9ZtjQJrLzQ
+
 
 ##Full Text Search on Title
 CREATE FULLTEXT INDEX idx ON movies(title);
 
+##Fuzzy Search
+Not yet implemented 
+
 ##Prepared Statements
-Changed Prepared Statements for the Following Files:
-Confirmation Servlet (for updating Sales Data)
-Link: https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-3/blob/master/src/main/java/ConfirmationServlet.java 
-Movie-List Servlet
-Link: https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-3/blob/master/src/main/java/MovieListServlet.java
-Payment Servlet
-Link: https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-3/blob/master/src/main/java/PaymentServlet.java
+Changed Prepared Statements for the Following Files: 
+
+Confirmation Servlet (for updating Sales Data): https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-3/blob/master/src/main/java/ConfirmationServlet.java 
+
+Movie-List Servlet: https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-3/blob/master/src/main/java/MovieListServlet.java
+
+Payment Servlet: https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-3/blob/master/src/main/java/PaymentServlet.java
 
 ##Inconsistencies
 - Extracted starName and movieID from casts.xml
@@ -32,31 +36,36 @@ Link: https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-3/blob/master/
 - SAX Parser is more efficient than DOM Parser for larger files
 
 
-
-
-## Demo 
-YouTube Video URL: https://youtu.be/x9ZtjQJrLzQ
-
 ##Assumptions
 Movie is not added to database if genre name is not provided in xml file, and reported to inconsistency_report_movie.txt
+
 
 ## Deployment Instructions
 In order to deploy the project to Tomcat. 
 First, navigate to the **bin** directory of Tomcat and run **./startup.sh**. 
 This ensures that the Tomcat server is running. 
-Then clone the project into your choice of directory and navigate to the directory in which **pom.xml** is located. 
+Next, clone the project into your choice of directory. 
+This project has 2 directories inside, the AndroidApp directory for android project, and the 
+WebApp directory for the web application. 
+To run the website, navigate to the WebApp directory in which **pom.xml** is located. 
 Run **mvn clean package** in order to generate the **.war** file which will be located within the target directory. 
-Copy this war file to the **webapps** directory of Tomcat using **cp ./target/*.war /PATH_TO_TOMCAT/webapps** (i.e. home/ubuntu/tomcat/webapps).
-Then need to execute the sql files which have the stored procedures. This can be done with **sudo mysql moviedb < "filename"** where filename
+Copy this war file to the **webapps** directory of Tomcat using 
+**cp ./target/*.war /PATH_TO_TOMCAT/webapps** (i.e. home/ubuntu/tomcat/webapps).
+Before running website, ensure database is updated with stored procedures.
+This can be done with **sudo mysql moviedb < "filename"** where filename
 will be "addStarMovie_SP.sql", "addStar_SP.sql", "addMovie_SP.sql", "showDBMetaData_SP.sql", and "employeeTable.sql".
 Lastly, the parsers will need to be executed, which can be done with the commands -
 **mvn exec:java -Dexec.mainClass=main.java.SAXParserMovie**, **mvn exec:java -Dexec.mainClass=main.java.SAXParserActor**,
 and **mvn exec:java -Dexec.mainClass=main.java.SAXParserStar**  
 Navigate to the Tomcat manager page on **http://localhost:8080/manager/html** which will now show the newly deployed project. 
 These permission needed to be given to user:
-GRANT EXECUTE ON PROCEDURE moviedb.addStar  TO mytestuser; 
-GRANT EXECUTE ON PROCEDURE moviedb.addStarMovie  TO mytestuser; 
-GRANT EXECUTE ON PROCEDURE moviedb.addStarInBatch  TO mytestuser; 
+
+GRANT EXECUTE ON PROCEDURE moviedb.addStar TO mytestuser;
+ 
+GRANT EXECUTE ON PROCEDURE moviedb.addStarMovie TO mytestuser; 
+
+GRANT EXECUTE ON PROCEDURE moviedb.addStarInBatch TO mytestuser; 
+
 Click on it and you will see the project! 
 
 ## Functionalities
