@@ -111,6 +111,10 @@ $('#searchmTitle').autocomplete({
     lookupLimit:10,
     noCache:true,
     noSuggestionNotice: 'Sorry, no matching results'
+    preventBadQueries:true
+    //  lookupFilter: function (suggestion, query, queryLowerCase) {
+    //     return suggestion.value.toLowerCase().indexOf(queryLowerCase) < -1 || suggestion.id.toLowerCase().indexOf(queryLowerCase) < -1; //checking with both id as well as value
+    //  }
     // there are some other parameters that you might want to use to satisfy all the requirements
     // TODO: add other parameters, such as minimum characters
 });
