@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/WebApp.iml" filepath="$PROJECT_DIR$/.idea/modules/WebApp.iml" group="WebApp" />
       <module fileurl="file://$PROJECT_DIR$/cs122b-spring20-team-3.iml" filepath="$PROJECT_DIR$/cs122b-spring20-team-3.iml" />
     </modules>
   </component>
