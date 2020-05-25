@@ -2,17 +2,17 @@
 By: Soumya Sharma
 ___
 
-**Demo** 
+## Demo
 YouTube Video URL (Project 3): https://youtu.be/x9ZtjQJrLzQ
 
 
-**Full Text Search on Title**
+## Full Text Search on Title
 CREATE FULLTEXT INDEX idx ON movies(title);
 
-**Fuzzy Search**
+## Fuzzy Search
 Not yet implemented 
 
-**Prepared Statements**
+## Prepared Statements
 Changed Prepared Statements for the Following Files: 
 
 Confirmation Servlet (for updating Sales Data): https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-3/blob/master/src/main/java/ConfirmationServlet.java 
@@ -21,13 +21,13 @@ Movie-List Servlet: https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-
 
 Payment Servlet: https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-3/blob/master/src/main/java/PaymentServlet.java
 
-**Inconsistencies**
+## Inconsistencies
 - Extracted starName and movieID from casts.xml
 - Generated id for starName and saved data in record
 - If movieID is invalid (doesn't exist in movie table), then did not add star to the movie
 
 
-**Parsing Optimization Strategies**
+## Parsing Optimization Strategies
 - Removed old indexes before loading and then recreated indexes after
 - Attempted to execute batch statements 
 - Done analysis of indexes on the table, there are already primary indexes on the tables, but stars table can have index on name that might help for large data sets because we are searching with name
@@ -36,7 +36,7 @@ Payment Servlet: https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-3/b
 - SAX Parser is more efficient than DOM Parser for larger files
 
 
-**Assumptions**
+## Assumptions
 Movie is not added to database if genre name is not provided in xml file, and reported to inconsistency_report_movie.txt
 
 
