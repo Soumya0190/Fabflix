@@ -74,8 +74,13 @@ public class Login extends ActionBarActivity
               //  Intent listPage = new Intent(Login.this, ListViewActivity.class);
                // startActivity(listPage);
                 if (status.equals("success")) {
-                    Intent searchPage = new Intent(Login.this, Search.class);
-                    startActivity(searchPage);
+                   Intent searchPage = new Intent(Login.this, Search.class);
+                   startActivity(searchPage);
+
+                   /* Intent singleMoviePage = new Intent(Login.this, SingleMovieActivity.class);
+                    singleMoviePage.putExtra("movieid", "BsK25");
+
+                    startActivity(singleMoviePage);*/
                 }
             }
         },

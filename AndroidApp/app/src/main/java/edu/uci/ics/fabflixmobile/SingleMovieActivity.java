@@ -15,6 +15,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -34,20 +35,22 @@ public class SingleMovieActivity extends ActionBarActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.search);
+        setContentView(R.layout.singlemovieview);
 
 
-        mID = findViewById(R.id.movieid);
-       message = findViewById(R.id.message);
+        mID = findViewById(R.id.sMovieid);
+        message = findViewById(R.id.smmessage);
         navSrchBtn = findViewById(R.id.navSrchBtn);
         Intent moviePage = getIntent();
         String movieId= moviePage.getStringExtra("movieid");
-        mID.setText(movieId);
+       // mID.setText(movieId);
 
-        url = "http://10.0.2.2:8080/cs122b_spring20_team_3_war_exploded/api/single-movie?id="+movieId;
+        url="https://10.0.2.2:8443/cs122b_spring20_team_3_war_exploded/api/single-movie?id="+movieId;
+
+       // url = "http://10.0.2.2:8080/cs122b_spring20_team_3_war_exploded/api/single-movie?id="+movieId;
 
         displayMovie();
-        navSrchBtn.setOnClickListener(new View.OnClickListener()
+      navSrchBtn.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view) {
@@ -61,7 +64,7 @@ public class SingleMovieActivity extends ActionBarActivity
     {
         ArrayList<MovieItem> movies = new ArrayList<>();
         final RequestQueue queue = NetworkManager.sharedManager(this).queue;
-        final StringRequest loginRequest = new StringRequest(Request.Method.POST, url , new Response.Listener<String>() {
+        final StringRequest singleMovieRequest = new StringRequest(Request.Method.GET, url , new Response.Listener<String>() {
             @Override
             public void onResponse(String response)
             {
@@ -71,43 +74,62 @@ public class SingleMovieActivity extends ActionBarActivity
                 {
                     JSONObject jObj = new JSONObject(response);
 
-                    Log.d("parse movie data", jObj.get("title").toString());
+                    Log.d("parse movie data", response);
                     MovieItem mItem = new MovieItem();
-                        mItem.setTitle(jObj.getString("movie_title"));
-                        mItem.setDirector(jObj.getString("movie_director"));
-                        mItem.setMovie_genres(jObj.getString("movie_genres"));
-                        mItem.setMovie_stars(jObj.getString("movie_stars"));
-                        mItem.setMovieid(jObj.getString("movie_id"));
-                        mItem.setYear(jObj.getString("movie_year"));
-                        mItem.setRating(jObj.getString("movie_rating"));
-                        mItem.setPrice(jObj.getString("price"));
+                    //{"usertype":"cust","title":"Go West","year":"1925","director":"B.Keaton","stars":"[]","genres":"[\"Comd\"]"}
+                     /*   mItem.setTitle(jObj.getString("title"));
+                        mItem.setDirector(jObj.getString("director"));
+                        mItem.setMovie_genres(jObj.getString("genres"));
+                        mItem.setMovie_stars(jObj.getString("stars"));
+                       // mItem.setMovieid(jObj.getString("movie_id"));
+                        mItem.setYear(jObj.getString("year"));
+                       // mItem.setRating(jObj.getString("movie_rating"));
+                      //  mItem.setPrice(jObj.getString("price"));
+*/
+                     //   movies.add(mItem);
+                    TextView titleView = findViewById(R.id.smtitle);
+                    TextView yearView = findViewById(R.id.smyear);
+                    // TextView movieidView = view.findViewById(R.id.movieid);
+                    TextView directorView = findViewById(R.id.smdirector);
+                    TextView genreView = findViewById(R.id.smgenres);
+                    TextView starsView = findViewById(R.id.smstars);
+                    //TextView ratingView = view.findViewById(R.id.rating);
+                    // TextView pricingView = view.findViewById(R.id.pricing);
+                    titleView.setText(jObj.getString("title"));
+                    yearView.setText("Year :" + jObj.getString("year"));
+                    // movieidView.setText(movie.getMovieid());
+                    directorView.setText("Director :" +jObj.getString("director"));
+                    String genres = jObj.getString("genres");
+                    if (genres == null) genres ="";
+                    genres = genres.replace("[", "");
+                    genres = genres.replace("]", "");
+                    genreView.setText("Genre :" + genres);
 
-                        movies.add(mItem);
-                    SingleMovieAdapter adapter = new SingleMovieAdapter(movies, this);
-
-                    ListView listView = findViewById(R.id.smovielist);
-                    listView.setAdapter(adapter);
-
-
-                    //  System.out.println("JSON OBJECT " + jsonObj.get("movieArray"));
-                    // Log.d("parse movie data", jsonObj.get("movieArray").toString());
-
+                    String stars = jObj.getString("stars");
+                    if (stars != null && stars.length()>0) {
+                        stars = stars.replace("[", "");
+                        stars = stars.replace("]", "");
+                        String[] starArr = stars.split(","); stars = "";
+                        for (int x=1; x < starArr.length; x=x+2)
+                        {
+                            if (x==1) stars = starArr[x];
+                            else stars = stars + ", " + starArr[x];
+                        }
+                    } else stars ="";
+                    starsView.setText("Stars : "+ stars);
                 }
                 catch(Exception ex)
                 {
-                    Log.d("search.parsedata", String.valueOf(ex.getStackTrace()));
-                    message.setText("Error in displaying Single Movie");
+                    Log.d("single movie.parsedata", String.valueOf(ex.getStackTrace()));
+                   // message.setText("Error in displaying Single Movie");
                 }
-
-
-
-            }
+           }
         },
                 new Response.ErrorListener()
                 {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d("search.error", error.toString());
+                        Log.d("single movie.error", error.toString());
                     }
                 }) {
             @Override
@@ -115,11 +137,11 @@ public class SingleMovieActivity extends ActionBarActivity
                 final Map<String, String> params = new HashMap<>();
                 params.put("id", mID.getText().toString());
                 //   params.put("searchTitle", mTitle.getText().toString());
-                //params.put("recordsPerPage", "20");
+                params.put("recordsPerPage", "20");
                 Log.d("single movie params =" , params.toString());
                 return params;
             }
         };
-        queue.add(loginRequest);
+        queue.add(singleMovieRequest);
     }
 }
