@@ -37,10 +37,10 @@ public class Search extends ActionBarActivity
         searchButton = findViewById(R.id.search);
         //url = "http://10.0.2.2:8080/cs122b_spring20_team_3_war_exploded/api/movies";
 
-      // url = "http://192.168.1.129:8080/cs122b_spring20_team_3_war_exploded/api/movies";
-       url ="https://10.0.2.2:8443/cs122b_spring20_team_3_war_exploded/api/movies";
-
-
+        // url = "http://192.168.1.129:8080/cs122b_spring20_team_3_war_exploded/api/movies";
+        //  url ="https://10.0.2.2:8443/cs122b_spring20_team_3_war_exploded/api/movies";
+        url ="https://ec2-18-222-19-74.us-east-2.compute.amazonaws.com:8443/cs122b-spring20-team-3/api/movies";
+        //url = "https://10.0.2.2:8443/122bwebproject_war/api/movies";
 
         searchButton.setOnClickListener(new View.OnClickListener()
         {
@@ -92,7 +92,7 @@ public class Search extends ActionBarActivity
             protected Map<String, String> getParams() {
                 final Map<String, String> params = new HashMap<>();
                 params.put("ftMovieTitle", mTitle.getText().toString());
-             //   params.put("searchTitle", mTitle.getText().toString());
+                //   params.put("searchTitle", mTitle.getText().toString());
                 params.put("recordsPerPage", "20");
                 Log.d("movie params =" , params.toString());
                 return params;

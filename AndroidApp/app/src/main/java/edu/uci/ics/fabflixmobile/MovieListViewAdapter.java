@@ -1,6 +1,5 @@
 package edu.uci.ics.fabflixmobile;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -14,11 +13,13 @@ public class MovieListViewAdapter extends ArrayAdapter<MovieItem>
 {
     private ArrayList<MovieItem> movies;
 
-    public MovieListViewAdapter(ArrayList<MovieItem> movies, Context context)
+    public MovieListViewAdapter(ArrayList<MovieItem> movies, ListViewActivity context)
     {
         super(context, R.layout.row, movies);
         this.movies = movies;
     }
+
+
 
     @NonNull
     @Override
@@ -38,7 +39,7 @@ public class MovieListViewAdapter extends ArrayAdapter<MovieItem>
         TextView ratingView = view.findViewById(R.id.rating);
         TextView pricingView = view.findViewById(R.id.pricing);
         titleView.setText(movie.getTitle() +" ("+movie.getYear()+")");
-       // yearView.setText();
+        // yearView.setText();
         movieidView.setText(movie.getMovieid());
         directorView.setText("Director :" +movie.getDirector());
         genreView.setText("Genre :" + movie.getMovie_genres());
