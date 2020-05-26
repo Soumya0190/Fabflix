@@ -15,6 +15,8 @@ Database command : CREATE FULLTEXT INDEX idx ON movies(title);
 
 ## Fuzzy Search
 Implemented in separate search box on search page
+Backed out at last minute due to it causing confusion with full text search
+Was calulating edit distance for half the length of the search query
 
 
 ## Deployment Instructions
