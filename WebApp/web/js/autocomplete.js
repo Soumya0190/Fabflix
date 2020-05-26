@@ -5,46 +5,60 @@
 
 */
 
+let cachedItems =[];
 
-/*
-* This function is called by the library when it needs to lookup a query.
-*
-* The parameter query is the query string.
-* The doneCallback is a callback function provided by the library, after you get the
-*   suggestion list from AJAX, you need to call this function to let the library know.
-*/
+function findItem(query, cachedItems) {
+    if (cachedItems != "undefined" && cachedItems != undefined) {
+        //{data:data, query:query};
+        for (let i = 0; i < cachedItems.length; i++) {
+            if (cachedItems[i] != "undefined" && cachedItems[i] != undefined) {
+                if (cachedItems[i]["query"] === query) {
+                    return cachedItems[i]["data"];
+                }
+            }
+
+        }
+        return "";
+    }
+}
+
+
 function handleLookup(query, doneCallback) {
     console.log("autocomplete initiated for query ="+query);
-
+    let makeAJaxCall = true;
     if (typeof(Storage) !== "undefined") {
-        // Store
-        if (query === localStorage.getItem("query")) {
-            var data = localStorage.getItem("data");
-            console.log("Get query results from local storage for query="+ query);
-            handleLookupAjaxSuccess(data, query, doneCallback)
-        } else
-        {
-            localStorage.setItem("query", query);
+        // var existingEntries = JSON.parse(localStorage.getItem("allEntries"));
+
+        let cachedItems = JSON.parse(localStorage.getItem("cachedQry"));
+        if(cachedItems == null) cachedItems = [];
+        let cacheddata = findItem(query, cachedItems);
+        if (cacheddata != "undefined" && cacheddata != undefined) {
+            if (cacheddata.length > 0) {
+                console.log("Get query results from local storage for query=" + query);
+                handleLookupAjaxSuccess(cacheddata, query, doneCallback);
+                makeAJaxCall = false;
+            }
+        }
+        if (makeAJaxCall) {
             // sending the HTTP GET request to the Java Servlet endpoint  // with the query data
-            console.log("Get query results from api/database for query="+ query);
+            console.log("Get query results from api/database for query=" + query);
             console.log("sending AJAX request to backend Java Servlet")
             jQuery.ajax({
                 "method": "GET",
                 // generate the request url from the query.
                 // escape the query string to avoid errors caused by special characters
                 "url": "search-suggestion?query=" + escape(query),
-                "success": function(data) {
+                "success": function (data) {
                     // pass the data, query, and doneCallback function into the success handler
                     handleLookupAjaxSuccess(data, query, doneCallback)
                 },
-                "error": function(errorData) {
+                "error": function (errorData) {
                     console.log("lookup ajax error")
                     console.log(errorData)
                 }
             })
         }
     }
-
 }
 
 
@@ -64,19 +78,28 @@ function handleLookupAjaxSuccess(data, query, doneCallback) {
 
     //Cache in windows storage
     if (typeof(Storage) != "undefined") {
-        localStorage.setItem("data", data);
-        localStorage.setItem("query", query);
+        let obj = {data:data, query:query};
+        //if (cachedItems.length < 10) {
+
+        //  localStorage.setItem("data", data);
+        //  localStorage.setItem("query", query);
+        let existingEntries = JSON.parse(localStorage.getItem("cachedQry"));
+        if(existingEntries == null) existingEntries = [];
+        localStorage.setItem("obj", JSON.stringify(obj));
+        // Save allEntries back to local storage
+        existingEntries.push(obj);
+        localStorage.setItem("cachedQry", JSON.stringify(existingEntries));
+
+        //   }
     }
-    // call the callback function provided by the autocomplete library
-    // add "{suggestions: jsonData}" to satisfy the library response format according to
-    //   the "Response Format" section in documentation
+
     doneCallback( { suggestions: jsonData } );
 }
 
 function parseQuery(suggestion, query, queryLowerCase){
-    if (queryLowerCase != "undefined") {
+    if (queryLowerCase != "undefined" && queryLowerCase != undefined) {
         var res = queryLowerCase.split(" ");
-        if (res != null && res != "undefined") {
+        if (res != null && res != "undefined" && res != undefined) {
             if (res.length === 2) {
                 return suggestion.value.toLowerCase().indexOf(res[0]) || suggestion.value.toLowerCase().indexOf(res[1]);
             } else if (res.length > 2){
