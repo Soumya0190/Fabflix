@@ -12,6 +12,9 @@ YouTube Video URL (Project 4) : https://youtu.be/dDHwH1xkoQI
 Create full test indexes on title column of movies og moviedb database
 Database command : CREATE FULLTEXT INDEX idx ON movies(title);
 
+## Fuzzy Search
+Implemented in separate search box on search page
+
 
 ## Deployment Instructions
 In order to deploy the project to Tomcat, follow below 
@@ -53,6 +56,8 @@ which will now show the newly deployed project.
 (14) Click on the local emulator to see the android app project!
 
 
+## From Project #3
+
 ## Functionalities
 This project has several webpages, as listed: Login Page, Search Page, Movie List Page, Single Movie Page, Single Star Page, Shopping Cart Page, Payment Form, Confirmation Page 
 
@@ -86,8 +91,6 @@ Payment Servlet: https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-3/b
 - As per my research, indexes are only effective if there are lot of records
 - SAX Parser is more efficient than DOM Parser for larger files
 
-## Fuzzy Search
-Not yet implemented 
 
 ## Assumptions
 Movie is not added to database if genre name is not provided in xml file, and reported to inconsistency_report_movie.txt
