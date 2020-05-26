@@ -40,6 +40,9 @@ public class MovieListServlet extends HttpServlet {
             searchCriteria.titleStartsWith = request.getParameter("browsetitle");
             if (request.getParameter("ftMovieTitle") != null && request.getParameter("ftMovieTitle").length()>0)
                 searchCriteria.ftMovieTitle = request.getParameter("ftMovieTitle");
+            if (request.getParameter("fsMovieTitle") != null && request.getParameter("fsMovieTitle").length()>0)
+                searchCriteria.fsMovieTitle = request.getParameter("fsMovieTitle");
+
             if (request.getParameter("searchTitle") != null && request.getParameter("searchTitle").length()>0)
                 searchCriteria.movieTitle = request.getParameter("searchTitle");
             searchCriteria.movieDirector = request.getParameter("searchDirector");
@@ -52,7 +55,7 @@ public class MovieListServlet extends HttpServlet {
             searchCriteria.pageOffset = firstRecord;
             String pageNum = request.getParameter("pageNum");///Still used??
             String pagination = request.getParameter("pagination");
-            System.out.println(" searchCriteria.ftMovieTitle ="+  searchCriteria.ftMovieTitle );
+            System.out.println(" GET searchCriteria.ftMovieTitle ="+  searchCriteria.ftMovieTitle );
             if (pagination != null && pagination == "Y") { //initiated from pagination
                 SearchCriteria srchCriteria = (SearchCriteria) session.getAttribute("searchCriteria");
                 int lastRecord = totalRecordsCashed + firstRecord;
@@ -88,6 +91,8 @@ public class MovieListServlet extends HttpServlet {
             searchCriteria.titleStartsWith = request.getParameter("browsetitle");
             if (request.getParameter("ftMovieTitle") != null && request.getParameter("ftMovieTitle").length()>0)
                 searchCriteria.ftMovieTitle = request.getParameter("ftMovieTitle");
+            if (request.getParameter("fsMovieTitle") != null && request.getParameter("fsMovieTitle").length()>0)
+                searchCriteria.fsMovieTitle = request.getParameter("fsMovieTitle");
             if (request.getParameter("searchTitle") != null && request.getParameter("searchTitle").length()>0)
                 searchCriteria.movieTitle = request.getParameter("searchTitle");
             searchCriteria.movieDirector = request.getParameter("searchDirector");
@@ -100,7 +105,7 @@ public class MovieListServlet extends HttpServlet {
             searchCriteria.pageOffset = firstRecord;
             String pageNum = request.getParameter("pageNum");///Still used??
             String pagination = request.getParameter("pagination");
-System.out.println(" searchCriteria.ftMovieTitle ="+  searchCriteria.ftMovieTitle );
+            System.out.println(" POST searchCriteria.ftMovieTitle ="+  searchCriteria.ftMovieTitle );
             if (pagination != null && pagination == "Y") { //initiated from pagination
                 SearchCriteria srchCriteria = (SearchCriteria) session.getAttribute("searchCriteria");
                 int lastRecord = totalRecordsCashed + firstRecord;
@@ -126,7 +131,7 @@ System.out.println(" searchCriteria.ftMovieTitle ="+  searchCriteria.ftMovieTitl
     }
 
     protected String getDataFromDatabase(SearchCriteria searchCriteria, int pgOffset, HttpServletRequest request, HttpServletResponse response){
-        String movieStar, movieTitle, movieDirector, movieYear, genreid, titleStartsWith, ftMovieTitle;
+        String movieStar, movieTitle, movieDirector, movieYear, genreid, titleStartsWith, ftMovieTitle,fsMovieTitle;
         //int pgOffset, recordsPerPage;
         JsonArray jsonArray = new JsonArray();
         String[] arrParams;
@@ -138,6 +143,7 @@ System.out.println(" searchCriteria.ftMovieTitle ="+  searchCriteria.ftMovieTitl
         movieStar = searchCriteria.movieStar;// searchCriteria.recordsPerPage = request.getParameter("recordsPerPage");
         pgOffset = searchCriteria.pageOffset;
         ftMovieTitle = searchCriteria.ftMovieTitle;
+        fsMovieTitle = searchCriteria.fsMovieTitle;
         Integer intParams = 0;
         Hashtable<Integer, String> hashtable = new Hashtable<Integer, String>(); //Store search criteria and set paramaters in prepared stmt
 
@@ -171,14 +177,22 @@ System.out.println(" searchCriteria.ftMovieTitle ="+  searchCriteria.ftMovieTitl
                 hashtable.put(intParams, "%" + movieTitle + "%");
             }
             if (ftMovieTitle != null && ftMovieTitle.length() >0) {
-                    query = query + " AND MATCH (title) AGAINST (? IN BOOLEAN MODE) ";
-                    intParams++;
-                    String[] splited = ftMovieTitle.split("\\s+");
-                    String temp ="";
-                    for (int i = 0; i < splited.length; i++)
-                        temp = temp + "+"+ splited[i] + "* ";
-                    hashtable.put(intParams, temp);
-                }
+                query = query + " AND MATCH (title) AGAINST (? IN BOOLEAN MODE) ";
+                intParams++;
+                String[] splited = ftMovieTitle.split("\\s+");
+                String temp = "";
+                //for (int i = 0; i < splited.length; i++)
+                for (int i = splited.length-1; i >=0; i--)
+                    temp = temp + "+" + splited[i] + "* ";
+                hashtable.put(intParams, temp);
+            }
+
+            if (fsMovieTitle != null && fsMovieTitle.length()>0){
+                int tLen = Math.round(fsMovieTitle.length()/2);
+                query = query + " AND ed(title,?) <= ? ";
+                intParams++; hashtable.put(intParams, fsMovieTitle);
+                intParams++; hashtable.put(intParams, String.valueOf(tLen));
+            }
 
             if (movieDirector != null && movieDirector.length() > 0) {
                 query = query + " AND director like ? "; intParams++;hashtable.put(intParams,"%" + movieDirector + "%" );
@@ -422,6 +436,7 @@ System.out.println(" searchCriteria.ftMovieTitle ="+  searchCriteria.ftMovieTitl
         int recordsPerPage;
         int pageOffset;
         String ftMovieTitle;
+        String fsMovieTitle;
     }
 
 }

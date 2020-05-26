@@ -23,6 +23,7 @@ public class Search extends ActionBarActivity
 {
 
     private EditText mTitle;
+    private EditText fsTitle;
     private TextView message;
     private Button searchButton;
     private String url;
@@ -33,6 +34,7 @@ public class Search extends ActionBarActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search);
         mTitle = findViewById(R.id.mTitle);
+        fsTitle = findViewById(R.id.fsTitle);
         message = findViewById(R.id.message);
         searchButton = findViewById(R.id.search);
         //url = "http://10.0.2.2:8080/cs122b_spring20_team_3_war_exploded/api/movies";
@@ -92,6 +94,8 @@ public class Search extends ActionBarActivity
             protected Map<String, String> getParams() {
                 final Map<String, String> params = new HashMap<>();
                 params.put("ftMovieTitle", mTitle.getText().toString());
+                params.put("fsMovieTitle", fsTitle.getText().toString());
+
                 //   params.put("searchTitle", mTitle.getText().toString());
                 params.put("recordsPerPage", "20");
                 Log.d("movie params =" , params.toString());
