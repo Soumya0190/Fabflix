@@ -9,7 +9,7 @@ YouTube Video URL (Project 4) : https://youtu.be/dDHwH1xkoQI
 
 
 ## Full Text Search on Title
-Create full text indexes on title of movies from moviedb database
+Created full text indexes on title of movies from moviedb database
 
 Database command : CREATE FULLTEXT INDEX idx ON movies(title);
 
