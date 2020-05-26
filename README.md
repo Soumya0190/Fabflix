@@ -7,7 +7,7 @@ YouTube Video URL (Project 3): https://youtu.be/x9ZtjQJrLzQ
 
 YouTube Video URL (Project 4) : https://youtu.be/RUuZjOnDiBI
 
-AWS is pointing to backend
+Adroid is pointing to backend in AWS
 
 ## Full Text Search on Title
 Created full text indexes on title of movies from moviedb database
