@@ -159,7 +159,15 @@ public class SAXParserActor extends DefaultHandler
 
         try
         {
-            connection = DriverManager.getConnection(loginUrl, loginUser, loginPasswd);
+            //connection = DriverManager.getConnection(loginUrl, loginUser, loginPasswd);
+
+            Context initContext = new InitialContext();
+            Context envContext = (Context) initContext.lookup("java:/comp/env");
+            DataSource ds = (DataSource) envContext.lookup("jdbc/moviedbexample");
+            Connection connection = ds.getConnection();
+            if (connection == null)
+                out.println("connection is null.");
+
             //connection = DriverManager.getConnection(String.valueOf(dataSource));
             CallableStatement  prepStmt = connection.prepareCall(starQuery);
             prepStmt.setString(1, starName);

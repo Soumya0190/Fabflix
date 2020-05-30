@@ -146,6 +146,17 @@ System.out.println(" searchCriteria.ftMovieTitle ="+  searchCriteria.ftMovieTitl
         try {
             String commaSeparatedMovieIds = "";
             Connection connection = dataSource.getConnection();
+
+            /*
+            Context initContext = new InitialContext();
+            Context envContext = (Context) initContext.lookup("java:/comp/env");
+            DataSource ds = (DataSource) envContext.lookup("jdbc/moviedbexample");
+            Connection connection = ds.getConnection();
+            if (connection == null)
+                out.println("connection is null.");
+             */
+
+
             // Statement statement = connection.createStatement();
             PreparedStatement preparedStatementMainQuery;
 

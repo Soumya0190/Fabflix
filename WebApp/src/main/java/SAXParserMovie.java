@@ -194,7 +194,15 @@ public class SAXParserMovie extends DefaultHandler
         {
             //Class.forName("com.mysql.jdbc.Driver").newInstance();
             //DriverManager.getConnection("jdbc:mysql:///moviedb?autoReconnect=true&useSSL=false", "mytestuser", "mypassword")
-            connection = DriverManager.getConnection(loginUrl, loginUser, loginPasswd);
+            //connection = DriverManager.getConnection(loginUrl, loginUser, loginPasswd);
+
+            Context initContext = new InitialContext();
+            Context envContext = (Context) initContext.lookup("java:/comp/env");
+            DataSource ds = (DataSource) envContext.lookup("jdbc/moviedbexample");
+            Connection connection = ds.getConnection();
+            if (connection == null)
+                out.println("connection is null.");
+
             CallableStatement prepStmt = connection.prepareCall(movieQuery);
             prepStmt.setString(1, movie_id.trim());
             prepStmt.setString(2, movieTitle.trim());

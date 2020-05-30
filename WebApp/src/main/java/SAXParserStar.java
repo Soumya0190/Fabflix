@@ -81,7 +81,15 @@ public class SAXParserStar extends DefaultHandler {
         String starQuery = "{CALL addStarMovie(?,?,?,?,?)}";
         String status = "";
         try {
-            connection = DriverManager.getConnection(loginUrl, loginUser, loginPasswd);
+            //connection = DriverManager.getConnection(loginUrl, loginUser, loginPasswd);
+
+            Context initContext = new InitialContext();
+            Context envContext = (Context) initContext.lookup("java:/comp/env");
+            DataSource ds = (DataSource) envContext.lookup("jdbc/moviedbexample");
+            Connection connection = ds.getConnection();
+            if (connection == null)
+                out.println("connection is null.");
+
             CallableStatement prepStmt = connection.prepareCall(starQuery);
             prepStmt.setString(1, starName);
             prepStmt.setString(2, starBirthYear);
@@ -115,7 +123,15 @@ public class SAXParserStar extends DefaultHandler {
         FileWriter report = new FileWriter("inconsistency_report_stars.txt");
         report.write("Inconsistency report for casts124.xml :");
 
-        connection = DriverManager.getConnection(loginUrl, loginUser, loginPasswd);
+        //connection = DriverManager.getConnection(loginUrl, loginUser, loginPasswd);
+
+        Context initContext = new InitialContext();
+        Context envContext = (Context) initContext.lookup("java:/comp/env");
+        DataSource ds = (DataSource) envContext.lookup("jdbc/moviedbexample");
+        Connection connection = ds.getConnection();
+        if (connection == null)
+            out.println("connection is null.");
+
         connection.setAutoCommit(false);
         String starQuery = "{CALL addStarInBatch(?,?)}";
         CallableStatement prepStmt = connection.prepareCall(starQuery);
