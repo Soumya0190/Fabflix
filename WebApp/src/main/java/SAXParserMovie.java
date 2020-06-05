@@ -4,6 +4,9 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -198,10 +201,10 @@ public class SAXParserMovie extends DefaultHandler
 
             Context initContext = new InitialContext();
             Context envContext = (Context) initContext.lookup("java:/comp/env");
-            DataSource ds = (DataSource) envContext.lookup("jdbc/moviedbexample");
+            DataSource ds = (DataSource) envContext.lookup("jdbc/moviedb");
             Connection connection = ds.getConnection();
             if (connection == null)
-                out.println("connection is null.");
+                System.out.println("connection is null.");
 
             CallableStatement prepStmt = connection.prepareCall(movieQuery);
             prepStmt.setString(1, movie_id.trim());

@@ -200,6 +200,7 @@ let browsetitle = getParameterByName('browsetitle');
 let pgOffset = getParameterByName('pgOffset');
 let pagination = getParameterByName('pagination');
 let ftMovieTitle = getParameterByName('ftMovieTitle');
+let fsMovieTitle = getParameterByName('fsMovieTitle');
 if (recordsPerPage == null || recordsPerPage.length <= 0) recordsPerPage = 25;
 if (pgOffset == null || pgOffset.length <= 0) pgOffset = 0;
 if (pagination == null || pagination.length <= 0) pagination = "N";
@@ -216,7 +217,8 @@ if (pgOffset != null) data = data + "&pgOffset=" + pgOffset;
 if (pagination != null) data = data + "&pagination=" + pagination;
 if (usertype != null) data = data + "&usertype=" + usertype;
 if (ftMovieTitle != null) data = data + "&ftMovieTitle="+ftMovieTitle;
-
+if (fsMovieTitle != null) data = data + "&fsMovieTitle="+fsMovieTitle;
+//alert(data);
 jQuery.ajax({
     dataType: "json",
     method: "GET",

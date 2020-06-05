@@ -1,10 +1,9 @@
 package main.java;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import javax.annotation.Resource;
-import javax.naming.Context;
-import javax.naming.InitialContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,30 +11,30 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
-import java.io.*;
-import java.nio.file.StandardOpenOption;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.List;
 import java.util.Hashtable;
+import java.util.List;
 
-@WebServlet(name = "MovieListServlet", urlPatterns = "/api/movies")
-public class MovieListServlet extends HttpServlet {
+@WebServlet(name = "MovieListNoConnPoolServlet", urlPatterns = "/api/moviesNoConPool")
+public class MovieListNoConnPoolServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private final String servletName ="MovieListServlet";
-    @Resource(name = "jdbc/moviedb")
+    @Resource(name = "jdbc/moviedbNoConPool")
     private DataSource dataSource;
-    long elapsedTimeStarQuery;
-    long elapsedTimeMainQuery;
-    long elapsedTimeGenreQuery;
     final int totalRecordsCashed = 100;
+    long elapsedTimeMainQuery;
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         long startTime = System.nanoTime(); //Start recording time for servlet
-        response.setContentType("application/json");
+        // response.setContentType("application/json");
         HttpSession session = request.getSession();
         PrintWriter printer = response.getWriter();
         SearchCriteria searchCriteria = new SearchCriteria();
@@ -46,10 +45,6 @@ public class MovieListServlet extends HttpServlet {
             searchCriteria.titleStartsWith = request.getParameter("browsetitle");
             if (request.getParameter("ftMovieTitle") != null && request.getParameter("ftMovieTitle").length()>0)
                 searchCriteria.ftMovieTitle = request.getParameter("ftMovieTitle");
-
-            if (request.getParameter("fsMovieTitle") != null && request.getParameter("fsMovieTitle").length()>0)
-                searchCriteria.fsMovieTitle = request.getParameter("fsMovieTitle");
-
             if (request.getParameter("searchTitle") != null && request.getParameter("searchTitle").length()>0)
                 searchCriteria.movieTitle = request.getParameter("searchTitle");
             searchCriteria.movieDirector = request.getParameter("searchDirector");
@@ -62,7 +57,7 @@ public class MovieListServlet extends HttpServlet {
             searchCriteria.pageOffset = firstRecord;
             String pageNum = request.getParameter("pageNum");///Still used??
             String pagination = request.getParameter("pagination");
-            //  System.out.println(" GET searchCriteria.ftMovieTitle ="+  searchCriteria.ftMovieTitle );
+           // System.out.println(" searchCriteria.ftMovieTitle ="+  searchCriteria.ftMovieTitle );
             if (pagination != null && pagination == "Y") { //initiated from pagination
                 SearchCriteria srchCriteria = (SearchCriteria) session.getAttribute("searchCriteria");
                 int lastRecord = totalRecordsCashed + firstRecord;
@@ -71,7 +66,7 @@ public class MovieListServlet extends HttpServlet {
                 } else {
                     //Get Data from database
                     jSONResponse = getDataFromDatabase(srchCriteria,firstRecord, request, response);
-                    // System.out.println("srchCriteria="+ srchCriteria.toString());
+                  //  System.out.println("srchCriteria="+ srchCriteria.toString());
                 }
             } else //get data from database
             {
@@ -85,19 +80,16 @@ public class MovieListServlet extends HttpServlet {
             System.out.println(servletName + ":"+ ex.getMessage());
         }
         printer.close();
-
         //End recording Time
         long endTime = System.nanoTime();
         long elapsedTime = endTime - startTime;
         // long totalJDBCExecTime = elapsedTimeMainQuery + elapsedTimeStarQuery + elapsedTimeGenreQuery;elapsedTimeMainQuery includes all jdbc execution time
         writeToFile(elapsedTime,elapsedTimeMainQuery);
-
     }
-
     private static final String newLine = System.getProperty("line.separator");
 
     private synchronized void writeToFile(long elapsedTime, long totalJDBCExecTime)  {
-        String fileName = "log_processing.txt";
+        String fileName = "log_processing_noConnectionPool.txt";
         //String fileName = "/Users/pratyushsharma/Documents/122B/logfiles/log_processing.txt";
 
         PrintWriter printWriter = null;
@@ -117,7 +109,6 @@ public class MovieListServlet extends HttpServlet {
         }
     }
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        long startTime = System.nanoTime();
         response.setContentType("application/json");
         HttpSession session = request.getSession();
         PrintWriter printer = response.getWriter();
@@ -129,8 +120,6 @@ public class MovieListServlet extends HttpServlet {
             searchCriteria.titleStartsWith = request.getParameter("browsetitle");
             if (request.getParameter("ftMovieTitle") != null && request.getParameter("ftMovieTitle").length()>0)
                 searchCriteria.ftMovieTitle = request.getParameter("ftMovieTitle");
-            if (request.getParameter("fsMovieTitle") != null && request.getParameter("fsMovieTitle").length()>0)
-                searchCriteria.fsMovieTitle = request.getParameter("fsMovieTitle");
             if (request.getParameter("searchTitle") != null && request.getParameter("searchTitle").length()>0)
                 searchCriteria.movieTitle = request.getParameter("searchTitle");
             searchCriteria.movieDirector = request.getParameter("searchDirector");
@@ -143,7 +132,7 @@ public class MovieListServlet extends HttpServlet {
             searchCriteria.pageOffset = firstRecord;
             String pageNum = request.getParameter("pageNum");///Still used??
             String pagination = request.getParameter("pagination");
-            // System.out.println(" POST searchCriteria.ftMovieTitle ="+  searchCriteria.ftMovieTitle );
+           // System.out.println(" searchCriteria.ftMovieTitle ="+  searchCriteria.ftMovieTitle );
             if (pagination != null && pagination == "Y") { //initiated from pagination
                 SearchCriteria srchCriteria = (SearchCriteria) session.getAttribute("searchCriteria");
                 int lastRecord = totalRecordsCashed + firstRecord;
@@ -152,7 +141,7 @@ public class MovieListServlet extends HttpServlet {
                 } else {
                     //Get Data from database
                     jSONResponse = getDataFromDatabase(srchCriteria,firstRecord, request, response);
-                    //System.out.println("srchCriteria="+ srchCriteria.toString());
+                 //   System.out.println("srchCriteria="+ srchCriteria.toString());
                 }
             } else //get data from database
             {
@@ -166,14 +155,10 @@ public class MovieListServlet extends HttpServlet {
             System.out.println(servletName + ":"+ ex.getMessage());
         }
         printer.close();
-        long endTime = System.nanoTime();
-        long elapsedTime = endTime - startTime;
-        long totalJDBCExecTime = elapsedTimeMainQuery + elapsedTimeStarQuery + elapsedTimeGenreQuery;
-        writeToFile(elapsedTime,totalJDBCExecTime);
     }
 
     protected String getDataFromDatabase(SearchCriteria searchCriteria, int pgOffset, HttpServletRequest request, HttpServletResponse response){
-        String movieStar, movieTitle, movieDirector, movieYear, genreid, titleStartsWith, ftMovieTitle,fsMovieTitle;
+        String movieStar, movieTitle, movieDirector, movieYear, genreid, titleStartsWith, ftMovieTitle;
         //int pgOffset, recordsPerPage;
         JsonArray jsonArray = new JsonArray();
         String[] arrParams;
@@ -185,16 +170,15 @@ public class MovieListServlet extends HttpServlet {
         movieStar = searchCriteria.movieStar;// searchCriteria.recordsPerPage = request.getParameter("recordsPerPage");
         pgOffset = searchCriteria.pageOffset;
         ftMovieTitle = searchCriteria.ftMovieTitle;
-        fsMovieTitle = searchCriteria.fsMovieTitle;
         Integer intParams = 0;
         Hashtable<Integer, String> hashtable = new Hashtable<Integer, String>(); //Store search criteria and set paramaters in prepared stmt
 
-
+        // recordsPerPage = searchCriteria.recordsPerPage;
+        //  System.out.println("titleStartsWith=" +titleStartsWith+", movieTitle = "+ movieTitle+", movieDirector="+movieDirector);
         try {
             String commaSeparatedMovieIds = "";
 
 
-            // Statement statement = connection.createStatement();
             PreparedStatement preparedStatementMainQuery;
 
             String query = "SELECT m.id movieId, m.title, m.year, m.director, r.rating , FLOOR(RAND()*(10)+5) price ";
@@ -222,17 +206,10 @@ public class MovieListServlet extends HttpServlet {
                 query = query + " AND MATCH (title) AGAINST (? IN BOOLEAN MODE) ";
                 intParams++;
                 String[] splited = ftMovieTitle.split("\\s+");
-                String temp = "";
+                String temp ="";
                 for (int i = 0; i < splited.length; i++)
-                    temp = temp + "+" + splited[i] + "* ";
+                    temp = temp + "+"+ splited[i] + "* ";
                 hashtable.put(intParams, temp);
-            }
-
-            if (fsMovieTitle != null && fsMovieTitle.length()>0){
-                int tLen = Math.round(fsMovieTitle.length()/2);
-                query = query + " AND ed(title,?) <= ? ";
-                intParams++; hashtable.put(intParams, fsMovieTitle);
-                intParams++; hashtable.put(intParams, String.valueOf(tLen));
             }
 
             if (movieDirector != null && movieDirector.length() > 0) {
@@ -242,35 +219,36 @@ public class MovieListServlet extends HttpServlet {
                 query = query + " AND year = ? " ; intParams++;hashtable.put(intParams,movieYear);
             }
             String mainQuery = query + " LIMIT ? OFFSET ?;";
-
+            //hashtable.put(intParams,String.valueOf(totalRecordsCashed)); intParams++;
+            //hashtable.put(intParams,String.valueOf(pgOffset)); intParams++;
 
             //System.out.println("MovieListServlet DBquery = " + query);
             Enumeration names = hashtable.keys(); Integer key;
             String genreQuery = "SELECT DISTINCT name FROM genres_in_movies gm, genres g WHERE gm.movieId=? AND gm.genreId = g.id LIMIT 3";
             String starsQuery = "SELECT DISTINCT name, id FROM stars_in_movies, stars WHERE movieId=? AND starId = id LIMIT 3";
-
             long startTimeMainQuery = System.nanoTime();
-            Context initContext = new InitialContext();
-            Context envContext = (Context) initContext.lookup("java:/comp/env");
-            DataSource ds = (DataSource) envContext.lookup("jdbc/moviedb");
-            Connection connection = ds.getConnection();
+            Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatementGenres = connection.prepareStatement(genreQuery);
+
+
             PreparedStatement preparedStatementStars = connection.prepareStatement(starsQuery);
+
+
             preparedStatementMainQuery = connection.prepareStatement(mainQuery);
-
-
             while(names.hasMoreElements()) {
                 key = (Integer) names.nextElement();
-                // System.out.println("Key: " +key+ " & Value: " + hashtable.get(key));
                 preparedStatementMainQuery.setString(key, hashtable.get(key));
             }
             key = intParams+ 1;
+
             preparedStatementMainQuery.setInt(key, totalRecordsCashed);
             key = intParams+ 2;
+
             preparedStatementMainQuery.setInt(key, pgOffset);
+           // System.out.println("After : " + preparedStatementMainQuery.toString());
 
             ResultSet result = preparedStatementMainQuery.executeQuery();
-
+            //ResultSet result = statement.executeQuery(mainQuery);
             while (result.next()) {
                 String movie_id =result.getString("movieId") ;
                 String genres = ""; //result.getString("genre");
@@ -283,13 +261,8 @@ public class MovieListServlet extends HttpServlet {
                 jsonObject.addProperty("movie_rating", result.getString("rating"));
                 jsonObject.addProperty("price", result.getString("price"));
                 //jsonObject.addProperty("genre", _genres);
-
-                //long startTimeGenreQuery = System.nanoTime();
                 preparedStatementGenres.setString(1, movie_id);
                 ResultSet genresResult = preparedStatementGenres.executeQuery();
-                // long endTimeGenreQuery = System.nanoTime();
-                // elapsedTimeGenreQuery = endTimeGenreQuery - startTimeGenreQuery;
-
                 while (genresResult.next()) {
                     if (!genres.equals("")) genres += ", ";
                     genres += genresResult.getString("name");
@@ -297,11 +270,9 @@ public class MovieListServlet extends HttpServlet {
                 jsonObject.addProperty("movie_genres", genres);
                 genresResult.close();
 
-                // long startTimeStarQuery = System.nanoTime();
                 preparedStatementStars.setString(1, movie_id);
                 ResultSet starsResult = preparedStatementStars.executeQuery();
-                //long endTimeStarQuery = System.nanoTime();
-                // elapsedTimeStarQuery = endTimeStarQuery - startTimeStarQuery;
+
                 JsonArray starsArray = new JsonArray();
                 while (starsResult.next()) {
                     starsArray.add(starsResult.getString("id"));
@@ -314,13 +285,12 @@ public class MovieListServlet extends HttpServlet {
             result.close();
             //System.out.println(servletName +"  After : " + preparedStatementMainQuery.toString());
             preparedStatementMainQuery.close();
-
+            // statement.close();
             preparedStatementGenres.close();
             preparedStatementStars.close();
             connection.close();
             long endTimeMainquery = System.nanoTime();
             elapsedTimeMainQuery = endTimeMainquery - startTimeMainQuery;
-
             //Store in session
             String numOfRecords = getTotalRecords(query, hashtable);
             if (numOfRecords != null && (Integer.parseInt(numOfRecords) <0 ))
@@ -351,8 +321,7 @@ public class MovieListServlet extends HttpServlet {
             if (userInfo!=null) {
                 jsnObject.addProperty("usertype", userInfo.role);
             }
-            //String movieLstString = getMovieListFromSession(0, recordsPerPage, session);
-            //System.out.println("MovieListServlet = " + jsnObject.toString());
+
             response.setStatus(200);
             return jsnObject.toString();
         } catch (Exception ex) {
@@ -457,10 +426,8 @@ public class MovieListServlet extends HttpServlet {
             PreparedStatement preparedStatemenUser = connection.prepareStatement(query+";");
             while(names.hasMoreElements()) {
                 key = (Integer) names.nextElement();
-                // System.out.println("Key: " +key+ " & Value: " + hashtable.get(key));
                 preparedStatemenUser.setString(key, hashtable.get(key));
             }
-            //System.out.println("After count : " + preparedStatemenUser.toString());
             ResultSet userResult = preparedStatemenUser.executeQuery();
             if (userResult.last()){
                 rowCount= userResult.getRow();
@@ -487,7 +454,6 @@ public class MovieListServlet extends HttpServlet {
         int recordsPerPage;
         int pageOffset;
         String ftMovieTitle;
-        String fsMovieTitle;
     }
 
 }

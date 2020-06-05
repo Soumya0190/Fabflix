@@ -1,6 +1,7 @@
 let search_form = $("#search_form");
 let browse_genre = $("#browse_genre");
 let search_movie_form = $("#search_movie_form");
+let searchfsButton= $("#searchfsButton");
 let usertype=$("#usertype");
 
 function handleLoginResult(resultDataString)
@@ -96,11 +97,18 @@ function displaySearchScreen (resultData) {
 function submitmovieSearchForm(formSubmitEvent) {
     formSubmitEvent.preventDefault();
     console.log("submit movie search form");
-    var data = "?ftMovieTitle="+ $("#searchmTitle").val();
+    let ftTitle = $("#searchmTitle").val() != null && $("#searchmTitle").val() != undefined ?$("#searchmTitle").val():"";
+    let fsTitle = $("#searchfsTitle").val() != null && $("#searchfsTitle").val() != undefined ?$("#searchfsTitle").val():"";
+    //let ftTitle = $("#searchmTitle").val();
+    // let fsTitle = $("#searchfsTitle").val();
+    //  alert("ftTitle = " +ftTitle);
+    var data = "?ftMovieTitle="+ ftTitle;
+    var data = data + "&fsMovieTitle="+ fsTitle;
+
     data = data +"&recordPerPage=25";
     data = data +"&usertype="+$("#usertype").val();
     console.log("search submit: " +data);
-   // alert(data);
+    // alert(data);
     window.location.replace("movie-list.html"+data);
 }
 
@@ -113,16 +121,17 @@ function displayAdvancedSrch(flag) {
         //document.getElementById("divAdvSearch").style.visibility = "hidden";
 
     }
-else {
+    else {
         $("#divAdvSearch").show(); $("#divBasicSearch").hide();
         //document.getElementById("divAdvSearch").style.display = "block";
-       // document.getElementById("divAdvSearch").style.visibility = "visible";
+        // document.getElementById("divAdvSearch").style.visibility = "visible";
     }
 }
 
 // Bind the submit action of the form to a handler function
 search_form.submit(submitSearchForm);
 search_movie_form.submit(submitmovieSearchForm);
+searchfsButton.submit(submitmovieSearchForm);
 $("#moviesResult").hide();
 
 //printAlphanumericList();

@@ -29,33 +29,6 @@ public class LoginServlet extends HttpServlet {
         String logout = request.getParameter("logout");
         User usrObj =null;
         System.out.println("usrNm="+ username+" , password="+password+",  usertype="+usertype);
-      /* if (logout.equals("Y") )
-        {
-            request.getSession().setAttribute("user", null);
-            responseJsonObject.addProperty("status", "fail");
-
-            Cookie[] cookies = request.getCookies();
-            if(cookies != null)
-            {
-                for(Cookie cookie : cookies)
-                {
-                    if(cookie.getName().equals("JSESSIONID"))
-                    {
-                        System.out.println("JSESSIONID="+cookie.getValue());
-                        break;
-                    }
-                }
-            }
-            //invalidate the session if exists
-            System.out.println("User="+session.getAttribute("user"));
-            if(session != null)
-            {
-                session.invalidate();
-            }
-            response.sendRedirect("login.html");
-
-        }
-*/
 
         if (usertype != null && usertype.equals("admin")) {
             usrObj = validateEmployee(username, password);
@@ -151,7 +124,7 @@ public class LoginServlet extends HttpServlet {
             Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatemenUser = connection.prepareStatement(movieInfoQuery);
             preparedStatemenUser.setString(1, username);
-           //preparedStatemenUser.setString(2, password);
+            //preparedStatemenUser.setString(2, password);
             System.out.println("after="+ preparedStatemenUser.toString() );
             ResultSet userResult = preparedStatemenUser.executeQuery();
 

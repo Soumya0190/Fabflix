@@ -5,6 +5,10 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -85,10 +89,10 @@ public class SAXParserStar extends DefaultHandler {
 
             Context initContext = new InitialContext();
             Context envContext = (Context) initContext.lookup("java:/comp/env");
-            DataSource ds = (DataSource) envContext.lookup("jdbc/moviedbexample");
+            DataSource ds = (DataSource) envContext.lookup("jdbc/moviedb");
             Connection connection = ds.getConnection();
             if (connection == null)
-                out.println("connection is null.");
+                System.out.println("connection is null.");
 
             CallableStatement prepStmt = connection.prepareCall(starQuery);
             prepStmt.setString(1, starName);
@@ -103,14 +107,14 @@ public class SAXParserStar extends DefaultHandler {
             prepStmt.close();
             connection.close();
             return status;
-        } catch (SQLException e) {
+        } catch (SQLException | NamingException e) {
             e.printStackTrace();
             System.out.println("SAXParserActor:" + " Exception=" + e.getMessage());
             return "error";
         }
     }
 
-    private void printData() throws IOException, SQLException {
+    private void printData() throws IOException, SQLException, NamingException {
         int batchCount = 0;
         boolean badData;
         int totalRecords = 0;
@@ -130,7 +134,7 @@ public class SAXParserStar extends DefaultHandler {
         DataSource ds = (DataSource) envContext.lookup("jdbc/moviedbexample");
         Connection connection = ds.getConnection();
         if (connection == null)
-            out.println("connection is null.");
+            System.out.println("connection is null.");
 
         connection.setAutoCommit(false);
         String starQuery = "{CALL addStarInBatch(?,?)}";
@@ -175,12 +179,12 @@ public class SAXParserStar extends DefaultHandler {
         report.close();
     }
 
-    public static void main(String[] args) throws IOException, SQLException {
+    public static void main(String[] args) throws IOException, SQLException, NamingException {
         SAXParserStar spe = new SAXParserStar();
         spe.runParser();
     }
 
-    public void runParser() throws IOException, SQLException {
+    public void runParser() throws IOException, SQLException, NamingException {
         parseDocument();
         printData();
     }

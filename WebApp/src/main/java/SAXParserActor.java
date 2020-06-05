@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javax.annotation.Resource;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -124,16 +127,16 @@ public class SAXParserActor extends DefaultHandler
             }
 
 
-           if(!reportIt) {
-               starBirthYear =  starBirthYear != null? starBirthYear :"";
-               status = saveActorInfoinDB(actorObj.getStagename(), actorObj.getDob(), null);
-               if (status != null && !status.contains("success")) {
-                   report.write(" Error in processing xml record " + status + "\n");
-               }
+            if(!reportIt) {
+                starBirthYear =  starBirthYear != null? starBirthYear :"";
+                status = saveActorInfoinDB(actorObj.getStagename(), actorObj.getDob(), null);
+                if (status != null && !status.contains("success")) {
+                    report.write(" Error in processing xml record " + status + "\n");
+                }
 
-           }else{
-               totalRecords++;
-               report.write("\n");}
+            }else{
+                totalRecords++;
+                report.write("\n");}
 
         }
         report.write(" Total Records with Bad Data: "+ totalRecords);
@@ -163,10 +166,10 @@ public class SAXParserActor extends DefaultHandler
 
             Context initContext = new InitialContext();
             Context envContext = (Context) initContext.lookup("java:/comp/env");
-            DataSource ds = (DataSource) envContext.lookup("jdbc/moviedbexample");
+            DataSource ds = (DataSource) envContext.lookup("jdbc/moviedb");
             Connection connection = ds.getConnection();
             if (connection == null)
-                out.println("connection is null.");
+                System.out.println("connection is null.");
 
             //connection = DriverManager.getConnection(String.valueOf(dataSource));
             CallableStatement  prepStmt = connection.prepareCall(starQuery);
@@ -183,7 +186,7 @@ public class SAXParserActor extends DefaultHandler
             connection.close();
             return status;
         }
-        catch (SQLException e)
+        catch (SQLException | NamingException e)
         {
             e.printStackTrace();
             System.out.println("SAXParserActor:" +" Exception=" + e.getMessage());

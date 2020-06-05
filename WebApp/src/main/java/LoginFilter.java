@@ -29,15 +29,15 @@ public class LoginFilter implements Filter
             chain.doFilter(request, response);
             return;
         }
-
-        if (httpRequest.getSession().getAttribute("user") == null)
+//Suppress LoginFilter as we need to run test from jmeter (without using cookie manager)
+        /*if (httpRequest.getSession().getAttribute("user") == null)
         {
             httpResponse.sendRedirect("login.html");
             //return;
         }
-        else {
-            chain.doFilter(request, response);
-        }
+        else {*/
+        chain.doFilter(request, response);
+        //}
     }
 
     @Override
