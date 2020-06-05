@@ -9,6 +9,38 @@ YouTube Video URL (Project 4) : https://youtu.be/RUuZjOnDiBI
 
 Adroid is pointing to backend in AWS
 
+- # General
+    - #### Team#: Team 3
+    
+    - #### Names: Soumya Sharma
+    
+    - #### Project 5 Video Demo Link:
+
+    - #### Instruction of deployment:
+
+    - #### Collaborations and Work Distribution:
+
+
+- # Connection Pooling
+    - #### Include the filename/path of all code/configuration files in GitHub of using JDBC Connection Pooling.
+cs122b-spring20-team-3/WebApp/web/META-INF/context.xml
+cs122b-spring20-team-3/WebApp/web/WEB-INF/web.xml
+cs122b-spring20-team-3/WebApp/src/main/java/ConfirmationServlet.java
+cs122b-spring20-team-3/WebApp/src/main/java/CConfirmationServlet.java
+cs122b-spring20-team-3/WebApp/src/main/java/CDashboardServlet.java
+cs122b-spring20-team-3/WebApp/src/main/java/CEmployeeLoginServlet.java
+cs122b-spring20-team-3/WebApp/src/main/java/CLoginServlet.java
+cs122b-spring20-team-3/WebApp/src/main/java/CMovieListServlet.java
+cs122b-spring20-team-3/WebApp/src/main/java/CPaymentServlet.java
+cs122b-spring20-team-3/WebApp/src/main/java/CSAXParserActor.java
+cs122b-spring20-team-3/WebApp/src/main/java/CSAXParserStar.java
+cs122b-spring20-team-3/WebApp/src/main/java/CSAXParserMovie.java
+cs122b-spring20-team-3/WebApp/src/main/java/CSearchServlet.java
+cs122b-spring20-team-3/WebApp/src/main/java/CSingleMovieServlet.java
+cs122b-spring20-team-3/WebApp/src/main/java/CSingleStarServlet.java
+cs122b-spring20-team-3/WebApp/src/main/java/CUpdateSecurePassword.java
+cs122b-spring20-team-3/WebApp/src/main/java/CVerifyPassword.java
+
 ## Full Text Search on Title
 Created full text indexes on title of movies from moviedb database
 
