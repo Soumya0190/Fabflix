@@ -10,12 +10,13 @@ public class ParseLogFile {
         public static void main(String[] args) {
 
             //readFile("/Users/pratyushsharma/documents/122B/logfiles/log_processing1thread.txt", "Single instance with connection Pool - Single thread");
-            readFile("/Users/pratyushsharma/documents/122B/logfiles/log_processingsingle.txt", "Single instance with connection Pool -  10 threads");
-            readFile("/Users/pratyushsharma/documents/122B/logfiles/log_processingAWSmaster.txt", "AWS Master with connection Pool -  10 threads");
-            readFile("/Users/pratyushsharma/documents/122B/logfiles/log_processingAWSslave.txt", "AWS Slave with connection Pool -  10 threads");
-            readFile("/Users/pratyushsharma/documents/122B/logfiles/log_processingAWSLB.txt", "AWS Load Balancer with connection Pool -  10 threads");
+            readFile("/Users/pratyushsharma/Documents/122B/log_processing_original_master.txt", "Single instance with connection Pool -  10 threads");
+            readFile("/Users/pratyushsharma/Documents/122B/log_processing_original_slave.txt", "Single instance slave with connection Pool -  10 threads");
+            readFile("/Users/pratyushsharma/Documents/122B/log_processing_apache_master.txt", "AWS Load Balancer Master with connection Pool -  10 threads");
+            readFile("/Users/pratyushsharma/Documents/122B/log_processing_apache_slave.txt", "AWS Load Balancer Slave with connection Pool -  10 threads");
+            readFile("/Users/pratyushsharma/Documents/122B/log_processing_gcp_master.txt", "GCP Load Balancer with connection Pool -  10 threads");
           //  readFile("/Users/pratyushsharma/documents/122B/logfiles/log_processing_noConnectionPool.txt", "Single instance with no connection Pool - 10 threads");
-            readFile("documents/122B/logfiles/GCP/log_processing_gcp.txt", "GCP with connection pool: 10 threads");
+            readFile("documents/122B/logfiles/GCP/log_processing_gcp_slave.txt", "GCP Load Balancer slave with connection pool: 10 threads");
 
         }
 private static void readFile(String filename, String mName){
