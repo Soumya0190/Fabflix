@@ -43,8 +43,11 @@ public class SingleMovieServlet extends HttpServlet
         }
         try
         {
-            Connection connection = dataSource.getConnection();
-
+           // Connection connection = dataSource.getConnection();
+            Context initContext = new InitialContext();
+            Context envContext = (Context) initContext.lookup("java:/comp/env");
+            DataSource ds = (DataSource) envContext.lookup("jdbc/moviedb");
+            Connection connection = ds.getConnection();
             String movieInfoQuery = "SELECT title, year, director FROM movies WHERE id=?";
             PreparedStatement preparedStatementMovie = connection.prepareStatement(movieInfoQuery);
 
