@@ -55,7 +55,11 @@ public class SearchServlet extends HttpServlet
             jsonTObject.addProperty("usertype", userInfo.role);
         }
         try {
-            Connection connection = dataSource.getConnection();
+           // Connection connection = dataSource.getConnection();
+            Context initContext = new InitialContext();
+            Context envContext = (Context) initContext.lookup("java:/comp/env");
+            DataSource ds = (DataSource) envContext.lookup("jdbc/moviedb");
+            Connection connection = ds.getConnection();
             // Statement statement = connection.createStatement();
             String query = "select id, name from genres ORDER BY name;";
             PreparedStatement preparedStatement = connection.prepareStatement(query);

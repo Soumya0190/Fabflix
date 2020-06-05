@@ -17,12 +17,18 @@ public class VerifyPassword
 
 	private static boolean verifyCredentials(String email, String password) throws Exception
 	{
-		String loginUser = "mytestuser";
-		String loginPasswd = "mypassword";
-		String loginUrl = "jdbc:mysql:///moviedb?autoReconnect=true&useSSL=false";
+		//String loginUser = "mytestuser";
+		//String loginPasswd = "mypassword";
+		//String loginUrl = "jdbc:mysql:///moviedb?autoReconnect=true&useSSL=false";
 
-		Class.forName("com.mysql.jdbc.Driver").newInstance();
-		Connection connection = DriverManager.getConnection(loginUrl, loginUser, loginPasswd);
+		//Class.forName("com.mysql.jdbc.Driver").newInstance();
+		//Connection connection = DriverManager.getConnection(loginUrl, loginUser, loginPasswd);
+
+		Context initContext = new InitialContext();
+		Context envContext = (Context) initContext.lookup("java:/comp/env");
+		DataSource ds = (DataSource) envContext.lookup("jdbc/moviedb");
+		Connection connection = ds.getConnection();
+
 		Statement statement = connection.createStatement();
 
 		String query = String.format("SELECT * from customers where email='%s'", email);

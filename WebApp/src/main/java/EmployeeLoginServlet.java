@@ -65,7 +65,11 @@ public class EmployeeLoginServlet extends HttpServlet {
 
         try
         {
-            Connection connection = dataSource.getConnection();
+          //  Connection connection = dataSource.getConnection();
+            Context initContext = new InitialContext();
+            Context envContext = (Context) initContext.lookup("java:/comp/env");
+            DataSource ds = (DataSource) envContext.lookup("jdbc/moviedb");
+            Connection connection = ds.getConnection();
             PreparedStatement preparedStatemenUser = connection.prepareStatement(userQuery);
             preparedStatemenUser.setString(1, username);
             preparedStatemenUser.setString(2, password);

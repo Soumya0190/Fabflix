@@ -111,7 +111,11 @@ public class SearchSuggestion extends HttpServlet {
         JsonArray jsonArray = new JsonArray();
         try {
 
-            Connection connection = dataSource.getConnection();
+            //Connection connection = dataSource.getConnection();
+            Context initContext = new InitialContext();
+            Context envContext = (Context) initContext.lookup("java:/comp/env");
+            DataSource ds = (DataSource) envContext.lookup("jdbc/moviedb");
+            Connection connection = ds.getConnection();
             String query =" Select id, title from movies where MATCH (title) AGAINST (? IN BOOLEAN MODE);";
             String id; String name;
 
@@ -140,7 +144,11 @@ public class SearchSuggestion extends HttpServlet {
     protected JsonArray  getStarList(String searchStr,  JsonArray jsonArray )
     {
         try {
-            Connection connection = dataSource.getConnection(); String id; String name;
+           // Connection connection = dataSource.getConnection(); String id; String name;
+            Context initContext = new InitialContext();
+            Context envContext = (Context) initContext.lookup("java:/comp/env");
+            DataSource ds = (DataSource) envContext.lookup("jdbc/moviedb");
+            Connection connection = ds.getConnection();
             String query =" Select id, name from stars where MATCH (name) AGAINST (? IN BOOLEAN MODE);";
             PreparedStatement preparedStatemenUser = connection.prepareStatement(query);
             searchStr = queryParam(searchStr);
