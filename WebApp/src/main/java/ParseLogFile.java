@@ -11,7 +11,7 @@ public class ParseLogFile {
 
             //readFile("/Users/pratyushsharma/documents/122B/logfiles/log_processing1thread.txt", "Single instance with connection Pool - Single thread");
             readFile("/Users/pratyushsharma/Documents/122B/log_processing_original_master.txt", "Single instance with connection Pool -  10 threads");
-            readFile("/Users/pratyushsharma/Documents/122B/log_processing_original_slave.txt", "Single instance slave with connection Pool -  10 threads");
+            //readFile("/Users/pratyushsharma/Documents/122B/log_processing_original_slave.txt", "Single instance slave with connection Pool -  10 threads");
             readFile("/Users/pratyushsharma/Documents/122B/log_processing_apache_master.txt", "AWS Load Balancer Master with connection Pool -  10 threads");
             readFile("/Users/pratyushsharma/Documents/122B/log_processing_apache_slave.txt", "AWS Load Balancer Slave with connection Pool -  10 threads");
             readFile("/Users/pratyushsharma/Documents/122B/log_processing_gcp_master.txt", "GCP Load Balancer with connection Pool -  10 threads");
