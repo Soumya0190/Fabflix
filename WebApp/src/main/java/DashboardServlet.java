@@ -78,11 +78,7 @@ public class DashboardServlet extends HttpServlet {
         try
         {
             if (starBirthYear.length()> 0 && (starBirthYear.matches(regex) == false ) ) starBirthYear ="";
-          //  Connection connection = dataSource.getConnection();
-            Context initContext = new InitialContext();
-            Context envContext = (Context) initContext.lookup("java:/comp/env");
-            DataSource ds = (DataSource) envContext.lookup("jdbc/moviedb");
-            Connection connection = ds.getConnection();
+            Connection connection = dataSource.getConnection();
             CallableStatement prepStmt = connection.prepareCall(starQuery);
             prepStmt.setString(1, starName);
             prepStmt.setString(2, starBirthYear);
@@ -129,11 +125,7 @@ public class DashboardServlet extends HttpServlet {
         try
         {
             if (starByear.length()> 0 && (starByear.matches(regex) == false ) ) starByear ="";
-         //   Connection connection = dataSource.getConnection();
-            Context initContext = new InitialContext();
-            Context envContext = (Context) initContext.lookup("java:/comp/env");
-            DataSource ds = (DataSource) envContext.lookup("jdbc/moviedb");
-            Connection connection = ds.getConnection();
+            Connection connection = dataSource.getConnection();
             CallableStatement prepStmt = connection.prepareCall(query);
 
             prepStmt.setString(1, null);
@@ -174,11 +166,7 @@ public class DashboardServlet extends HttpServlet {
         JsonArray jsonArray = new JsonArray();
         try
         {
-           // Connection connection = dataSource.getConnection();
-            Context initContext = new InitialContext();
-            Context envContext = (Context) initContext.lookup("java:/comp/env");
-            DataSource ds = (DataSource) envContext.lookup("jdbc/moviedb");
-            Connection connection = ds.getConnection();
+            Connection connection = dataSource.getConnection();
             CallableStatement prepStmt = connection.prepareCall(query);
             prepStmt.setString(1, "moviedb");
             boolean hadResults = prepStmt.execute();

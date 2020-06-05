@@ -45,11 +45,8 @@ public class SingleStarServlet extends HttpServlet
 
         try
         {
-           // Connection connection = dataSource.getConnection();
-            Context initContext = new InitialContext();
-            Context envContext = (Context) initContext.lookup("java:/comp/env");
-            DataSource ds = (DataSource) envContext.lookup("jdbc/moviedb");
-            Connection connection = ds.getConnection();
+            Connection connection = dataSource.getConnection();
+
             String starInfoQuery = "SELECT name, birthYear FROM stars WHERE id=?";
             PreparedStatement preparedStatementStar = connection.prepareStatement(starInfoQuery);
 

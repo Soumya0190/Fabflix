@@ -15,7 +15,7 @@ import javax.sql.DataSource;
 @WebServlet(name = "LoginServlet", urlPatterns = "/api/login")
 public class LoginServlet extends HttpServlet {
     @Resource(name = "jdbc/moviedb")
-   // private DataSource dataSource;
+    private DataSource dataSource;
     private final String servletName ="LoginServlet";
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException
     {
@@ -83,11 +83,7 @@ public class LoginServlet extends HttpServlet {
 
         try
         {
-           // Connection connection = dataSource.getConnection();
-            Context initContext = new InitialContext();
-            Context envContext = (Context) initContext.lookup("java:/comp/env");
-            DataSource ds = (DataSource) envContext.lookup("jdbc/moviedb");
-            Connection connection = ds.getConnection();
+            Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatemenUser = connection.prepareStatement(userQuery);
             preparedStatemenUser.setString(1, username);
             preparedStatemenUser.setString(2, password);
@@ -125,11 +121,7 @@ public class LoginServlet extends HttpServlet {
 
         try
         {
-           // Connection connection = dataSource.getConnection();
-            Context initContext = new InitialContext();
-            Context envContext = (Context) initContext.lookup("java:/comp/env");
-            DataSource ds = (DataSource) envContext.lookup("jdbc/moviedb");
-            Connection connection = ds.getConnection();
+            Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatemenUser = connection.prepareStatement(movieInfoQuery);
             preparedStatemenUser.setString(1, username);
             //preparedStatemenUser.setString(2, password);

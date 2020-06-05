@@ -100,12 +100,7 @@ public class PaymentServlet extends HttpServlet {
         try
         {
 
-           // Connection connection = dataSource.getConnection();
-            Context initContext = new InitialContext();
-            Context envContext = (Context) initContext.lookup("java:/comp/env");
-            DataSource ds = (DataSource) envContext.lookup("jdbc/moviedb");
-            Connection connection = ds.getConnection();
-
+            Connection connection = dataSource.getConnection();
             // no need to match customer name as per instructions
             String paymentQuery = "SELECT customer.ccId FROM customers customer, creditcards card " +
                     "WHERE customer.ccId = card.id AND card.expiration =? AND card.id =?;";

@@ -13,19 +13,12 @@ public class UpdateSecurePassword
 {
     public static void main(String[] args) throws Exception
     {
-       /* String loginUser = "mytestuser";
+        String loginUser = "mytestuser";
         String loginPasswd = "mypassword";
         String loginUrl = "jdbc:mysql:///moviedb?autoReconnect=true&useSSL=false";
 
         Class.forName("com.mysql.jdbc.Driver").newInstance();
         Connection connection = DriverManager.getConnection(loginUrl, loginUser, loginPasswd);
-
-        */
-        Context initContext = new InitialContext();
-        Context envContext = (Context) initContext.lookup("java:/comp/env");
-        DataSource ds = (DataSource) envContext.lookup("jdbc/moviedb");
-        Connection connection = ds.getConnection();
-
         Statement statement = connection.createStatement();
 
         String alterQuery = "ALTER TABLE customers MODIFY COLUMN password VARCHAR(128)";
