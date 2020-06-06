@@ -114,25 +114,36 @@ The Connection pooling helps managing the connections to the database more effic
     - #### Include the filename/path of all code/configuration files in GitHub of routing queries to Master/Slave SQL.
 The following below files were changed for read-only slave master
 cs122b-spring20-team-3/WebApp/src/main/java/ConfirmationServlet.java
+
 cs122b-spring20-team-3/WebApp/src/main/java/DashboardServlet.java
+
 cs122b-spring20-team-3/WebApp/src/main/java/EmployeeLoginServlet.java
+
 cs122b-spring20-team-3/WebApp/src/main/java/LoginServlet.java
+
 cs122b-spring20-team-3/WebApp/src/main/java/MovieListServlet.java
+
 cs122b-spring20-team-3/WebApp/src/main/java/PaymentServlet.java
+
 cs122b-spring20-team-3/WebApp/src/main/java/SearchServlet.java
+
 cs122b-spring20-team-3/WebApp/src/main/java/SingleMovieServlet.java
+
 cs122b-spring20-team-3/WebApp/src/main/java/SingleStarServlet.java
 
 cs122b-spring20-team-3/WebApp/src/main/java/VerifyPassword.java
 
-for masterdb, I have chnaged below files
+for masterdb, I have changed below files
 cs122b-spring20-team-3/WebApp/src/main/java/UpdateSecurePassword.java
+
 cs122b-spring20-team-3/WebApp/src/main/java/SAXParserActor.java
+
 cs122b-spring20-team-3/WebApp/src/main/java/SAXParserStar.java
+
 cs122b-spring20-team-3/WebApp/src/main/java/SAXParserMovie.java
  
     - #### How read/write requests were routed to Master/Slave SQL?
-  I have created two resources, for read only operations, resource for slave is used and for write/update masterdb resource is used
+  I created two resources, for read only operations, resource for slave is used and for write/update masterdb resource is used
     resource moviedb is for slave DB
     <Resource name="jdbc/moviedb"
           auth="Container"
@@ -172,30 +183,18 @@ cs122b-spring20-team-3/WebApp/src/main/java/SAXParserMovie.java
  
 | **Single-instance Version Test Plan**          | **Graph Results Screenshot** | **Average Query Time(ms)** | **Average Search Servlet Time(ms)** | **Average JDBC Time(ms)** | **Analysis** |
 |------------------------------------------------|------------------------------|----------------------------|-------------------------------------|---------------------------|--------------|
-| Case 1: HTTP/1 thread                          | log_processing_single_cp_1.txt  | 100 ms                     | 7,540,362 ms                       | 6,271,671 ms              | Amongst all of the calculated times, these times are the largest and slowest. This is because the single instance execution time is not as fast as the execution time for the load balancers, due to the single instance having only 1 tomcat instance handling all the requests solo. In addition, this case has the single thread for the single instance. Within the instance, having only 1 thread handling all the reuqests will take much longer than having 10 threads handling the requests together.             |
-| Case 2: HTTP/10 threads                        | log_processing_single_cp_10.txt   |  235 ms                     | 7,876,373 ms                        | 6,616,776 ms              | 10 threads were faster than having 1 thread, and connection pooling is faster than no connection pooling           |
-| Case 3: HTTPS/10 threads                       | log_processing_https.txt   | 203 ms                          | 9,5902,816 ms                        | 6,991,626 ms              | HTTPS with connection pooling and 10 threads is slower than HTTP with connection pooling and 10 threads. This is because security enabled, there is a SSL handshake at connection level that results in execution cost and makes it little slower than HTTP.            |
-| Case 4: HTTP/10 threads/No connection pooling  | log_processing_single_ncp_10.txt  | 611 ms                    | 113,727,073,886 ms                    | 7,987,877 ms                 | As can be seen from times, on the single instance, no connection pooling with 10 threads was slower than having 10 threads with connection pooling           |
+| Case 1: HTTP/1 thread                          | log_processing_single_cp_1.txt | 100 ms                     | 7,540,362 ms                       | 6,271,671 ms              | During the initialization time, when the connections are first opened, there is an execution expense of creating the 10 threads. Since the duration of these tests were about 5 minutes, multithreading did not benefit much in execution time. |
+| Case 2: HTTP/10 threads                        | log_processing_single_cp_10.txt |  235 ms                     | 7,876,373 ms                        | 6,616,776 ms              | HTTP connection pooling was faster than no connection pooling and faster than HTTPS. This must be because connection pooling sped up the execution time. |
+| Case 3: HTTPS/10 threads                       | log_processing_https.txt | 203 ms                          | 9,5902,816 ms                        | 6,991,626 ms              | HTTPS with connection pooling is slower than HTTP with connection pooling, both with 10 threads. This is because security enabled, there is a SSL handshake at connection level that results in execution cost and makes it little slower than HTTP.            |
+| Case 4: HTTP/10 threads/No connection pooling  | log_processing_single_ncp_10.txt | 611 ms                    | 113,727,073,886 ms                    | 7,987,877 ms                 | On the single instance, no connection pooling was slower than having connection pooling. This is because connections do not need to be opened again and are instead reused. |
  
 | **Scaled Version Test Plan**                   | **Graph Results Screenshot** | **Average Query Time(ms)** | **Average Search Servlet Time(ms)** | **Average JDBC Time(ms)** | **Analysis** |
 |------------------------------------------------|------------------------------|----------------------------|-------------------------------------|---------------------------|--------------|
-| Case 1 AWS MASTER: HTTP/1 thread                          | log_processing_apache_master_cp_1.txt          | 115 ms                                 | 1,520,610 ms              | 614,266 ms                        | On the AWS Load Balancer, Having 1 thread was slower than having 10 threads on the same instance           |
-| Case 2 AWS MASTER: HTTP/10 threads                        | log_processing_apache_master_cp_10.txt         | 109 ms                                  | 3,371,767 ms              | 2,524,242 ms                        | The 10 threads was about 2,000,000 ms faster than having 1 thread on the same instance           |
-| Case 3 AWS MASTER: HTTP/10 threads/No connection pooling  | log_processing_apache_master_ncp_10.txt        | 124 ms                                 | 5,815,637 ms ms              |  4,552,608 ms                       | No connection pooling is slower than having 10 threads with connection pooling      |
-| **Scaled Version Test Plan**                   | **Graph Results Screenshot** | **Average Query Time(ms)** | **Average Search Servlet Time(ms)** | **Average JDBC Time(ms)** | **Analysis** |
-|------------------------------------------------|------------------------------|----------------------------|-------------------------------------|---------------------------|--------------|
-| Case 1 AWS SLAVE: HTTP/1 thread                | log_processing_apache_slave_cp_1.txt            | 115 ms     | 1,370,663 ms                      | 624,810 ms             | Similar to results of master, having 1 thread is slower compared to 10 threads, but is faster than running the single instance           |
-| Case 2 AWS SLAVE: HTTP/10 threads              | log_processing_apache_slave_cp_10.txt           | 109     | 3,508,806 ms                        | 2,648,711 ms              | 10 threads results in faster execution time than 1 thread           |
-| Case 3 AWS SLAVE: HTTP/10 threads/No connection pooling  | log_processing_apache_slave_ncp_10.txt   | 124 ms   | 5,891,018 ms                       |  4,519,064 ms              | No connection pooling results in slower execution time than having connection pooling           |
+| Case 1 AWS: HTTP/1 thread                          | log_processing_apache_master_cp_1.txt          | 115 ms                                 | M = 1,520,610; S = 1,370,663 ms      | M = 614,266 ms; S = 624,810 ms        | For both scaled instances, the Jmeter tests produced 2 sets of data, one on master instance, another on slave instance. On the AWS Load Balancer, again 1 thread was faster than 10 threads, but this is because creating the threads led to an expense in execution time, and with connection pooling enabled, it was even faster.          |
+| Case 2 AWS: HTTP/10 threads                        | log_processing_apache_master_cp_10.txt         | 109 ms                                  | M = 3,371,767 ms; S = 3,508,806 ms             | M = 2,524,242 ms; S = 2,648,711 ms     | The 10 threads was about ms faster than having 1 thread on the same instance           |
+| Case 3 AWS: HTTP/10 threads/No connection pooling  | log_processing_apache_master_ncp_10.txt        | 124 ms                                 | M = 5,815,637 ms; S = 5,891,018 ms              |  M = 4,552,608 ms; S = 4,519,064 ms  | No connection pooling led to the slowest execution time for the AWS load balancer.     |
 **Scaled Version Test Plan**                   | **Graph Results Screenshot** | **Average Query Time(ms)** | **Average Search Servlet Time(ms)** | **Average JDBC Time(ms)** | **Analysis** |
 |------------------------------------------------|------------------------------|----------------------------|-------------------------------------|---------------------------|--------------|
-| Case 1 GCP MASTER: HTTP/1 thread                          | log_processing_gcp_master_cp_1.txt  | 108 ms                         | 1,348,639 ms                                   | 607,806 ms                        | GCP takes the longest amount of time, and most so with the single thread because there is a netwrok latency           |
-| Case 2 GCP MASTER: HTTP/10 threads                        | log_processing_gcp_master_cp_10.txt    | 100 ms                      | 3,662,841 ms                                 | 2,788,663 ms                        | 10 threads had faster execution time than single thread           |
-| Case 3 GCP MASTER: HTTP/10 threads/No connection pooling  | log_processing_gcp_master_ncp_10.txt   | 117 ms                       | 7,151,798,900 ms                                | 4,601,459 ms                       |           | Without connection pooling and 10 threads, the results were slower than with connection pooling and only 1 thread
-| **Scaled Version Test Plan**                   | **Graph Results Screenshot** | **Average Query Time(ms)** | **Average Search Servlet Time(ms)** | **Average JDBC Time(ms)** | **Analysis** |
-|------------------------------------------------|------------------------------|----------------------------|-------------------------------------|---------------------------|--------------|
-| Case 1 GCP SLAVE: HTTP/1 thread                          | log_processing_gcp_slave_cp_1.txt  | 107/108 ms        | 1,475,805 ms                         | 642,546 ms                |  Similar to results of master, single thread results in more execution time than 10 threads on same instance          |
-| Case 2 GCP SLAVE: HTTP/10 threads                        | log_processing_gcp_slave_cp_10.txt  |  100/112 ms      | 3,671,920 ms                        | 2,786,886 ms              | With connection pooling and 10 threads, the execution time was the fastest           |
-| Case 3 GCP SLAVE: HTTP/10 threads/No connection pooling  | log_processing_gcp_slave_ncp_10.txt   | 120 ms     | 6,234,668 ms                        |  4,281,205 ms             |   Without connection pooling, the results are seen to be slower than with connection pooling         |
-
-
+| Case 1 GCP: HTTP/1 thread                          | log_processing_gcp_master_cp_1.txt  | 108 ms                         | M = 1,348,639 ms; S = 1,475,805 ms   | M = 607,806 ms; S = 642,546 ms     |  |
+| Case 2 GCP: HTTP/10 threads                        | log_processing_gcp_master_cp_10.txt    | 100 ms                      | M = 3,662,841 ms; S = 3,671,920 ms      | M = 2,788,663 ms; S = 2,786,886 ms    | 10 threads had faster execution time than single thread           |
+| Case 3 GCP: HTTP/10 threads/No connection pooling  | log_processing_gcp_master_ncp_10.txt   | 117 ms                       | M = 7,151,798,900 ms; S = 6,234,668 ms   | M = 4,601,459 ms; S = 4,281,205 ms | Since the GCP is on an external Google Cloud platform, not on the AWS network platform, there is a network latency for execution time. This is why the time here is slower than the others, in addition to no connection pooling enabled. |
