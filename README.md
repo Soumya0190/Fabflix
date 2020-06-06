@@ -117,25 +117,25 @@ cs122b-spring20-team-3/WebApp/src/main/java/CVerifyPassword.java
  
 | **Single-instance Version Test Plan**          | **Graph Results Screenshot** | **Average Query Time(ms)** | **Average Search Servlet Time(ms)** | **Average JDBC Time(ms)** | **Analysis** |
 |------------------------------------------------|------------------------------|----------------------------|-------------------------------------|---------------------------|--------------|
-| Case 1: HTTP/1 thread                          | ![](path to image in img/)   | 217                       | ??                                  | ??                        | ??           |
-| Case 2: HTTP/10 threads                        | ![](path to image in img/)   | ??                         | ??                                  | ??                        | ??           |
-| Case 3: HTTPS/10 threads                       | ![](path to image in img/)   | ??                         | ??                                  | ??                        | ??           |
-| Case 4: HTTP/10 threads/No connection pooling  | ![](path to image in img/)   | ??                         | ??                                  | ??                        | ??           |
+| Case 1: HTTP/1 thread                          | ![](path to image in img/)   | 217                       | 1302903 ms                                 | 720764 ms                        | 1 thread took longer than 10 threads           |
+| Case 2: HTTP/10 threads                        | ![](path to image in img/)   | ??                         | 8691160 ms                                  | 6454065 ms                        | ??           |
+| Case 3: HTTPS/10 threads                       | ![](path to image in img/)   | ??                         | 9309436 ms                                  | 7879926 ms                        | ??           |
+| Case 4: HTTP/10 threads/No connection pooling  | ![](path to image in img/)   | ??                         | 10684810 ms                                  | 8246870                        | ??           |
  
 | **Scaled Version Test Plan**                   | **Graph Results Screenshot** | **Average Query Time(ms)** | **Average Search Servlet Time(ms)** | **Average JDBC Time(ms)** | **Analysis** |
 |------------------------------------------------|------------------------------|----------------------------|-------------------------------------|---------------------------|--------------|
-| Case 1 AWS MASTER: HTTP/1 thread                          | ![](path to image in img/)   | 108                         | ??                                  | ??                        | ??           |
-| Case 2 AWS MASTER: HTTP/10 threads                        | ![](path to image in img/)   | ??                         | ??                                  | ??                        | ??           |
-| Case 3 AWS MASTER: HTTP/10 threads/No connection pooling  | ![](path to image in img/)   | 117                         | ??                                  | ??                        | ??           |
+| Case 1 AWS MASTER: HTTP/1 thread                          | ![](path to image in img/)   | 108                         | 1106077 ms                                  | 573739 ms                        | ??           |
+| Case 2 AWS MASTER: HTTP/10 threads                        | ![](path to image in img/)   | ??                         | 4025746 ms                                  | 3061537 ms                        | ??           |
+| Case 3 AWS MASTER: HTTP/10 threads/No connection pooling  | ![](path to image in img/)   | 117                         | ??                                  | 3150529 ms                         | 2207705 ms           |
 | **Scaled Version Test Plan**                   | **Graph Results Screenshot** | **Average Query Time(ms)** | **Average Search Servlet Time(ms)** | **Average JDBC Time(ms)** | **Analysis** |
 |------------------------------------------------|------------------------------|----------------------------|-------------------------------------|---------------------------|--------------|
-| Case 1 AWS SLAVE: HTTP/1 thread                          | ![](path to image in img/)   | 108                       | ??                                  | ??                        | ??           |
-| Case 2 AWS SLAVE: HTTP/10 threads                        | ![](path to image in img/)   | ??                         | ??                                  | ??                        | ??           |
-| Case 3 AWS SLAVE: HTTP/10 threads/No connection pooling  | ![](path to image in img/)   | 117                        | ??                                  | ??                        | ??           |
+| Case 1 AWS SLAVE: HTTP/1 thread                          | ![](path to image in img/)   | 108                       | 1143968 ms                                  | 569903 ms                        | ??           |
+| Case 2 AWS SLAVE: HTTP/10 threads                        | ![](path to image in img/)   | ??                         | 110759871 ms                                  | 3057154 ms                        | ??           |
+| Case 3 AWS SLAVE: HTTP/10 threads/No connection pooling  | ![](path to image in img/)   | 117                        |  2858440 ms                                | 2025506 ms                        | ??           |
 **Scaled Version Test Plan**                   | **Graph Results Screenshot** | **Average Query Time(ms)** | **Average Search Servlet Time(ms)** | **Average JDBC Time(ms)** | **Analysis** |
 |------------------------------------------------|------------------------------|----------------------------|-------------------------------------|---------------------------|--------------|
-| Case 1 GCP MASTER: HTTP/1 thread                          | ![](path to image in img/)   | 109                         | ??                                  | ??                        | ??           |
-| Case 2 GCP MASTER: HTTP/10 threads                        | ![](path to image in img/)   | ??                         | ??                                  | ??                        | ??           |
+| Case 1 GCP MASTER: HTTP/1 thread                          | ![](path to image in img/)   | 109                         | 1092474 ms                                  | 576821 ms                        | GCP takes the longest amount of time because there is a netwrok latency           |
+| Case 2 GCP MASTER: HTTP/10 threads                        | ![](path to image in img/)   | ??                         | 4607613 ms                                  | 3551625 ms                        | ??           |
 | Case 3 GCP MASTER: HTTP/10 threads/No connection pooling  | ![](path to image in img/)   | 118                       | ??                                  | ??                        | ??           |
 | **Scaled Version Test Plan**                   | **Graph Results Screenshot** | **Average Query Time(ms)** | **Average Search Servlet Time(ms)** | **Average JDBC Time(ms)** | **Analysis** |
 |------------------------------------------------|------------------------------|----------------------------|-------------------------------------|---------------------------|--------------|
