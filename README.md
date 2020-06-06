@@ -68,9 +68,45 @@ cs122b-spring20-team-3/WebApp/src/main/java/SingleStarServlet.java
 cs122b-spring20-team-3/WebApp/src/main/java/UpdateSecurePassword.java
 cs122b-spring20-team-3/WebApp/src/main/java/VerifyPassword.java
     
-    - #### Explain how Connection Pooling is utilized in the Fabflix code.
-    
+   - #### Explain how Connection Pooling is utilized in the Fabflix code.
+1. For Fabflix, I have added added connection pool settings in resources in context.xml  
+2. for slaveDB (read operations), I have used resource name = jdbc/moviedb
+<Resource name="jdbc/moviedb"
+          auth="Container"
+          driverClassName="com.mysql.jdbc.Driver"
+          factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
+          type="javax.sql.DataSource"
+          maxTotal="100" maxIdle="30" maxWaitMillis="10000"
+          username="mytestuser"
+          password="mypassword"
+          url="jdbc:mysql://localhost:3306/moviedb?autoReconnect=true&amp;useSSL=false&amp;cachePrepStmts=true" />
+3. for masterDB (insert/update operations), I am using jdbc/masterdb 
+<Resource name="jdbc/masterdb"
+          auth="Container"
+          driverClassName="com.mysql.jdbc.Driver"
+          factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
+          type="javax.sql.DataSource"
+          maxTotal="100" maxIdle="30" maxWaitMillis="10000"
+          username="mytestuser"
+          password="mypassword"
+          url="jdbc:mysql://172.31.24.250:3306/moviedb?autoReconnect=true&amp;useSSL=false&amp;cachePrepStmts=true"/>
+
+
+2. I have made changes to servlet when JDBC connection is used
+Context initContext = new InitialContext();
+Context envContext = (Context) initContext.lookup("java:/comp/env"); 
+DataSource ds = (DataSource) envContext.lookup("jdbc/moviedb");
+Connection connection = ds.getConnection();
+
+By adding connection pooling , connections are reused rather than created each time a connection is requested. Connection pooling is performed in the background and does not affect how an application is coded; however, the application must use a DataSource object to obtain a connection instead of using the DriverManager class. 
+The lookup returns a connection from the pool if one is available. in my configuration, there are 100 connection in connection pool, max idle connections are 30, i have added autoconnect=true.
+The closing event on a pooled connection signals the pooling module to place the connection back in the connection pool for future reuse.
+
+
+
     - #### Explain how Connection Pooling works with two backend SQL.
+    
+We have implemented Master-Slave configuration in MySQL. Master allows Read and write operations while slave is read only. We have two AWS VM Servers with Tomcat and Mysql server running on each of them. The Connection pooling helps managing the connections to the database more efficiently. 
     
  
 - # Master/Slave
@@ -96,9 +132,27 @@ cs122b-spring20-team-3/WebApp/src/main/java/SAXParserStar.java
 cs122b-spring20-team-3/WebApp/src/main/java/SAXParserMovie.java
  
     - #### How read/write requests were routed to Master/Slave SQL?
-    We update value of parameter called "read_only" with value of "1" in a configuration file called /etc/mysql/my.cnf on Slave node. This enforces "read only" operation in the  slave node.
-    
-    
+  I have created two resources, for read only operations, resource for slave is used and for write/update masterdb resource is used
+    resource moviedb is for slave DB
+    <Resource name="jdbc/moviedb"
+          auth="Container"
+          driverClassName="com.mysql.jdbc.Driver"
+          factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
+          type="javax.sql.DataSource"
+          maxTotal="100" maxIdle="30" maxWaitMillis="10000"
+          username="mytestuser"
+          password="mypassword"
+          url="jdbc:mysql://localhost:3306/moviedb?autoReconnect=true&amp;useSSL=false&amp;cachePrepStmts=true" />
+3. for masterDB (insert/update operations), I am using jdbc/masterdb 
+<Resource name="jdbc/masterdb"
+          auth="Container"
+          driverClassName="com.mysql.jdbc.Driver"
+          factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
+          type="javax.sql.DataSource"
+          maxTotal="100" maxIdle="30" maxWaitMillis="10000"
+          username="mytestuser"
+          password="mypassword"
+          url="jdbc:mysql://172.31.24.250:3306/moviedb?autoReconnect=true&amp;useSSL=false&amp;cachePrepStmts=true"/>
  
 - # JMeter TS/TJ Time Logs
     - #### Instructions of how to use the `log_processing.*` script to process the JMeter logs.
