@@ -139,8 +139,8 @@ cs122b-spring20-team-3/WebApp/src/main/java/CVerifyPassword.java
 | Case 3 GCP MASTER: HTTP/10 threads/No connection pooling  | ![](path to image in img/)   | 118                       | ??                                  | ??                        | ??           |
 | **Scaled Version Test Plan**                   | **Graph Results Screenshot** | **Average Query Time(ms)** | **Average Search Servlet Time(ms)** | **Average JDBC Time(ms)** | **Analysis** |
 |------------------------------------------------|------------------------------|----------------------------|-------------------------------------|---------------------------|--------------|
-| Case 1 GCP SLAVE: HTTP/1 thread                          | ![](path to image in img/)   | 109                        | ??                                  | ??                        | ??           |
-| Case 2 GCP SLAVE: HTTP/10 threads                        | ![](path to image in img/)   | ??                         | ??                                  | ??                        | ??           |
+| Case 1 GCP SLAVE: HTTP/1 thread                          | ![](path to image in img/)   | 109                        | ??                                  | 1123661 ms                        | 569278 ms           |
+| Case 2 GCP SLAVE: HTTP/10 threads                        | ![](path to image in img/)   |                          | 5561143 ms                                  | 4412899 ms                        | ??           |
 | Case 3 GCP SLAVE: HTTP/10 threads/No connection pooling  | ![](path to image in img/)   | 118                       | ??                                  | ??                        | ??           |
 
 
