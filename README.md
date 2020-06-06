@@ -54,20 +54,19 @@ which will now show the newly deployed project.
 cs122b-spring20-team-3/WebApp/web/META-INF/context.xml
 cs122b-spring20-team-3/WebApp/web/WEB-INF/web.xml
 cs122b-spring20-team-3/WebApp/src/main/java/ConfirmationServlet.java
-cs122b-spring20-team-3/WebApp/src/main/java/CConfirmationServlet.java
-cs122b-spring20-team-3/WebApp/src/main/java/CDashboardServlet.java
-cs122b-spring20-team-3/WebApp/src/main/java/CEmployeeLoginServlet.java
-cs122b-spring20-team-3/WebApp/src/main/java/CLoginServlet.java
-cs122b-spring20-team-3/WebApp/src/main/java/CMovieListServlet.java
-cs122b-spring20-team-3/WebApp/src/main/java/CPaymentServlet.java
-cs122b-spring20-team-3/WebApp/src/main/java/CSAXParserActor.java
-cs122b-spring20-team-3/WebApp/src/main/java/CSAXParserStar.java
-cs122b-spring20-team-3/WebApp/src/main/java/CSAXParserMovie.java
-cs122b-spring20-team-3/WebApp/src/main/java/CSearchServlet.java
-cs122b-spring20-team-3/WebApp/src/main/java/CSingleMovieServlet.java
-cs122b-spring20-team-3/WebApp/src/main/java/CSingleStarServlet.java
-cs122b-spring20-team-3/WebApp/src/main/java/CUpdateSecurePassword.java
-cs122b-spring20-team-3/WebApp/src/main/java/CVerifyPassword.java
+cs122b-spring20-team-3/WebApp/src/main/java/DashboardServlet.java
+cs122b-spring20-team-3/WebApp/src/main/java/EmployeeLoginServlet.java
+cs122b-spring20-team-3/WebApp/src/main/java/LoginServlet.java
+cs122b-spring20-team-3/WebApp/src/main/java/MovieListServlet.java
+cs122b-spring20-team-3/WebApp/src/main/java/PaymentServlet.java
+cs122b-spring20-team-3/WebApp/src/main/java/SAXParserActor.java
+cs122b-spring20-team-3/WebApp/src/main/java/SAXParserStar.java
+cs122b-spring20-team-3/WebApp/src/main/java/SAXParserMovie.java
+cs122b-spring20-team-3/WebApp/src/main/java/SearchServlet.java
+cs122b-spring20-team-3/WebApp/src/main/java/SingleMovieServlet.java
+cs122b-spring20-team-3/WebApp/src/main/java/SingleStarServlet.java
+cs122b-spring20-team-3/WebApp/src/main/java/UpdateSecurePassword.java
+cs122b-spring20-team-3/WebApp/src/main/java/VerifyPassword.java
     
     - #### Explain how Connection Pooling is utilized in the Fabflix code.
     
@@ -76,23 +75,25 @@ cs122b-spring20-team-3/WebApp/src/main/java/CVerifyPassword.java
  
 - # Master/Slave
     - #### Include the filename/path of all code/configuration files in GitHub of routing queries to Master/Slave SQL.
-    cs122b-spring20-team-3/WebApp/web/META-INF/context.xml
-cs122b-spring20-team-3/WebApp/web/WEB-INF/web.xml
+    
+    for slave readonly I have changed below files
 cs122b-spring20-team-3/WebApp/src/main/java/ConfirmationServlet.java
-cs122b-spring20-team-3/WebApp/src/main/java/CConfirmationServlet.java
-cs122b-spring20-team-3/WebApp/src/main/java/CDashboardServlet.java
-cs122b-spring20-team-3/WebApp/src/main/java/CEmployeeLoginServlet.java
-cs122b-spring20-team-3/WebApp/src/main/java/CLoginServlet.java
-cs122b-spring20-team-3/WebApp/src/main/java/CMovieListServlet.java
-cs122b-spring20-team-3/WebApp/src/main/java/CPaymentServlet.java
-cs122b-spring20-team-3/WebApp/src/main/java/CSAXParserActor.java
-cs122b-spring20-team-3/WebApp/src/main/java/CSAXParserStar.java
-cs122b-spring20-team-3/WebApp/src/main/java/CSAXParserMovie.java
-cs122b-spring20-team-3/WebApp/src/main/java/CSearchServlet.java
-cs122b-spring20-team-3/WebApp/src/main/java/CSingleMovieServlet.java
-cs122b-spring20-team-3/WebApp/src/main/java/CSingleStarServlet.java
-cs122b-spring20-team-3/WebApp/src/main/java/CUpdateSecurePassword.java
-cs122b-spring20-team-3/WebApp/src/main/java/CVerifyPassword.java
+cs122b-spring20-team-3/WebApp/src/main/java/DashboardServlet.java
+cs122b-spring20-team-3/WebApp/src/main/java/EmployeeLoginServlet.java
+cs122b-spring20-team-3/WebApp/src/main/java/LoginServlet.java
+cs122b-spring20-team-3/WebApp/src/main/java/MovieListServlet.java
+cs122b-spring20-team-3/WebApp/src/main/java/PaymentServlet.java
+cs122b-spring20-team-3/WebApp/src/main/java/SearchServlet.java
+cs122b-spring20-team-3/WebApp/src/main/java/SingleMovieServlet.java
+cs122b-spring20-team-3/WebApp/src/main/java/SingleStarServlet.java
+
+cs122b-spring20-team-3/WebApp/src/main/java/VerifyPassword.java
+
+for masterdb, I have chnaged below files
+cs122b-spring20-team-3/WebApp/src/main/java/UpdateSecurePassword.java
+cs122b-spring20-team-3/WebApp/src/main/java/SAXParserActor.java
+cs122b-spring20-team-3/WebApp/src/main/java/SAXParserStar.java
+cs122b-spring20-team-3/WebApp/src/main/java/SAXParserMovie.java
  
     - #### How read/write requests were routed to Master/Slave SQL?
     We update value of parameter called "read_only" with value of "1" in a configuration file called /etc/mysql/my.cnf on Slave node. This enforces "read only" operation in the  slave node.
