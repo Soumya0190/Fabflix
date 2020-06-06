@@ -1,99 +1,212 @@
-# Project 3: Fabflix
-By: Soumya Sharma
-___
+# General
+    - #### Team#: Team 3
 
-##Note
-I had to delete all previous commits because there were many conflicts with merging latest files
+    - #### Names: Soumya Sharma
 
-##Full Text Search on Title
-CREATE FULLTEXT INDEX idx ON movies(title);
+    - #### Project 5 Video Demo Link: https://youtu.be/ZvpoAU0Pw5c 
 
-##Prepared Statements
-Changed Prepared Statements for the Following Files:
-Confirmation Servlet (for updating Sales Data)
-Link: https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-3/blob/master/src/main/java/ConfirmationServlet.java 
-Movie-List Servlet
-Link: https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-3/blob/master/src/main/java/MovieListServlet.java
-Payment Servlet
-Link: https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-3/blob/master/src/main/java/PaymentServlet.java
+    - #### Instruction of deployment:
+    
+    ## Deployment Instructions
+In order to deploy the project to Tomcat, follow below 
 
-##Inconsistencies
-- Extracted starName and movieID from casts.xml
-- Generated id for starName and saved data in record
-- If movieID is invalid (doesn't exist in movie table), then did not add star to the movie
-
-
-##Parsing Optimization Strategies
-- Removed old indexes before loading and then recreated indexes after
-- Attempted to execute batch statements 
-- Done analysis of indexes on the table, there are already primary indexes on the tables, but stars table can have index on name that might help for large data sets because we are searching with name
-- In Movies, index can be created on title, year, and director to improve the performance because these are the used search criterias
-- As per my research, indexes are only effective if there are lot of records
-- SAX Parser is more efficient than DOM Parser for larger files
-
-
-
-
-## Demo 
-YouTube Video URL: https://youtu.be/x9ZtjQJrLzQ
-
-##Assumptions
-Movie is not added to database if genre name is not provided in xml file, and reported to inconsistency_report_movie.txt
-
-## Deployment Instructions
-In order to deploy the project to Tomcat. 
-First, navigate to the **bin** directory of Tomcat and run **./startup.sh**. 
+(1) Navigate to the **bin** directory of Tomcat and run **./startup.sh**. 
 This ensures that the Tomcat server is running. 
-Then clone the project into your choice of directory and navigate to the directory in which **pom.xml** is located. 
-Run **mvn clean package** in order to generate the **.war** file which will be located within the target directory. 
-Copy this war file to the **webapps** directory of Tomcat using **cp ./target/*.war /PATH_TO_TOMCAT/webapps** (i.e. home/ubuntu/tomcat/webapps).
-Then need to execute the sql files which have the stored procedures. This can be done with **sudo mysql moviedb < "filename"** where filename
-will be "addStarMovie_SP.sql", "addStar_SP.sql", "addMovie_SP.sql", "showDBMetaData_SP.sql", and "employeeTable.sql".
-Lastly, the parsers will need to be executed, which can be done with the commands -
-**mvn exec:java -Dexec.mainClass=main.java.SAXParserMovie**, **mvn exec:java -Dexec.mainClass=main.java.SAXParserActor**,
-and **mvn exec:java -Dexec.mainClass=main.java.SAXParserStar**  
-Navigate to the Tomcat manager page on **http://localhost:8080/manager/html** which will now show the newly deployed project. 
-These permission needed to be given to user:
-GRANT EXECUTE ON PROCEDURE moviedb.addStar  TO mytestuser; 
-GRANT EXECUTE ON PROCEDURE moviedb.addStarMovie  TO mytestuser; 
-GRANT EXECUTE ON PROCEDURE moviedb.addStarInBatch  TO mytestuser; 
-Click on it and you will see the project! 
 
-## Functionalities
-This project has several webpages, as listed: Login Page, Search Page, Movie List Page, Single Movie Page, Single Star Page, Shopping Cart Page, Payment Form, Confirmation Page 
+(2) Clone the project into your choice of directory. 
+This project has 2 directories inside, the AndroidApp directory for android project, and the 
+WebApp directory for the web application. 
 
-The project has the following functionalities:
-- Redirect any other pages to Login Page if not logged in
-- Show error message with incorrect user name or password
-- Use HTTP POST for user login, as this is more secire than HTTP GET method
-- Login with correct user name and password
-- Access to searching and browsing pages/functionalities
-    - Search by title
-    - Search by year
-    - Search by director
-    - Search by star's name
-    - Substring Matching is implemented for searching title/director/star using the LIKE % predicate for fuzzy searches, in format: %keyword%. If keyword is anywhere in the text input, it will show up in the results
-- Jump among movie list page, single movie page, and single star page without using browser history or changing url
-- Show at least (title(hyperlinked), year, director, list of genres(hyperlinked), list of stars(hyperlinked)), rating
-- Implemented Pagination. Frontend cache and backend cache both can not exceed 100 records 
-- Created pagination buttons. it shows maximum 10 page numbers at a time, based on click on the page, it recalculates number of pages shown e.g. if there are 15 pages. It will show first 10 , on clicking page number 4 will show 4-14 in the pagincation section.
-- Change number of listings N per page
-- Sort on title by clicking header (clicking on title header column will toggle ascending and decensding of the title, it will rearrange rest of the data accordingly.
-- Sort on rating - implemented same logic for title for rating (this is numeric sorting instead of alpha)
-- Browse by movie title first alphanumeric letter - click on each letter jumps to movie list page only consists of movies starting with this letter
-- Browse by genres - click on each genre jumps to Movie List Page which only consists of movies of this genre
-- Display information about current shopping cart
- - Modify quantity using an input box and only allow valid values (numbers that >= 0)
-- Modify quantity using an input box and only allow valid values (numbers that >= 0). Ask for basic customer transactional information
-- Show error message with incorrect input
-- Insert sale record in ''moviedb.sales" table
-- Show confirmation message, containing order details - sale ID, movies purchased and the quantity
- - "Check Out" button for every page after login - jump to shopping cart page
- - Modify quantity using an input box and only allow valid values (numbers that >= 0) 
-""Add to Cart"" button for each movie in ""Movie List"" page and ""Single Movie"" page"
-- Show efforts to beautify the page and table using CSS and JavaScript - i have implemneted css consistently , but due to shortage of time, model pops are not implemented everywhere and added alerts for faster delivery. 
--Update and Delete items from shopping cart
-- Due to shortage of time logout and about is not imeplemneted, but will add next time. (it is optional, and not part of rubric score)
-Use Microservices Architecture (front-end back-end separation)
+**----------- To Run The Web Application ---------**
 
-The project is implemented using Microservice Architecture with CSS, HTML, JavaScript, and Java
+(3) Navigate to the WebApp directory, in which **pom.xml** is located. 
+
+(4) Run **mvn clean package** to generate the **.war** file, which will be created within the target directory. 
+
+(5) Copy this war file to the **webapps** directory of Tomcat using 
+**cp ./target/*.war /PATH_TO_TOMCAT/webapps** (i.e. home/ubuntu/tomcat/webapps).
+
+(6) Run the following links on the browser to connect to the different instances
+
+Project deployed on Master Instance: http://18.191.106.30:8080/cs122b-spring20-team-3/
+
+Project deployed on Slave Instance: http://3.21.240.182:8080/cs122b-spring20-team-3/
+
+Project deployed on AWS Load Balancer: http://18.221.207.68:80/cs122b-spring20-team-3/ 
+
+Project deployed on GCP Load Balancer: http://35.202.189.23:80/cs122b-spring20-team-3/  
+
+Project deployed on Original Instance (used on all the other projects): http://3.14.14.154:8080/cs122b-spring20-team-3/  
+
+
+
+
+    - #### Collaborations and Work Distribution: Solo
+
+
+- # Connection Pooling
+    - #### Include the filename/path of all code/configuration files in GitHub of using JDBC Connection Pooling.
+***cs122b-spring20-team-3/WebApp/web/META-INF/context.xml
+
+***cs122b-spring20-team-3/WebApp/web/WEB-INF/web.xml
+
+***cs122b-spring20-team-3/WebApp/src/main/java/ConfirmationServlet.java
+
+***cs122b-spring20-team-3/WebApp/src/main/java/DashboardServlet.java
+
+***cs122b-spring20-team-3/WebApp/src/main/java/EmployeeLoginServlet.java
+
+***cs122b-spring20-team-3/WebApp/src/main/java/LoginServlet.java
+
+***cs122b-spring20-team-3/WebApp/src/main/java/MovieListServlet.java
+
+***cs122b-spring20-team-3/WebApp/src/main/java/PaymentServlet.java
+
+***cs122b-spring20-team-3/WebApp/src/main/java/SAXParserActor.java
+
+***cs122b-spring20-team-3/WebApp/src/main/java/SAXParserStar.java
+
+***cs122b-spring20-team-3/WebApp/src/main/java/SAXParserMovie.java
+
+***cs122b-spring20-team-3/WebApp/src/main/java/SearchServlet.java
+
+***cs122b-spring20-team-3/WebApp/src/main/java/SingleMovieServlet.java
+
+***cs122b-spring20-team-3/WebApp/src/main/java/SingleStarServlet.java
+
+***cs122b-spring20-team-3/WebApp/src/main/java/UpdateSecurePassword.java
+
+***cs122b-spring20-team-3/WebApp/src/main/java/VerifyPassword.java
+    
+   - #### Explain how Connection Pooling is utilized in the Fabflix code.
+1. For Fabflix, I have added added connection pool settings in resources in context.xml  
+2. For slaveDB (read only operations), I have used resource name = jdbc/moviedb
+
+<Resource name="jdbc/moviedb"
+          auth="Container"
+          driverClassName="com.mysql.jdbc.Driver"
+          factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
+          type="javax.sql.DataSource"
+          maxTotal="100" maxIdle="30" maxWaitMillis="10000"
+          username="mytestuser"
+          password="mypassword"
+          url="jdbc:mysql://localhost:3306/moviedb?autoReconnect=true&amp;useSSL=false&amp;cachePrepStmts=true" />
+          
+3. For masterDB (insert/update operations), I am using jdbc/masterdb
+ 
+<Resource name="jdbc/masterdb"
+          auth="Container"
+          driverClassName="com.mysql.jdbc.Driver"
+          factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
+          type="javax.sql.DataSource"
+          maxTotal="100" maxIdle="30" maxWaitMillis="10000"
+          username="mytestuser"
+          password="mypassword"
+          url="jdbc:mysql://172.31.24.250:3306/moviedb?autoReconnect=true&amp;useSSL=false&amp;cachePrepStmts=true"/>
+
+
+2. The following changes are made to the servlets where JDBC connection is used
+
+Context initContext = new InitialContext();
+Context envContext = (Context) initContext.lookup("java:/comp/env"); 
+DataSource ds = (DataSource) envContext.lookup("jdbc/moviedb");
+Connection connection = ds.getConnection();
+
+By adding connection pooling , connections are reused rather than created each time a connection is requested. 
+Connection pooling is performed in the background and does not affect how an application is coded; however, 
+the application must use a DataSource object to obtain a connection instead of using the DriverManager class. 
+The lookup returns a connection from the pool if one is available. in my configuration, there are 100 connection in connection pool, 
+max idle connections are 30, i have added autoconnect=true.
+The closing event on a pooled connection signals the pooling module to place the connection back in the connection pool for future reuse.
+
+
+
+    - #### Explain how Connection Pooling works with two backend SQL.
+    
+The Master-Slave configuration is implemented in MySQL. 
+Master allows read and write operations while the slave aloows only read operation. 
+Used two AWS VM Servers with Tomcat and Mysql server running on each of them. 
+The Connection pooling helps managing the connections to the database more efficiently. 
+    
+ 
+- # Master/Slave
+    - #### Include the filename/path of all code/configuration files in GitHub of routing queries to Master/Slave SQL.
+The following below files were changed for the read-only slave master
+***cs122b-spring20-team-3/WebApp/src/main/java/ConfirmationServlet.java
+
+***cs122b-spring20-team-3/WebApp/src/main/java/DashboardServlet.java
+
+***cs122b-spring20-team-3/WebApp/src/main/java/EmployeeLoginServlet.java
+
+***cs122b-spring20-team-3/WebApp/src/main/java/LoginServlet.java
+
+***cs122b-spring20-team-3/WebApp/src/main/java/MovieListServlet.java
+
+***cs122b-spring20-team-3/WebApp/src/main/java/PaymentServlet.java
+
+***cs122b-spring20-team-3/WebApp/src/main/java/SearchServlet.java
+
+***cs122b-spring20-team-3/WebApp/src/main/java/SingleMovieServlet.java
+
+***cs122b-spring20-team-3/WebApp/src/main/java/SingleStarServlet.java
+
+***cs122b-spring20-team-3/WebApp/src/main/java/VerifyPassword.java
+
+The following files were changed for the read and write master database
+***cs122b-spring20-team-3/WebApp/src/main/java/UpdateSecurePassword.java
+
+***cs122b-spring20-team-3/WebApp/src/main/java/SAXParserActor.java
+
+***cs122b-spring20-team-3/WebApp/src/main/java/SAXParserStar.java
+
+***cs122b-spring20-team-3/WebApp/src/main/java/SAXParserMovie.java
+ 
+    - #### How read/write requests were routed to Master/Slave SQL?
+I created two resources, resource for slave is used for read only operations, and masterdb resource is used for write/update
+
+resource moviedb is for slave DB ; Resource name="jdbc/moviedb" auth="Container" driverClassName="com.mysql.jdbc.Driver" 
+factory="org.apache.tomcat.jdbc.pool.DataSourceFactory" type="javax.sql.DataSource" maxTotal="100" maxIdle="30" maxWaitMillis="10000"
+username="mytestuser" password="mypassword" url="jdbc:mysql://localhost:3306/moviedb?autoReconnect=true&amp;useSSL=false&amp;cachePrepStmts=true" />
+
+
+for masterDB (insert/update operations), I am using jdbc/masterdb ; Resource name="jdbc/masterdb" auth="Container"
+driverClassName="com.mysql.jdbc.Driver" factory="org.apache.tomcat.jdbc.pool.DataSourceFactory" type="javax.sql.DataSource"
+maxTotal="100" maxIdle="30" maxWaitMillis="10000" username="mytestuser" password="mypassword"
+url="jdbc:mysql://172.31.24.250:3306/moviedb?autoReconnect=true&amp;useSSL=false&amp;cachePrepStmts=true"/>
+          
+ 
+- # JMeter TS/TJ Time Logs
+    - #### Instructions of how to use the `log_processing.*` script to process the JMeter logs.
+    All Jmeter logs are stored in the folder titled Log Processing Files under Web Apps folder.
+    Each file is named according to the test, which is recorded in the README table under the graph results for each test case
+    The "ParseLogFile" Servlet reads all the files from the folder where all log files are saved and parses through it to output the average times, as shown in the demo video. 
+    I have written code to read each file and extracted below data
+    	1. servlet execution time for getting movie results for each request (start-time is added as first line of servlet code(doGet) and endTime is recorded in the end of servlet code 
+   	2. JDBC execution time(start-time is recorded when database connection is opened and end-time is recorded when connection is closed (for each request))
+    After extracting above data, I have added calculated below data:
+   	 1. Average TS : added  servlet execution time of all the records/requests and divided by total number of requests
+   	 2. Average TJ : added JDBC execution time of all the records/requests and divided by total number of requests
+ 
+ The parsing script was execeuted by running the command ** mvn exec:java -Dexec.mainClass=main.java.ParseLogFile **
+ An alternate way of running the ParseLogFile is on IntelliJ 
+
+- # JMeter TS/TJ Time Measurement Report
+ 
+| **Single-instance Version Test Plan**          | **Graph Results Screenshot** | **Average Query Time(ms)** | **Average Search Servlet Time(ms)** | **Average JDBC Time(ms)** | **Analysis** |
+|------------------------------------------------|------------------------------|----------------------------|-------------------------------------|---------------------------|--------------|
+| Case 1: HTTP/1 thread                          | graph_results/single__HTTP_cp_1.png; log_processing_single_cp_1.txt | 100 ms                     | 7,540,362 ms                       | 6,271,671 ms              | In our test scenario, this test case has the best performance, even better than multithreading. This must be because during the initialization time, when the connections are first opened, there is an execution expense of creating the 10 threads. Since the duration of these tests was not enough, multithreading did not benefit much in execution time. |
+| Case 2: HTTP/10 threads                        | graph_results/Single_HTTP_noCP_10.png ; log_processing_single_cp_10.txt |  235 ms                     | 7,876,373 ms                        | 6,616,776 ms              | HTTP connection pooling was faster than no connection pooling and faster than HTTPS. This must be because connection pooling sped up the execution time. |
+| Case 3: HTTPS/10 threads                       | graph_results/Single_HTTPS_10_cp.png ; log_processing_https.txt | 203 ms                          | 9,5902,816 ms                        | 6,991,626 ms              | HTTPS with connection pooling is slower than HTTP with connection pooling, both with 10 threads. This is because security enabled, there is a SSL handshake at connection level that results in execution cost and makes it little slower than HTTP.            |
+| Case 4: HTTP/10 threads/No connection pooling  | graph_results/Single_HTTP_noCP_10.png ; log_processing_single_ncp_10.txt | 611 ms                    | 113,727,073,886 ms                    | 7,987,877 ms                 | This test case with no connection pooling was much slower than the test case with connection pooling. This must be because there is no connection management and reuse of the connections happening costing the increase in execution time operations. |
+ 
+| **Scaled Version Test Plan**                   | **Graph Results Screenshot** | **Average Query Time(ms)** | **Average Search Servlet Time(ms)** | **Average JDBC Time(ms)** | **Analysis** |
+|------------------------------------------------|------------------------------|----------------------------|-------------------------------------|---------------------------|--------------|
+| Case 1 AWS: HTTP/1 thread                          | graph_results/AWS-cp-single-thread.png ; log_processing_apache_master_cp_1.txt ; log_processing_apache_slave_cp_1.txt          | 115 ms                                 | M = 1,520,610; S = 1,370,663 ms      | M = 614,266 ms; S = 624,810 ms        | For both scaled instances, the Jmeter tests produced 2 sets of data, one on master instance, another on slave instance. On the AWS Load Balancer, again 1 thread was faster than 10 threads, this must be because during the initialization time, when the connections are first opened, there is an execution expense of creating the 10 threads. Since the duration of these tests was not enough, multithreading did not benefit much in execution time. In addition, because connection pooling is enabled, it was even faster.          |
+| Case 2 AWS: HTTP/10 threads                        | graph_results/AWS_CP_10.png ; log_processing_apache_master_cp_10.txt ; log_processing_apache_slave_cp_10.txt        | 109 ms                                  | M = 3,371,767 ms; S = 3,508,806 ms             | M = 2,524,242 ms; S = 2,648,711 ms     | The 10 threads was faster than no connection pooling. This must be because connection pooling sped up the execution time.          |
+| Case 3 AWS: HTTP/10 threads/No connection pooling  | graph_results/AWS_noCP_10.png ; log_processing_apache_master_ncp_10.txt ; log_processing_apache_slave_ncp_10.txt        | 124 ms                                 | M = 5,815,637 ms; S = 5,891,018 ms              |  M = 4,552,608 ms; S = 4,519,064 ms  | No connection pooling led to the slowest execution time for the AWS load balancer. This must be because there is no connection management and reuse of the connections happening costing the increase in execution time operations.  |
+
+|**Scaled Version Test Plan**                   | **Graph Results Screenshot** | **Average Query Time(ms)** | **Average Search Servlet Time(ms)** | **Average JDBC Time(ms)** | **Analysis** |
+|------------------------------------------------|------------------------------|----------------------------|-------------------------------------|---------------------------|--------------|
+| Case 1 GCP: HTTP/1 thread                          | graph_results/GCP_CP_1.png; log_processing_gcp_master_cp_1.txt ; log_processing_gcp_slave_cp_1.txt  | 108 ms                         | M = 1,348,639 ms; S = 1,475,805 ms   | M = 607,806 ms; S = 642,546 ms     | GCP 1 thread is faster than the other tests, this may be because the duration of the test was not enough for the multithreading to be faster than single thread. |
+| Case 2 GCP: HTTP/10 threads                        | graph_results/GCP_CP_10.png ; log_processing_gcp_master_cp_10.txt ; log_processing_gcp_slave_cp_10.txt    | 100 ms                      | M = 3,662,841 ms; S = 3,671,920 ms      | M = 2,788,663 ms; S = 2,786,886 ms    | The 10 threads was faster than no connection pooling. This must be because connection pooling sped up the execution time.    |
+| Case 3 GCP: HTTP/10 threads/No connection pooling  | graph_results/GCP_noCP_10.png ; log_processing_gcp_master_ncp_10.txt ; log_processing_gcp_slave_ncp_10.txt   | 117 ms                       | M = 7,151,798,900 ms; S = 6,234,668 ms   | M = 4,601,459 ms; S = 4,281,205 ms | Since the GCP is on an external Google Cloud platform, not on the AWS network platform, there is a network latency for execution time. This is why the time here is slower than the others, in addition to no connection pooling enabled. |
