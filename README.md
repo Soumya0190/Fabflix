@@ -1,28 +1,13 @@
-# Project 4: Fabflix
-By: Soumya Sharma
-___
+# General
+    - #### Team#: Team 3
 
-## Demo
-YouTube Video URL (Project 3): https://youtu.be/x9ZtjQJrLzQ
+    - #### Names: Soumya Sharma
 
-YouTube Video URL (Project 4) : https://youtu.be/RUuZjOnDiBI
+    - #### Project 5 Video Demo Link: https://youtu.be/ZvpoAU0Pw5c
 
-Adroid is pointing to backend in AWS
-
-## Full Text Search on Title
-Created full text indexes on title of movies from moviedb database
-
-Database command : CREATE FULLTEXT INDEX idx ON movies(title);
-
-## Fuzzy Search
-Implemented in separate search box on search page
-
-Backed out at last minute due to it causing confusion with full text search
-
-Was calulating edit distance for half the length of the search query
-
-
-## Deployment Instructions
+    - #### Instruction of deployment:
+    
+    ## Deployment Instructions
 In order to deploy the project to Tomcat, follow below 
 
 (1) Navigate to the **bin** directory of Tomcat and run **./startup.sh**. 
@@ -61,42 +46,101 @@ which will now show the newly deployed project.
 
 (14) Click on the local emulator to see the android app project!
 
-
-## From Project #3
-
-## Functionalities
-This project has several webpages, as listed: Login Page, Search Page, Movie List Page, Single Movie Page, Single Star Page, Shopping Cart Page, Payment Form, Confirmation Page 
-
-The following functionalities capabilities are added under project 4:
-- Implemented full-text search on the movie title field, Jump to the corresponding Movie List Page and show correct results.
-
-The project is implemented using Microservice Architecture with CSS, HTML, JavaScript, and Java
+    - #### Collaborations and Work Distribution:
 
 
+- # Connection Pooling
+    - #### Include the filename/path of all code/configuration files in GitHub of using JDBC Connection Pooling.
+cs122b-spring20-team-3/WebApp/web/META-INF/context.xml
+cs122b-spring20-team-3/WebApp/web/WEB-INF/web.xml
+cs122b-spring20-team-3/WebApp/src/main/java/ConfirmationServlet.java
+cs122b-spring20-team-3/WebApp/src/main/java/CConfirmationServlet.java
+cs122b-spring20-team-3/WebApp/src/main/java/CDashboardServlet.java
+cs122b-spring20-team-3/WebApp/src/main/java/CEmployeeLoginServlet.java
+cs122b-spring20-team-3/WebApp/src/main/java/CLoginServlet.java
+cs122b-spring20-team-3/WebApp/src/main/java/CMovieListServlet.java
+cs122b-spring20-team-3/WebApp/src/main/java/CPaymentServlet.java
+cs122b-spring20-team-3/WebApp/src/main/java/CSAXParserActor.java
+cs122b-spring20-team-3/WebApp/src/main/java/CSAXParserStar.java
+cs122b-spring20-team-3/WebApp/src/main/java/CSAXParserMovie.java
+cs122b-spring20-team-3/WebApp/src/main/java/CSearchServlet.java
+cs122b-spring20-team-3/WebApp/src/main/java/CSingleMovieServlet.java
+cs122b-spring20-team-3/WebApp/src/main/java/CSingleStarServlet.java
+cs122b-spring20-team-3/WebApp/src/main/java/CUpdateSecurePassword.java
+cs122b-spring20-team-3/WebApp/src/main/java/CVerifyPassword.java
+    
+    - #### Explain how Connection Pooling is utilized in the Fabflix code.
+    
+    - #### Explain how Connection Pooling works with two backend SQL.
+    
+ 
+- # Master/Slave
+    - #### Include the filename/path of all code/configuration files in GitHub of routing queries to Master/Slave SQL.
+    cs122b-spring20-team-3/WebApp/web/META-INF/context.xml
+cs122b-spring20-team-3/WebApp/web/WEB-INF/web.xml
+cs122b-spring20-team-3/WebApp/src/main/java/ConfirmationServlet.java
+cs122b-spring20-team-3/WebApp/src/main/java/CConfirmationServlet.java
+cs122b-spring20-team-3/WebApp/src/main/java/CDashboardServlet.java
+cs122b-spring20-team-3/WebApp/src/main/java/CEmployeeLoginServlet.java
+cs122b-spring20-team-3/WebApp/src/main/java/CLoginServlet.java
+cs122b-spring20-team-3/WebApp/src/main/java/CMovieListServlet.java
+cs122b-spring20-team-3/WebApp/src/main/java/CPaymentServlet.java
+cs122b-spring20-team-3/WebApp/src/main/java/CSAXParserActor.java
+cs122b-spring20-team-3/WebApp/src/main/java/CSAXParserStar.java
+cs122b-spring20-team-3/WebApp/src/main/java/CSAXParserMovie.java
+cs122b-spring20-team-3/WebApp/src/main/java/CSearchServlet.java
+cs122b-spring20-team-3/WebApp/src/main/java/CSingleMovieServlet.java
+cs122b-spring20-team-3/WebApp/src/main/java/CSingleStarServlet.java
+cs122b-spring20-team-3/WebApp/src/main/java/CUpdateSecurePassword.java
+cs122b-spring20-team-3/WebApp/src/main/java/CVerifyPassword.java
+ 
+    - #### How read/write requests were routed to Master/Slave SQL?
+    We update value of parameter called "read_only" with value of "1" in a configuration file called /etc/mysql/my.cnf on Slave node. This enforces "read only" operation in the  slave node.
+    
+    
+ 
+- # JMeter TS/TJ Time Logs
+    - #### Instructions of how to use the `log_processing.*` script to process the JMeter logs.
+    I have copied all Jmeter logs and renamed files for each case
+    I have created "ParseLogFile" Servlet that read all the files from the folder where all log files are saved. 
+    I have written code to read each file and extracted below data
+    	1. servlet execution time for getting movie results for each request (start-time is added as first line of servlet code(doGet) and endTime is recorded in the end of servlet code 
+   	2. JDBC execution time(start-time is recorded when database connection is opened and end-time is recorded when connection is closed (for each request))
+    After extracting above data, I have added calculated below data:
+   	 1. Average TS : added  servlet execution time of all the records/requests and divided by total number of requests
+   	 2. Average TJ : added JDBC execution time of all the records/requests and divided by total number of requests
+ 
+ The parsing script was exceuted by running the command ** mvn exec:java -Dexec.mainClass=main.java.ParseLogFile **
+ And alternate way of running the ParseLogFile is on IntelliJ 
 
-## Prepared Statements
-Changed Prepared Statements for the Following Files: 
+- # JMeter TS/TJ Time Measurement Report
+ 
+| **Single-instance Version Test Plan**          | **Graph Results Screenshot** | **Average Query Time(ms)** | **Average Search Servlet Time(ms)** | **Average JDBC Time(ms)** | **Analysis** |
+|------------------------------------------------|------------------------------|----------------------------|-------------------------------------|---------------------------|--------------|
+| Case 1: HTTP/1 thread                          | ![](path to image in img/)   | 217                       | ??                                  | ??                        | ??           |
+| Case 2: HTTP/10 threads                        | ![](path to image in img/)   | ??                         | ??                                  | ??                        | ??           |
+| Case 3: HTTPS/10 threads                       | ![](path to image in img/)   | ??                         | ??                                  | ??                        | ??           |
+| Case 4: HTTP/10 threads/No connection pooling  | ![](path to image in img/)   | ??                         | ??                                  | ??                        | ??           |
+ 
+| **Scaled Version Test Plan**                   | **Graph Results Screenshot** | **Average Query Time(ms)** | **Average Search Servlet Time(ms)** | **Average JDBC Time(ms)** | **Analysis** |
+|------------------------------------------------|------------------------------|----------------------------|-------------------------------------|---------------------------|--------------|
+| Case 1 AWS MASTER: HTTP/1 thread                          | ![](path to image in img/)   | 108                         | ??                                  | ??                        | ??           |
+| Case 2 AWS MASTER: HTTP/10 threads                        | ![](path to image in img/)   | ??                         | ??                                  | ??                        | ??           |
+| Case 3 AWS MASTER: HTTP/10 threads/No connection pooling  | ![](path to image in img/)   | 117                         | ??                                  | ??                        | ??           |
+| **Scaled Version Test Plan**                   | **Graph Results Screenshot** | **Average Query Time(ms)** | **Average Search Servlet Time(ms)** | **Average JDBC Time(ms)** | **Analysis** |
+|------------------------------------------------|------------------------------|----------------------------|-------------------------------------|---------------------------|--------------|
+| Case 1 AWS SLAVE: HTTP/1 thread                          | ![](path to image in img/)   | 108                       | ??                                  | ??                        | ??           |
+| Case 2 AWS SLAVE: HTTP/10 threads                        | ![](path to image in img/)   | ??                         | ??                                  | ??                        | ??           |
+| Case 3 AWS SLAVE: HTTP/10 threads/No connection pooling  | ![](path to image in img/)   | 117                        | ??                                  | ??                        | ??           |
+**Scaled Version Test Plan**                   | **Graph Results Screenshot** | **Average Query Time(ms)** | **Average Search Servlet Time(ms)** | **Average JDBC Time(ms)** | **Analysis** |
+|------------------------------------------------|------------------------------|----------------------------|-------------------------------------|---------------------------|--------------|
+| Case 1 GCP MASTER: HTTP/1 thread                          | ![](path to image in img/)   | 109                         | ??                                  | ??                        | ??           |
+| Case 2 GCP MASTER: HTTP/10 threads                        | ![](path to image in img/)   | ??                         | ??                                  | ??                        | ??           |
+| Case 3 GCP MASTER: HTTP/10 threads/No connection pooling  | ![](path to image in img/)   | 118                       | ??                                  | ??                        | ??           |
+| **Scaled Version Test Plan**                   | **Graph Results Screenshot** | **Average Query Time(ms)** | **Average Search Servlet Time(ms)** | **Average JDBC Time(ms)** | **Analysis** |
+|------------------------------------------------|------------------------------|----------------------------|-------------------------------------|---------------------------|--------------|
+| Case 1 GCP SLAVE: HTTP/1 thread                          | ![](path to image in img/)   | 109                        | ??                                  | ??                        | ??           |
+| Case 2 GCP SLAVE: HTTP/10 threads                        | ![](path to image in img/)   | ??                         | ??                                  | ??                        | ??           |
+| Case 3 GCP SLAVE: HTTP/10 threads/No connection pooling  | ![](path to image in img/)   | 118                       | ??                                  | ??                        | ??           |
 
-Confirmation Servlet (for updating Sales Data): https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-3/blob/master/src/main/java/ConfirmationServlet.java 
 
-Movie-List Servlet: https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-3/blob/master/src/main/java/MovieListServlet.java
-
-Payment Servlet: https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-3/blob/master/src/main/java/PaymentServlet.java
-
-## Inconsistencies
-- Extracted starName and movieID from casts.xml
-- Generated id for starName and saved data in record
-- If movieID is invalid (doesn't exist in movie table), then did not add star to the movie
-
-
-## Parsing Optimization Strategies
-- Removed old indexes before loading and then recreated indexes after
-- Attempted to execute batch statements 
-- Done analysis of indexes on the table, there are already primary indexes on the tables, but stars table can have index on name that might help for large data sets because we are searching with name
-- In Movies, index can be created on title, year, and director to improve the performance because these are the used search criterias
-- As per my research, indexes are only effective if there are lot of records
-- SAX Parser is more efficient than DOM Parser for larger files
-
-
-## Assumptions
-Movie is not added to database if genre name is not provided in xml file, and reported to inconsistency_report_movie.txt
