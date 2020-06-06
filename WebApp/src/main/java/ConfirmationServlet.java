@@ -96,7 +96,11 @@ public class ConfirmationServlet extends HttpServlet
 
         try
         {
-            Connection connection = dataSource.getConnection();
+            // Connection connection = dataSource.getConnection();
+            Context initContext = new InitialContext();
+            Context envContext = (Context) initContext.lookup("java:/comp/env");
+            DataSource ds = (DataSource) envContext.lookup("jdbc/moviedb");
+            Connection connection = ds.getConnection();
             PreparedStatement preparedStatemenUser = connection.prepareStatement(movieInfoQuery);
             preparedStatemenUser.setString(1, username);
             preparedStatemenUser.setString(2, password);
@@ -139,7 +143,11 @@ public class ConfirmationServlet extends HttpServlet
         Integer rid;
         try
         {
-            connection = dataSource.getConnection();
+            //connection = dataSource.getConnection();
+            Context initContext = new InitialContext();
+            Context envContext = (Context) initContext.lookup("java:/comp/env");
+            DataSource ds = (DataSource) envContext.lookup("jdbc/moviedb");
+            connection = ds.getConnection();
             if (itemsInCart != null)
             {
                 int count = 0;
@@ -176,8 +184,6 @@ public class ConfirmationServlet extends HttpServlet
 
 /*
                            if(rs.next()) {
-
-
                                //java.sql.RowId rid=rs.getRowId(1);
                                //TODO create movieid, sales id (rid);, quanity, price
                                //String id, String title, int price, int quantity, String saleId)
