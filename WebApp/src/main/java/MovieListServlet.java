@@ -405,7 +405,12 @@ public class MovieListServlet extends HttpServlet {
         String query = "";
         String movieList = "";
         try {
-            Connection connection = dataSource.getConnection();
+            Context initContext = new InitialContext();
+            Context envContext = (Context) initContext.lookup("java:/comp/env");
+            DataSource ds = (DataSource) envContext.lookup("jdbc/moviedb");
+            Connection connection = ds.getConnection();
+
+          //  Connection connection = dataSource.getConnection();
             if (starName != null && starName.length() > 0) {
                 ResultSet movieResult = null;
                 //query = "SELECT  movieId FROM stars_in_movies sm, stars s WHERE starId = id AND s.name like '%" + starName + "%'; ";
@@ -453,7 +458,11 @@ public class MovieListServlet extends HttpServlet {
         try
         {
             Enumeration names = hashtable.keys(); Integer key;
-            Connection connection = dataSource.getConnection();
+            Context initContext = new InitialContext();
+            Context envContext = (Context) initContext.lookup("java:/comp/env");
+            DataSource ds = (DataSource) envContext.lookup("jdbc/moviedb");
+            Connection connection = ds.getConnection();
+            //Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatemenUser = connection.prepareStatement(query+";");
             while(names.hasMoreElements()) {
                 key = (Integer) names.nextElement();
