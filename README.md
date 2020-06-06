@@ -46,22 +46,37 @@ Project deployed on Original Instance (used on all the other projects): http://3
 
 - # Connection Pooling
     - #### Include the filename/path of all code/configuration files in GitHub of using JDBC Connection Pooling.
-cs122b-spring20-team-3/WebApp/web/META-INF/context.xml
-cs122b-spring20-team-3/WebApp/web/WEB-INF/web.xml
-cs122b-spring20-team-3/WebApp/src/main/java/ConfirmationServlet.java
-cs122b-spring20-team-3/WebApp/src/main/java/DashboardServlet.java
-cs122b-spring20-team-3/WebApp/src/main/java/EmployeeLoginServlet.java
-cs122b-spring20-team-3/WebApp/src/main/java/LoginServlet.java
-cs122b-spring20-team-3/WebApp/src/main/java/MovieListServlet.java
-cs122b-spring20-team-3/WebApp/src/main/java/PaymentServlet.java
-cs122b-spring20-team-3/WebApp/src/main/java/SAXParserActor.java
-cs122b-spring20-team-3/WebApp/src/main/java/SAXParserStar.java
-cs122b-spring20-team-3/WebApp/src/main/java/SAXParserMovie.java
-cs122b-spring20-team-3/WebApp/src/main/java/SearchServlet.java
-cs122b-spring20-team-3/WebApp/src/main/java/SingleMovieServlet.java
-cs122b-spring20-team-3/WebApp/src/main/java/SingleStarServlet.java
-cs122b-spring20-team-3/WebApp/src/main/java/UpdateSecurePassword.java
-cs122b-spring20-team-3/WebApp/src/main/java/VerifyPassword.java
+***cs122b-spring20-team-3/WebApp/web/META-INF/context.xml
+
+***cs122b-spring20-team-3/WebApp/web/WEB-INF/web.xml
+
+***cs122b-spring20-team-3/WebApp/src/main/java/ConfirmationServlet.java
+
+***cs122b-spring20-team-3/WebApp/src/main/java/DashboardServlet.java
+
+***cs122b-spring20-team-3/WebApp/src/main/java/EmployeeLoginServlet.java
+
+***cs122b-spring20-team-3/WebApp/src/main/java/LoginServlet.java
+
+***cs122b-spring20-team-3/WebApp/src/main/java/MovieListServlet.java
+
+***cs122b-spring20-team-3/WebApp/src/main/java/PaymentServlet.java
+
+***cs122b-spring20-team-3/WebApp/src/main/java/SAXParserActor.java
+
+***cs122b-spring20-team-3/WebApp/src/main/java/SAXParserStar.java
+
+***cs122b-spring20-team-3/WebApp/src/main/java/SAXParserMovie.java
+
+***cs122b-spring20-team-3/WebApp/src/main/java/SearchServlet.java
+
+***cs122b-spring20-team-3/WebApp/src/main/java/SingleMovieServlet.java
+
+***cs122b-spring20-team-3/WebApp/src/main/java/SingleStarServlet.java
+
+***cs122b-spring20-team-3/WebApp/src/main/java/UpdateSecurePassword.java
+
+***cs122b-spring20-team-3/WebApp/src/main/java/VerifyPassword.java
     
    - #### Explain how Connection Pooling is utilized in the Fabflix code.
 1. For Fabflix, I have added added connection pool settings in resources in context.xml  
@@ -112,35 +127,35 @@ The Connection pooling helps managing the connections to the database more effic
  
 - # Master/Slave
     - #### Include the filename/path of all code/configuration files in GitHub of routing queries to Master/Slave SQL.
-The following below files were changed for read-only slave master
-cs122b-spring20-team-3/WebApp/src/main/java/ConfirmationServlet.java
+The following below files were changed for the read-only slave master
+***cs122b-spring20-team-3/WebApp/src/main/java/ConfirmationServlet.java
 
-cs122b-spring20-team-3/WebApp/src/main/java/DashboardServlet.java
+***cs122b-spring20-team-3/WebApp/src/main/java/DashboardServlet.java
 
-cs122b-spring20-team-3/WebApp/src/main/java/EmployeeLoginServlet.java
+***cs122b-spring20-team-3/WebApp/src/main/java/EmployeeLoginServlet.java
 
-cs122b-spring20-team-3/WebApp/src/main/java/LoginServlet.java
+***cs122b-spring20-team-3/WebApp/src/main/java/LoginServlet.java
 
-cs122b-spring20-team-3/WebApp/src/main/java/MovieListServlet.java
+***cs122b-spring20-team-3/WebApp/src/main/java/MovieListServlet.java
 
-cs122b-spring20-team-3/WebApp/src/main/java/PaymentServlet.java
+***cs122b-spring20-team-3/WebApp/src/main/java/PaymentServlet.java
 
-cs122b-spring20-team-3/WebApp/src/main/java/SearchServlet.java
+***cs122b-spring20-team-3/WebApp/src/main/java/SearchServlet.java
 
-cs122b-spring20-team-3/WebApp/src/main/java/SingleMovieServlet.java
+***cs122b-spring20-team-3/WebApp/src/main/java/SingleMovieServlet.java
 
-cs122b-spring20-team-3/WebApp/src/main/java/SingleStarServlet.java
+***cs122b-spring20-team-3/WebApp/src/main/java/SingleStarServlet.java
 
-cs122b-spring20-team-3/WebApp/src/main/java/VerifyPassword.java
+***cs122b-spring20-team-3/WebApp/src/main/java/VerifyPassword.java
 
-for masterdb, I have changed below files
-cs122b-spring20-team-3/WebApp/src/main/java/UpdateSecurePassword.java
+The following files were changed for the read and write master database
+***cs122b-spring20-team-3/WebApp/src/main/java/UpdateSecurePassword.java
 
-cs122b-spring20-team-3/WebApp/src/main/java/SAXParserActor.java
+***cs122b-spring20-team-3/WebApp/src/main/java/SAXParserActor.java
 
-cs122b-spring20-team-3/WebApp/src/main/java/SAXParserStar.java
+***cs122b-spring20-team-3/WebApp/src/main/java/SAXParserStar.java
 
-cs122b-spring20-team-3/WebApp/src/main/java/SAXParserMovie.java
+***cs122b-spring20-team-3/WebApp/src/main/java/SAXParserMovie.java
  
     - #### How read/write requests were routed to Master/Slave SQL?
   I created two resources, for read only operations, resource for slave is used and for write/update masterdb resource is used
