@@ -117,10 +117,10 @@ cs122b-spring20-team-3/WebApp/src/main/java/CVerifyPassword.java
  
 | **Single-instance Version Test Plan**          | **Graph Results Screenshot** | **Average Query Time(ms)** | **Average Search Servlet Time(ms)** | **Average JDBC Time(ms)** | **Analysis** |
 |------------------------------------------------|------------------------------|----------------------------|-------------------------------------|---------------------------|--------------|
-| Case 1: HTTP/1 thread                          | /graph_results  | 217                       | 1,302,903 ms                                 | 720,764 ms                        | 1 thread took longer than 10 threads           |
-| Case 2: HTTP/10 threads                        | /graph_results   |                          | 8,691,160 ms                                  | 6,454,065 ms                        | 10 threads were faster than having 1 thread, and connection pooling is faster than no connection pooling           |
-| Case 3: HTTPS/10 threads                       | /graph_results   | 220                         | 9,309,436 ms                                  | 7879926 ms                        | ??           |
-| Case 4: HTTP/10 threads/No connection pooling  | /graph_results  | ??                         | 10,684,810 ms                                  | 8,246,870                        | As can be seen from times, on the single instance, no connection pooling was slower than having 10 threads with connection pooling           |
+| Case 1: HTTP/1 thread                          | /graph_results  | 217                       | 10,302,903 ms                                 | 820,764 ms                        | 1 thread took longer than 10 threads           |
+| Case 2: HTTP/10 threads                        | /graph_results   |                          | 9,691,160 ms                                  | 7,454,065 ms                        | 10 threads were faster than having 1 thread, and connection pooling is faster than no connection pooling           |
+| Case 3: HTTPS/10 threads                       | /graph_results   | 220                         | 8,309,436 ms                                  | 6,879,926 ms                        | ??           |
+| Case 4: HTTP/10 threads/No connection pooling  | /graph_results  | ??                         | 1,684,810 ms                                  | 6,246,870                        | As can be seen from times, on the single instance, no connection pooling was slower than having 10 threads with connection pooling           |
  
 | **Scaled Version Test Plan**                   | **Graph Results Screenshot** | **Average Query Time(ms)** | **Average Search Servlet Time(ms)** | **Average JDBC Time(ms)** | **Analysis** |
 |------------------------------------------------|------------------------------|----------------------------|-------------------------------------|---------------------------|--------------|
