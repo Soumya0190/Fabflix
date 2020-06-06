@@ -32,9 +32,9 @@ Project deployed on Master Instance: http://18.191.106.30:8080/cs122b-spring20-t
 
 Project deployed on Slave Instance: http://3.21.240.182:8080/cs122b-spring20-team-3/
 
-Project deployed on AWS Load Balancer: http://18.221.207.68:8080/cs122b-spring20-team-3/ 
+Project deployed on AWS Load Balancer: http://18.221.207.68:80/cs122b-spring20-team-3/ 
 
-Project deployed on GCP Load Balancer: http://35.202.189.23:8080/cs122b-spring20-team-3/  
+Project deployed on GCP Load Balancer: http://35.202.189.23:80/cs122b-spring20-team-3/  
 
 Project deployed on Original Instance (used on all the other projects): http://3.14.14.154:8080/cs122b-spring20-team-3/  
 
