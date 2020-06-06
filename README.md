@@ -136,11 +136,11 @@ cs122b-spring20-team-3/WebApp/src/main/java/CVerifyPassword.java
 |------------------------------------------------|------------------------------|----------------------------|-------------------------------------|---------------------------|--------------|
 | Case 1 GCP MASTER: HTTP/1 thread                          | ![](path to image in img/)   | 109                         | 1092474 ms                                  | 576821 ms                        | GCP takes the longest amount of time because there is a netwrok latency           |
 | Case 2 GCP MASTER: HTTP/10 threads                        | ![](path to image in img/)   | ??                         | 4607613 ms                                  | 3551625 ms                        | ??           |
-| Case 3 GCP MASTER: HTTP/10 threads/No connection pooling  | ![](path to image in img/)   | 118                       | ??                                  | ??                        | ??           |
+| Case 3 GCP MASTER: HTTP/10 threads/No connection pooling  | ![](path to image in img/)   | 118                       | ??                                  | 2796297 ms                        | 1955982 ms           |
 | **Scaled Version Test Plan**                   | **Graph Results Screenshot** | **Average Query Time(ms)** | **Average Search Servlet Time(ms)** | **Average JDBC Time(ms)** | **Analysis** |
 |------------------------------------------------|------------------------------|----------------------------|-------------------------------------|---------------------------|--------------|
-| Case 1 GCP SLAVE: HTTP/1 thread                          | ![](path to image in img/)   | 109                        | ??                                  | 1123661 ms                        | 569278 ms           |
+| Case 1 GCP SLAVE: HTTP/1 thread                          | ![](path to image in img/)   | 109                        | 1123661ms                                  | 569278 ms                        |            |
 | Case 2 GCP SLAVE: HTTP/10 threads                        | ![](path to image in img/)   |                          | 5561143 ms                                  | 4412899 ms                        | ??           |
-| Case 3 GCP SLAVE: HTTP/10 threads/No connection pooling  | ![](path to image in img/)   | 118                       | ??                                  | ??                        | ??           |
+| Case 3 GCP SLAVE: HTTP/10 threads/No connection pooling  | ![](path to image in img/)   | 118                       | ??                                  | 2858440 ms                        | 2025506 ms           |
 
 
