@@ -146,7 +146,7 @@ public class ConfirmationServlet extends HttpServlet
             //connection = dataSource.getConnection();
             Context initContext = new InitialContext();
             Context envContext = (Context) initContext.lookup("java:/comp/env");
-            DataSource ds = (DataSource) envContext.lookup("jdbc/moviedb");
+            DataSource ds = (DataSource) envContext.lookup("jdbc/masterdb");
             connection = ds.getConnection();
             if (itemsInCart != null)
             {
@@ -160,8 +160,7 @@ public class ConfirmationServlet extends HttpServlet
                             String sale_movie_id = cart.movieId;
 
                             paymentQuery = "INSERT INTO sales (customerId, movieId, saleDate) VALUES (?,?,?)";
-                          /* paymentQuery = "INSERT INTO sales (customerId, movieId, saleDate) VALUES ('"
-                                   + customer_id + "','" + sale_movie_id + "','" + sale_time + "');";*/
+
                             preparedStatement = connection.prepareStatement(paymentQuery, Statement.RETURN_GENERATED_KEYS);
 
 
@@ -179,19 +178,6 @@ public class ConfirmationServlet extends HttpServlet
                                 updatedItemsObj = new ShoppingCart(cart.movieId, cart.movieTitle, cart.price, cart.quantity, rid.toString());
                                 updatedItemsinCart.add(updatedItemsObj);
                             }
-                            //  rs.next();
-                            // int auto_id = rs.getInt(1);
-
-/*
-                           if(rs.next()) {
-                               //java.sql.RowId rid=rs.getRowId(1);
-                               //TODO create movieid, sales id (rid);, quanity, price
-                               //String id, String title, int price, int quantity, String saleId)
-                               System.out.println("confirmation: "+rid);
-                               updatedItemsObj = new ShoppingCart(cart.movieId, cart.movieTitle, cart.price, cart.quantity, rid.toString());
-                               updatedItemsinCart.add(updatedItemsObj);
-                           }
-                           */
 
 
                         }

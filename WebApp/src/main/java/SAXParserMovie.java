@@ -201,7 +201,7 @@ public class SAXParserMovie extends DefaultHandler
 
             Context initContext = new InitialContext();
             Context envContext = (Context) initContext.lookup("java:/comp/env");
-            DataSource ds = (DataSource) envContext.lookup("jdbc/moviedb");
+            DataSource ds = (DataSource) envContext.lookup("jdbc/masterdb");
             Connection connection = ds.getConnection();
             if (connection == null)
                 System.out.println("connection is null.");

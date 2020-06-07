@@ -81,7 +81,7 @@ public class DashboardServlet extends HttpServlet {
             //  Connection connection = dataSource.getConnection();
             Context initContext = new InitialContext();
             Context envContext = (Context) initContext.lookup("java:/comp/env");
-            DataSource ds = (DataSource) envContext.lookup("jdbc/moviedb");
+            DataSource ds = (DataSource) envContext.lookup("jdbc/masterdb");
             Connection connection = ds.getConnection();
             CallableStatement prepStmt = connection.prepareCall(starQuery);
             prepStmt.setString(1, starName);
@@ -132,7 +132,7 @@ public class DashboardServlet extends HttpServlet {
             //   Connection connection = dataSource.getConnection();
             Context initContext = new InitialContext();
             Context envContext = (Context) initContext.lookup("java:/comp/env");
-            DataSource ds = (DataSource) envContext.lookup("jdbc/moviedb");
+            DataSource ds = (DataSource) envContext.lookup("jdbc/masterdb");
             Connection connection = ds.getConnection();
             CallableStatement prepStmt = connection.prepareCall(query);
 
@@ -177,7 +177,7 @@ public class DashboardServlet extends HttpServlet {
             // Connection connection = dataSource.getConnection();
             Context initContext = new InitialContext();
             Context envContext = (Context) initContext.lookup("java:/comp/env");
-            DataSource ds = (DataSource) envContext.lookup("jdbc/moviedb");
+            DataSource ds = (DataSource) envContext.lookup("jdbc/masterdb");
             Connection connection = ds.getConnection();
             CallableStatement prepStmt = connection.prepareCall(query);
             prepStmt.setString(1, "moviedb");

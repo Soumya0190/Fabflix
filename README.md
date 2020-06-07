@@ -102,7 +102,7 @@ Project deployed on Original Instance (used on all the other projects): http://3
           maxTotal="100" maxIdle="30" maxWaitMillis="10000"
           username="mytestuser"
           password="mypassword"
-          url="jdbc:mysql://172.31.24.250:3306/moviedb?autoReconnect=true&amp;useSSL=false&amp;cachePrepStmts=true"/>
+          url="jdbc:mysql://18.191.106.30:3306/moviedb?autoReconnect=true&amp;useSSL=false&amp;cachePrepStmts=true"/>
 
 
 2. The following changes are made to the servlets where JDBC connection is used
@@ -132,9 +132,6 @@ The Connection pooling helps managing the connections to the database more effic
 - # Master/Slave
     - #### Include the filename/path of all code/configuration files in GitHub of routing queries to Master/Slave SQL.
 The following below files were changed for the read-only slave master
-***cs122b-spring20-team-3/WebApp/src/main/java/ConfirmationServlet.java
-
-***cs122b-spring20-team-3/WebApp/src/main/java/DashboardServlet.java
 
 ***cs122b-spring20-team-3/WebApp/src/main/java/EmployeeLoginServlet.java
 
@@ -153,6 +150,9 @@ The following below files were changed for the read-only slave master
 ***cs122b-spring20-team-3/WebApp/src/main/java/VerifyPassword.java
 
 The following files were changed for the read and write master database
+***cs122b-spring20-team-3/WebApp/src/main/java/ConfirmationServlet.java
+
+***cs122b-spring20-team-3/WebApp/src/main/java/DashboardServlet.java
 ***cs122b-spring20-team-3/WebApp/src/main/java/UpdateSecurePassword.java
 
 ***cs122b-spring20-team-3/WebApp/src/main/java/SAXParserActor.java

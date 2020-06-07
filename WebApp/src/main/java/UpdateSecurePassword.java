@@ -21,7 +21,7 @@ public class UpdateSecurePassword
         */
         Context initContext = new InitialContext();
         Context envContext = (Context) initContext.lookup("java:/comp/env");
-        DataSource ds = (DataSource) envContext.lookup("jdbc/moviedb");
+        DataSource ds = (DataSource) envContext.lookup("jdbc/masterdb");
         Connection connection = ds.getConnection();
 
         Statement statement = connection.createStatement();
