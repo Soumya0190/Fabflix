@@ -1,0 +1,16 @@
+Single Instance HTTP with Connection Pooling - 1 thread  - Average ServletTime = 7540362,  Average JDBC Execution Time=6271671
+Single Instance HTTP without using Connection Pooling - 10 threads  - Average ServletTime = 113727073886,  Average JDBC Execution Time=7987877
+Single Instance HTTP with Connection Pooling - 10 threads  - Average ServletTime = 7876373,  Average JDBC Execution Time=6616776
+Single Instance HTTPS with Connection Pooling - 10 threads  - Average ServletTime = 34016209,  Average JDBC Execution Time=6804001
+AWS Load Balancer Master without using Connection Pooling -  10 threads  - Average ServletTime = 5815637,  Average JDBC Execution Time=4552608
+AWS Load Balancer Slave without using Connection Pooling -  10 threads  - Average ServletTime = 5891018,  Average JDBC Execution Time=4519064
+AWS Load Balancer Master with Connection Pooling -  1 thread  - Average ServletTime = 1520610,  Average JDBC Execution Time=614266
+AWS Load Balancer Slave with Connection Pooling -  1 thread  - Average ServletTime = 1370663,  Average JDBC Execution Time=624810
+AWS Load Balancer Master with Connection Pooling -  10 threads  - Average ServletTime = 5477498,  Average JDBC Execution Time=4391210
+AWS Load Balancer Slave with Connection Pooling -  10 threads  - Average ServletTime = 4423762,  Average JDBC Execution Time=3512589
+GCP Load Balancer Master without using Connection Pooling -  10 threads  - Average ServletTime = 7151798900,  Average JDBC Execution Time=4601459
+GCP Load Balancer Slave without using Connection Pooling -  10 threads  - Average ServletTime = 6234688,  Average JDBC Execution Time=4281205
+GCP Load Balancer Master with Connection Pooling -  1 thread  - Average ServletTime = 1348639,  Average JDBC Execution Time=607806
+GCP Load Balancer Slave with Connection Pooling -  1 thread  - Average ServletTime = 1475805,  Average JDBC Execution Time=642546
+GCP Load Balancer Master with Connection Pooling -  10 threads  - Average ServletTime = 3951568,  Average JDBC Execution Time=3181024
+GCP Load Balancer Slave with Connection Pooling -  10 threads  - Average ServletTime = 214162365,  Average JDBC Execution Time=3211355
