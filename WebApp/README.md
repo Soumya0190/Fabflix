@@ -7,7 +7,7 @@
 
     - #### Instruction of deployment:
     
-    ## Deployment Instructions:
+   ## Deployment Instructions:
     Set-up environments:
     1. created three additional VMs using same security group in AWS and 1 in GCP
     2. on AWS: 
@@ -47,7 +47,7 @@
        4.2.4 Run the tests and collected log files from all the environemnts
 
 
-    - #### Collaborations and Work Distribution: Solo
+   - #### Collaborations and Work Distribution: Solo
 
 - # Connection Pooling
     - #### Include the filename/path of all code/configuration files in GitHub of using JDBC Connection Pooling.
@@ -130,7 +130,7 @@ The lookup returns a connection from the pool if one is available.
 A pool of connection objects is created at the time the application server starts.
 The closing event on a pooled connection signals the pooling module to place the connection back in the connection pool for future reuse.
 
-    - #### Explain how Connection Pooling works with two backend SQL.
+   - #### Explain how Connection Pooling works with two backend SQL.
 For two backend SQL databases, two resource names are created in context.xml (one for each database). 
 Each resource has configuration for connection pool, so two connection pools are created.
 For  Master-Slave configuration, Master allows read and write operations while the slave allows only read operations. 
@@ -177,7 +177,7 @@ The following files were changed for the read and write master database
 
 ***cs122b-spring20-team-3/WebApp/src/main/java/SAXParserMovie.java
  
-    - #### How read/write requests were routed to Master/Slave SQL?
+   - #### How read/write requests were routed to Master/Slave SQL?
 I created two resources - the "moviedb" resource for slave is used for read only (select) operations, and "masterdb" resource is used for insert/update operations
 
 resource moviedb is for slave DB ; Resource name="jdbc/moviedb" auth="Container" driverClassName="com.mysql.jdbc.Driver" 
