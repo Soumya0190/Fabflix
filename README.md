@@ -180,12 +180,12 @@ The following files were changed for the read and write master database
     - #### How read/write requests were routed to Master/Slave SQL?
 I created two resources - the "moviedb" resource for slave is used for read only (select) operations, and "masterdb" resource is used for insert/update operations
 
-resource moviedb is for slave DB ; <Resource name="jdbc/moviedb" auth="Container" driverClassName="com.mysql.jdbc.Driver" 
+resource moviedb is for slave DB ; Resource name="jdbc/moviedb" auth="Container" driverClassName="com.mysql.jdbc.Driver" 
 factory="org.apache.tomcat.jdbc.pool.DataSourceFactory" type="javax.sql.DataSource" maxTotal="100" maxIdle="30" maxWaitMillis="10000"
 username="mytestuser" password="mypassword" url="jdbc:mysql://localhost:3306/moviedb?autoReconnect=true&amp;useSSL=false&amp;cachePrepStmts=true" />
 
 
-for masterDB (insert/update operations), I am using jdbc/masterdb ; <Resource name="jdbc/masterdb" auth="Container"
+for masterDB (insert/update operations), I am using jdbc/masterdb ; Resource name="jdbc/masterdb" auth="Container"
 driverClassName="com.mysql.jdbc.Driver" factory="org.apache.tomcat.jdbc.pool.DataSourceFactory" type="javax.sql.DataSource"
 maxTotal="100" maxIdle="30" maxWaitMillis="10000" username="mytestuser" password="mypassword"
 url="jdbc:mysql://<master database IP> :3306/moviedb?autoReconnect=true&amp;useSSL=false&amp;cachePrepStmts=true"/>
