@@ -3,7 +3,7 @@
 
     - #### Names: Soumya Sharma
 
-    - #### Project 5 Video Demo Link: https://youtu.be/ZvpoAU0Pw5c 
+    - #### Project 5 Video Demo Link: https://youtu.be/YIim8xjZ8vk
 
     - #### Instruction of deployment:
     
@@ -88,7 +88,7 @@
    - #### Explain how Connection Pooling is utilized in the Fabflix code.
 1. For Fabflix, I have added added connection pool settings in resources in context.xml  
 2. For read only operations, I have used resource name = jdbc/moviedb
-
+I have used localhost instead of using Slave database for read operations, as master database also supports read operation and going to local database will reduce network latency.
 <Resource name="jdbc/moviedb"
           auth="Container"
           driverClassName="com.mysql.jdbc.Driver"
@@ -109,8 +109,11 @@
           maxTotal="100" maxIdle="30" maxWaitMillis="10000"
           username="mytestuser"
           password="mypassword"
-          url="jdbc:mysql://18.191.106.30:3306/moviedb?autoReconnect=true&amp;useSSL=false&amp;cachePrepStmts=true"/>
-
+          url="jdbc:mysql://<master IP address>:3306/moviedb?autoReconnect=true&amp;useSSL=false&amp;cachePrepStmts=true"/>
+          
+maxTotal is maximum number of active database connections that can be allocated from the connection pool.
+maxIdle is maximum number of connections that should be kept in the pool at all times
+maxwait is maximum number of milliseconds that pool waits for a connection to be returned before throwing exception
 
 2. The following changes are made to the servlets where JDBC connection is used
 
@@ -120,22 +123,25 @@ DataSource ds = (DataSource) envContext.lookup("jdbc/moviedb"); //changes resour
 Connection connection = ds.getConnection();
 
 A connection pool operates by performing the work of creating connections ahead of time. 
-By adding connection pooling , connections are reused rather than created each time a connection is requested. 
+By adding connection pooling, connections are reused rather than created each time a connection is requested. 
 Connection pooling is performed in the background and does not affect how an application is coded; however, 
-the application must use a DataSource object to obtain a connection instead of using the DriverManager class. 
-The lookup returns a connection from the pool if one is available. in my configuration, there are 100 connection in connection pool, 
-max idle connections are 30, i have added autoconnect=true.
+the application must use a DataSource object to obtain a connection, instead of using the DriverManager class. 
+The lookup returns a connection from the pool if one is available. 
 A pool of connection objects is created at the time the application server starts.
 The closing event on a pooled connection signals the pooling module to place the connection back in the connection pool for future reuse.
 
     - #### Explain how Connection Pooling works with two backend SQL.
 For two backend SQL databases, two resource names are created in context.xml (one for each database). 
 Each resource has configuration for connection pool, so two connection pools are created.
-For  Master-Slave configuration, Master allows read and write operations while the slave allows only read operation. 
-So all database queries that need insert/update operation, master connection pool is used. 
-But read(select) operation queries are directed to local database to reduce network latency.
+For  Master-Slave configuration, Master allows read and write operations while the slave allows only read operations. 
+So for all database queries that need insert/update operation, master database connection pool is used. 
+But read(select) operation queries are directed to local database to reduce network latency. 
+(The slave database can be used for read operations all the time, but going to local database will avoid network issues and improve network latency).
+Master instance of tomcat will create one database connection pool, since master database can serve read and write operations.
+Slave instance of tomcat will create two database connection pools, since read/select database queries will be directed to slave/local database 
+and write(update/insert) database queries will be directed to master database.
 The Connection pooling helps managing the connections to the database more efficiently. 
-With two database SQL servers, query throughput will be improved.
+With two database SQL servers, query throughput is improved.
     
  
 - # Master/Slave
@@ -182,7 +188,7 @@ username="mytestuser" password="mypassword" url="jdbc:mysql://localhost:3306/mov
 for masterDB (insert/update operations), I am using jdbc/masterdb ; <Resource name="jdbc/masterdb" auth="Container"
 driverClassName="com.mysql.jdbc.Driver" factory="org.apache.tomcat.jdbc.pool.DataSourceFactory" type="javax.sql.DataSource"
 maxTotal="100" maxIdle="30" maxWaitMillis="10000" username="mytestuser" password="mypassword"
-url="jdbc:mysql://master database IP :3306/moviedb?autoReconnect=true&amp;useSSL=false&amp;cachePrepStmts=true"/>
+url="jdbc:mysql://<master database IP> :3306/moviedb?autoReconnect=true&amp;useSSL=false&amp;cachePrepStmts=true"/>
           
 For all the database queries that need insert/update operations, master database resource is used. 
 But all the read(select) operation queries are directed to local database to reduce network latency.
