@@ -89,7 +89,7 @@
 1. For Fabflix, I have added added connection pool settings in resources in context.xml  
 2. For read only operations, I have used resource name = jdbc/moviedb
 I have used localhost instead of using Slave database for read operations, as master database also supports read operation and going to local database will reduce network latency.
-<Resource name="jdbc/moviedb"
+Resource name="jdbc/moviedb"
           auth="Container"
           driverClassName="com.mysql.jdbc.Driver"
           factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
@@ -101,7 +101,7 @@ I have used localhost instead of using Slave database for read operations, as ma
           
 3. For masterDB (insert/update operations), I am using resource name ="jdbc/masterdb"
  
-<Resource name="jdbc/masterdb"
+Resource name="jdbc/masterdb"
           auth="Container"
           driverClassName="com.mysql.jdbc.Driver"
           factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
@@ -109,7 +109,7 @@ I have used localhost instead of using Slave database for read operations, as ma
           maxTotal="100" maxIdle="30" maxWaitMillis="10000"
           username="mytestuser"
           password="mypassword"
-          url="jdbc:mysql://<master IP address>:3306/moviedb?autoReconnect=true&amp;useSSL=false&amp;cachePrepStmts=true"/>
+          url="jdbc:mysql://"master IP address":3306/moviedb?autoReconnect=true&amp;useSSL=false&amp;cachePrepStmts=true"/>
           
 maxTotal is maximum number of active database connections that can be allocated from the connection pool.
 maxIdle is maximum number of connections that should be kept in the pool at all times
@@ -188,7 +188,7 @@ username="mytestuser" password="mypassword" url="jdbc:mysql://localhost:3306/mov
 for masterDB (insert/update operations), I am using jdbc/masterdb ; Resource name="jdbc/masterdb" auth="Container"
 driverClassName="com.mysql.jdbc.Driver" factory="org.apache.tomcat.jdbc.pool.DataSourceFactory" type="javax.sql.DataSource"
 maxTotal="100" maxIdle="30" maxWaitMillis="10000" username="mytestuser" password="mypassword"
-url="jdbc:mysql://<master database IP> :3306/moviedb?autoReconnect=true&amp;useSSL=false&amp;cachePrepStmts=true"/>
+url="jdbc:mysql://"master database IP":3306/moviedb?autoReconnect=true&amp;useSSL=false&amp;cachePrepStmts=true"/>
           
 For all the database queries that need insert/update operations, master database resource is used. 
 But all the read(select) operation queries are directed to local database to reduce network latency.
@@ -198,7 +198,7 @@ But all the read(select) operation queries are directed to local database to red
     - All the Jmeter log_processing files are created in the /tmp folder for master and slave instance
     - Each file is named according to the test, which is recorded in the README table under the graph results for each test case
     - These files are moved from instance to local machine after executing the following
-       - sudo scp -i SSH-Key.pem ubuntu@<instance connection string>:/tmp/<log processing file name> . 
+       - sudo scp -i SSH-Key.pem ubuntu@"instance connection string":/tmp/"log processing file name" . 
        - Example: sudo scp -i SSH-Key.pem ubuntu@ec2-3-14-14-154.us-east-2.compute.amazonaws.com:/tmp/log_processing_https.txt .
     - All Jmeter logs are stored in the folder titled "Log Processing Files" under "WebApp" folder
     - Run the "ParseLogFile" Servlet on IntelliJ to process the log processing files already stored under Log Processing Files folder
